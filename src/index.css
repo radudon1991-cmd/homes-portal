@@ -297,3 +297,41 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
   .dash-row { flex-wrap: wrap; }
   .searchbar-filters .input { min-width: 44%; }
 }
+
+.status-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+.status-badge.is-pending { background: #fef3c7; color: #92400e; }
+.status-badge.is-approved { background: #dcfce7; color: #166534; }
+.status-badge.is-rejected { background: #fee2e2; color: #991b1b; }
+.notice-banner {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.notice-banner.is-rejected {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+.notice-dismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 1rem;
+  padding: 0 0.25rem;
+}
