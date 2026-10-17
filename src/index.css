@@ -252,6 +252,37 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
   background: #2E2E2E;
 }
 
+/* ---------- trust & safety ---------- */
+.trust-warning {
+  background: #FDECEA; color: #9C2B1F; border: 1px solid #F5C6C0;
+  padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1.2rem;
+  font-size: 0.92rem; font-weight: 600; line-height: 1.5;
+}
+.trust-box {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.2rem; margin-top: 1rem;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.report-form { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.6rem; }
+.report-form label { margin-bottom: 0; }
+.seller-rating h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--teal-700); }
+.rating-avg { font-size: 1.3rem; font-weight: 800; margin: 0.2rem 0 0.6rem; color: var(--teal-900); }
+.stars { display: flex; gap: 0.2rem; margin-bottom: 0.6rem; }
+.star {
+  border: none; background: none; font-size: 1.6rem; cursor: pointer;
+  color: var(--line); padding: 0 2px;
+}
+.star.on { color: var(--gold-500); }
+.seller-rating form { display: flex; flex-direction: column; gap: 0.6rem; }
+.seller-rating form .btn { align-self: flex-start; }
+.admin-report {
+  background: var(--card); border-radius: var(--radius); padding: 1rem;
+  box-shadow: var(--shadow); border-left: 4px solid var(--danger);
+  display: flex; gap: 1rem; align-items: flex-start;
+}
+.admin-report .dash-info { flex: 1; min-width: 0; }
+.dashboard h2 { margin: 1.5rem 0 0.8rem; font-size: 1.2rem; }
+
 /* ---------- responsive ---------- */
 @media (max-width: 860px) {
   .home { height: auto; }
