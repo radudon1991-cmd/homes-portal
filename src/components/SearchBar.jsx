@@ -1,8 +1,10 @@
-import { PROPERTY_TYPES } from '../lib/format'
+import { useLang, TYPE_KEY } from '../lib/i18n'
 
 const BED_OPTIONS = ['', '1', '2', '3', '4', '5']
+const TYPE_VALUES = ['condo', 'house', 'townhouse', 'land']
 
 export default function SearchBar({ filters, onChange }) {
+  const { t } = useLang()
   const set = (key, value) => onChange({ ...filters, [key]: value })
 
   return (
@@ -11,7 +13,7 @@ export default function SearchBar({ filters, onChange }) {
         <input
           className="input search-query"
           type="text"
-          placeholder="Search by area, e.g. Sukhumvit, Phuket…"
+          placeholder={t('search_placeholder')}
           value={filters.query}
           onChange={(e) => set('query', e.target.value)}
         />
@@ -21,29 +23,29 @@ export default function SearchBar({ filters, onChange }) {
             className={filters.listingType === 'sale' ? 'seg-btn active' : 'seg-btn'}
             onClick={() => set('listingType', 'sale')}
           >
-            Buy
+            {t('buy')}
           </button>
           <button
             type="button"
             className={filters.listingType === 'rent' ? 'seg-btn active' : 'seg-btn'}
             onClick={() => set('listingType', 'rent')}
           >
-            Rent
+            {t('rent')}
           </button>
         </div>
       </div>
       <div className="searchbar-row searchbar-filters">
         <select className="input" value={filters.propertyType} onChange={(e) => set('propertyType', e.target.value)}>
-          <option value="">All types</option>
-          {PROPERTY_TYPES.map((t) => (
-            <option key={t.value} value={t.value}>{t.label}</option>
+          <option value="">{t('all_types')}</option>
+          {TYPE_VALUES.map((v) => (
+            <option key={v} value={v}>{t(TYPE_KEY[v])}</option>
           ))}
         </select>
         <input
           className="input"
           type="number"
           min="0"
-          placeholder="Min ฿"
+          placeholder={t('min_price')}
           value={filters.minPrice}
           onChange={(e) => set('minPrice', e.target.value)}
         />
@@ -51,18 +53,18 @@ export default function SearchBar({ filters, onChange }) {
           className="input"
           type="number"
           min="0"
-          placeholder="Max ฿"
+          placeholder={t('max_price')}
           value={filters.maxPrice}
           onChange={(e) => set('maxPrice', e.target.value)}
         />
         <select className="input" value={filters.bedrooms} onChange={(e) => set('bedrooms', e.target.value)}>
-          <option value="">Beds</option>
+          <option value="">{t('beds')}</option>
           {BED_OPTIONS.filter(Boolean).map((b) => (
             <option key={b} value={b}>{b}+</option>
           ))}
         </select>
         <select className="input" value={filters.bathrooms} onChange={(e) => set('bathrooms', e.target.value)}>
-          <option value="">Baths</option>
+          <option value="">{t('baths')}</option>
           {BED_OPTIONS.filter(Boolean).map((b) => (
             <option key={b} value={b}>{b}+</option>
           ))}
@@ -74,7 +76,7 @@ export default function SearchBar({ filters, onChange }) {
             onChange({ query: '', listingType: 'sale', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '', bathrooms: '' })
           }
         >
-          Clear
+          {t('clear')}
         </button>
       </div>
     </div>

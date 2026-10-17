@@ -1,15 +1,17 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { useLang } from '../lib/i18n'
 
 export default function ProtectedRoute({ children }) {
   const { user, loading, isSupabaseConfigured } = useAuth()
+  const { t } = useLang()
   const location = useLocation()
 
-  if (loading) return <div className="page-center">Loading…</div>
+  if (loading) return <div className="page-center">{t('loading')}</div>
   if (!isSupabaseConfigured) {
     return (
       <div className="page-center">
-        <p>Accounts are not set up yet — connect Supabase first (see README).</p>
+        <p>{t('accounts_not_setup')}</p>
       </div>
     )
   }
