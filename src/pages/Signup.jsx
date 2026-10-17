@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { useLang } from '../lib/i18n'
 
 export default function Signup() {
   const { signUp, isSupabaseConfigured } = useAuth()
+  const { t } = useLang()
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -13,7 +15,7 @@ export default function Signup() {
   const [busy, setBusy] = useState(false)
 
   if (!isSupabaseConfigured) {
-    return <div className="page-center"><p>Accounts are not set up yet — connect Supabase first (see README).</p></div>
+    return <div className="page-center"><p>{t('accounts_not_setup')}</p></div>
   }
 
   const submit = async (e) => {
@@ -36,9 +38,9 @@ export default function Signup() {
     return (
       <div className="page-center">
         <div className="auth-card">
-          <h1>Check your email</h1>
-          <p>We sent a confirmation link to <strong>{email}</strong>. Click it, then log in.</p>
-          <Link to="/login" className="btn btn-primary">Go to log in</Link>
+          <h1>{t('check_email')}</h1>
+          <p>{t('confirm_sent', { email })}</p>
+          <Link to="/login" className="btn btn-primary">{t('go_to_login')}</Link>
         </div>
       </div>
     )
@@ -47,14 +49,14 @@ export default function Signup() {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={submit}>
-        <h1>Create your account</h1>
-        <p className="auth-sub">Free. Post properties in minutes.</p>
+        <h1>{t('create_account')}</h1>
+        <p className="auth-sub">{t('signup_sub')}</p>
         {error && <div className="form-error">{error}</div>}
-        <label>Display name<input className="input" type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Nicha P." /></label>
-        <label>Email<input className="input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-        <label>Password (min 6 characters)<input className="input" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
-        <button className="btn btn-primary btn-block" disabled={busy}>{busy ? 'Creating…' : 'Sign up'}</button>
-        <p className="auth-switch">Already have an account? <Link to="/login">Log in</Link></p>
+        <label>{t('display_name')}<input className="input" type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder={t('name_placeholder')} /></label>
+        <label>{t('email')}<input className="input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
+        <label>{t('password_min')}<input className="input" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
+        <button className="btn btn-primary btn-block" disabled={busy}>{busy ? t('creating') : t('signup')}</button>
+        <p className="auth-switch">{t('have_account')} <Link to="/login">{t('login_link')}</Link></p>
       </form>
     </div>
   )

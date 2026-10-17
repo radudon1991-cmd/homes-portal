@@ -4,16 +4,18 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { dotIcon } from '../components/MapView'
 import { fetchListingById } from '../lib/listings'
-import { formatBaht, formatDate, PROPERTY_TYPES } from '../lib/format'
-
-const typeLabel = (v) => PROPERTY_TYPES.find((t) => t.value === v)?.label ?? v
+import { formatBaht, formatDate } from '../lib/format'
+import { useLang, TYPE_KEY } from '../lib/i18n'
 
 export default function ListingDetail() {
   const { id } = useParams()
+  const { t, lang } = useLang()
   const [listing, setListing] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activePhoto, setActivePhoto] = useState(0)
   const miniMapRef = useRef(null)
+
+  const typeLabel = (v) => t(TYPE_KEY[v] ?? v)
 
   useEffect(() => {
     fetchListingById(id).then(({ data }) => {
@@ -35,12 +37,12 @@ export default function ListingDetail() {
     return () => map.remove()
   }, [listing])
 
-  if (loading) return <div className="page-center">Loading…</div>
+  if (loading) return <div className="page-center">{t('loading')}</div>
   if (!listing) {
     return (
       <div className="page-center">
-        <p>Listing not found.</p>
-        <Link to="/" className="btn btn-primary">Back to search</Link>
+        <p>{t('listing_not_found')}</p>
+        <Link to="/" className="btn btn-primary">{t('back_to_search')}</Link>
       </div>
     )
   }
@@ -50,7 +52,7 @@ export default function ListingDetail() {
 
   return (
     <div className="detail">
-      <Link to="/" className="back-link">← Back to map</Link>
+      <Link to="/" className="back-link">{t('back_to_map')}</Link>
       <div className="detail-grid">
         <div className="detail-left">
           {photos.length > 0 ? (
@@ -71,30 +73,30 @@ export default function ListingDetail() {
               )}
             </>
           ) : (
-            <div className="detail-no-photo">No photos yet</div>
+            <div className="detail-no-photo">{t('no_photos')}</div>
           )}
-          <h2 className="detail-desc-title">About this property</h2>
-          <p className="detail-desc">{listing.description || 'No description provided.'}</p>
+          <h2 className="detail-desc-title">{t('about')}</h2>
+          <p className="detail-desc">{listing.description || t('no_description')}</p>
           {listing.latitude != null && <div ref={miniMapRef} className="detail-minimap" />}
         </div>
         <div className="detail-right">
           <span className={`badge ${listing.listing_type}`}>
-            {listing.listing_type === 'rent' ? 'For rent' : 'For sale'}
+            {listing.listing_type === 'rent' ? t('for_rent') : t('for_sale')}
           </span>
           <h1 className="detail-title">{listing.title}</h1>
           <div className="detail-price">{formatBaht(listing.price_thb)}</div>
           <div className="detail-facts">
-            <div><span>Type</span><strong>{typeLabel(listing.property_type)}</strong></div>
-            {listing.bedrooms > 0 && <div><span>Bedrooms</span><strong>{listing.bedrooms}</strong></div>}
-            {listing.bathrooms > 0 && <div><span>Bathrooms</span><strong>{listing.bathrooms}</strong></div>}
-            {listing.area_sqm > 0 && <div><span>Floor area</span><strong>{listing.area_sqm} sqm</strong></div>}
-            <div><span>Province</span><strong>{listing.province}</strong></div>
-            <div><span>Posted</span><strong>{formatDate(listing.created_at)}</strong></div>
+            <div><span>{t('fact_type')}</span><strong>{typeLabel(listing.property_type)}</strong></div>
+            {listing.bedrooms > 0 && <div><span>{t('fact_bedrooms')}</span><strong>{listing.bedrooms}</strong></div>}
+            {listing.bathrooms > 0 && <div><span>{t('fact_bathrooms')}</span><strong>{listing.bathrooms}</strong></div>}
+            {listing.area_sqm > 0 && <div><span>{t('fact_area')}</span><strong>{listing.area_sqm} {t('sqm')}</strong></div>}
+            <div><span>{t('fact_province')}</span><strong>{listing.province}</strong></div>
+            <div><span>{t('fact_posted')}</span><strong>{formatDate(listing.created_at, lang)}</strong></div>
           </div>
           {listing.address && <p className="detail-address">📍 {listing.address}</p>}
           <div className="seller-card">
-            <h3>Contact seller</h3>
-            <p className="seller-name">{seller.display_name || 'Seller'}</p>
+            <h3>{t('contact_seller')}</h3>
+            <p className="seller-name">{seller.display_name || t('seller_fallback')}</p>
             {seller.phone && (
               <a className="btn btn-primary btn-block" href={`tel:${seller.phone}`}>📞 {seller.phone}</a>
             )}

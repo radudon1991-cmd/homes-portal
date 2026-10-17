@@ -3,6 +3,7 @@ import MapView from '../components/MapView'
 import SearchBar from '../components/SearchBar'
 import ListingCard from '../components/ListingCard'
 import { fetchListings, applyFilters, dataSource } from '../lib/listings'
+import { useLang } from '../lib/i18n'
 
 const DEFAULT_FILTERS = {
   query: '',
@@ -15,6 +16,7 @@ const DEFAULT_FILTERS = {
 }
 
 export default function Home() {
+  const { t } = useLang()
   const [listings, setListings] = useState([])
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
   const [selectedId, setSelectedId] = useState(null)
@@ -36,7 +38,7 @@ export default function Home() {
       <SearchBar filters={filters} onChange={setFilters} />
       {dataSource === 'demo' && (
         <div className="demo-banner">
-          Demo mode — showing sample listings. Connect Supabase (see README) to go live with real data.
+          {t('demo_banner')}
         </div>
       )}
       <div className="home-main">
@@ -45,7 +47,7 @@ export default function Home() {
         </div>
         <aside className="home-panel">
           <div className="panel-head">
-            {loading ? 'Loading…' : `${filtered.length} propert${filtered.length === 1 ? 'y' : 'ies'}`}
+            {loading ? t('loading') : `${filtered.length} ${filtered.length === 1 ? t('property_one') : t('property_many')}`}
             {error && <span className="error-text"> ({error})</span>}
           </div>
           <div className="panel-list">
@@ -58,7 +60,7 @@ export default function Home() {
               />
             ))}
             {!loading && filtered.length === 0 && (
-              <p className="empty">No properties match your search. Try widening the filters.</p>
+              <p className="empty">{t('no_results')}</p>
             )}
           </div>
         </aside>
