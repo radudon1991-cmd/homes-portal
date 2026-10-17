@@ -57,6 +57,12 @@ export default function ListingDetail() {
   return (
     <div className="detail">
       <Link to="/" className="back-link">{t('back_to_map')}</Link>
+      {listing.status === 'pending' && (
+        <div className="notice-banner">{t('detail_pending_notice')}</div>
+      )}
+      {listing.status === 'rejected' && (
+        <div className="notice-banner is-rejected">{t('detail_rejected_notice')}</div>
+      )}
       <div className="detail-grid">
         <div className="detail-left">
           {photos.length > 0 ? (
