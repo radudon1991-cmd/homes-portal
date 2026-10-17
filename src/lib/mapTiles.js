@@ -1,9 +1,11 @@
 // Base map tiles per interface language.
 //
 // Thai UI  -> standard OpenStreetMap tiles (labels in Thai, the local language).
-// English UI -> Wikimedia's internationalized OSM render (labels in English).
+// English UI -> Esri World Street Map (labels in English).
 //
 // Both are free tile services that need no API key.
+// (Wikimedia's international tiles were tried first but they block
+// non-Wikimedia sites with HTTP 403, so Esri is used instead.)
 export function tileConfig(lang) {
   if (lang === 'th') {
     return {
@@ -13,8 +15,8 @@ export function tileConfig(lang) {
     }
   }
   return {
-    url: 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
     attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Wikimedia maps',
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.esri.com/">Esri</a>',
   }
 }
