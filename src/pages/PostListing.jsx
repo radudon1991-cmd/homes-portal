@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import LocationPicker from '../components/LocationPicker'
 import { useAuth } from '../lib/AuthContext'
+import { useProfile } from '../lib/useProfile'
 import { useLang, TYPE_KEY } from '../lib/i18n'
 import { supabase } from '../lib/supabase'
 import { fetchListingById, createListing, updateListing, uploadPhotos } from '../lib/listings'
@@ -27,6 +28,7 @@ export default function PostListing() {
   const { id: editId } = useParams()
   const isEdit = Boolean(editId)
   const { user } = useAuth()
+  const { profile } = useProfile()
   const { t } = useLang()
   const navigate = useNavigate()
 
@@ -139,10 +141,23 @@ export default function PostListing() {
 
   if (loading) return <div className="page-center">{t('loading')}</div>
 
+  if (profile?.is_banned) {
+    return (
+      <div className="page-center">
+        <div className="auth-card">
+          <h1>{t('banned_title')}</h1>
+          <p>{t('banned_msg', { reason: profile.ban_reason || '—' })}</p>
+          <Link to="/" className="btn btn-primary">{t('back_to_search')}</Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="form-page">
       <form className="listing-form" onSubmit={submit}>
         <h1>{isEdit ? t('edit_listing') : t('post_property')}</h1>
+        <div className="trust-warning">⚠ {t('posting_warning')}</div>
         {error && <div className="form-error">{error}</div>}
 
         <label>{t('title_label')}<input className="input" value={form.title} onChange={(e) => set('title', e.target.value)} placeholder={t('title_ph')} /></label>
