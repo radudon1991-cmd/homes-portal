@@ -21,9 +21,11 @@ export function formatBahtCompact(n) {
   return '฿' + num
 }
 
-export function formatDate(iso) {
+export function formatDate(iso, lang) {
   if (!iso) return '—'
-  return new Date(iso).toLocaleDateString('en-GB', {
+  // Thai locale gives Thai month names + Buddhist year, e.g. "17 ต.ค. 2569".
+  const locale = lang === 'th' ? 'th-TH' : 'en-GB'
+  return new Date(iso).toLocaleDateString(locale, {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
