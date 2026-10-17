@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { formatBahtCompact } from '../lib/format'
+import { formatBaht, formatBahtCompact } from '../lib/format'
 import { useLang } from '../lib/i18n'
 import { tileConfig } from '../lib/mapTiles'
 
@@ -25,14 +25,49 @@ function pinIcon(listing, selected) {
   })
 }
 
-export default function MapView({ listings, selectedId, onSelect }) {
-  const { lang } = useLang()
+// Builds the photo popup shown when a pin is tapped/clicked.
+// Uses DOM APIs (textContent) so listing titles can't inject HTML.
+function buildPopupEl(listing, t, onOpen) {
+  const el = document.createElement('div')
+  el.className = 'map-popup'
+  const photo = listing.image_urls?.[0]
+  if (photo) {
+    const img = document.createElement('img')
+    img.className = 'map-popup-photo'
+    img.src = photo
+    img.alt = ''
+    img.loading = 'lazy'
+    el.appendChild(img)
+  }
+  const title = document.createElement('div')
+  title.className = 'map-popup-title'
+  title.textContent = listing.title
+  el.appendChild(title)
+  const price = document.createElement('div')
+  price.className = 'map-popup-price'
+  price.textContent = formatBaht(listing.price_thb)
+  el.appendChild(price)
+  const btn = document.createElement('button')
+  btn.type = 'button'
+  btn.className = 'map-popup-link'
+  btn.textContent = t('view_details')
+  btn.addEventListener('click', () => onOpen(listing.id))
+  el.appendChild(btn)
+  return el
+}
+
+export default function MapView({ listings, selectedId, onSelect, onOpenListing }) {
+  const { lang, t } = useLang()
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const tileRef = useRef(null)
   const markersRef = useRef(new Map())
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
+  const onOpenRef = useRef(onOpenListing)
+  onOpenRef.current = onOpenListing
+  const tRef = useRef(t)
+  tRef.current = t
 
   // Create the map once.
   useEffect(() => {
@@ -79,6 +114,10 @@ export default function MapView({ listings, selectedId, onSelect }) {
           icon: pinIcon(l, selected),
           zIndexOffset: selected ? 1000 : 0,
         })
+        marker.bindPopup(
+          () => buildPopupEl(l, tRef.current, (id) => onOpenRef.current?.(id)),
+          { maxWidth: 260 },
+        )
         marker.on('click', () => {
           onSelectRef.current?.(l.id)
           map.flyTo([l.latitude, l.longitude], Math.max(map.getZoom(), 13), { duration: 0.6 })
@@ -95,18 +134,6 @@ export default function MapView({ listings, selectedId, onSelect }) {
       }
     }
   }, [listings, selectedId])
-
-  // Fly to the selected listing when chosen from the side panel.
-  const lastFlown = useRef(null)
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map || !selectedId || lastFlown.current === selectedId) return
-    const l = listings.find((x) => x.id === selectedId)
-    if (l && l.latitude != null) {
-      lastFlown.current = selectedId
-      map.flyTo([l.latitude, l.longitude], Math.max(map.getZoom(), 13), { duration: 0.6 })
-    }
-  }, [selectedId, listings])
 
   return <div ref={containerRef} className="map-container" />
 }
