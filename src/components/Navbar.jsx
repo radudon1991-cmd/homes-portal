@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
 
 export default function Navbar() {
   const { user, signOut } = useAuth()
+  const { profile } = useProfile()
   const { t, lang, setLang } = useLang()
   const navigate = useNavigate()
 
@@ -38,6 +40,9 @@ export default function Navbar() {
           </button>
         </div>
         <Link to="/" className="nav-link">{t('nav_search')}</Link>
+        {profile?.is_admin && (
+          <Link to="/admin" className="nav-link">{t('nav_admin')}</Link>
+        )}
         {user ? (
           <>
             <Link to="/post" className="nav-link nav-cta">{t('nav_post')}</Link>
