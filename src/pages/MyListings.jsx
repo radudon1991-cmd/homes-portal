@@ -1,18 +1,23 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
 import { fetchMyListings, deleteListing } from '../lib/listings'
 import { formatBaht, formatDate } from '../lib/format'
 
+const STATUS_CLASS = { pending: 'is-pending', approved: 'is-approved', rejected: 'is-rejected' }
+const STATUS_KEY = { pending: 'status_pending', approved: 'status_approved', rejected: 'status_rejected' }
+
 export default function MyListings() {
   const { user } = useAuth()
   const { profile } = useProfile()
   const { t, lang } = useLang()
+  const location = useLocation()
   const [listings, setListings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showPendingNotice, setShowPendingNotice] = useState(Boolean(location.state?.pendingNotice))
 
   const load = () => {
     setLoading(true)
@@ -43,6 +48,12 @@ export default function MyListings() {
       {profile?.is_banned && (
         <div className="trust-warning">⚠ {t('banned_msg', { reason: profile.ban_reason || '—' })}</div>
       )}
+      {showPendingNotice && (
+        <div className="notice-banner">
+          {t('pending_notice')}{' '}
+          <button type="button" className="notice-dismiss" onClick={() => setShowPendingNotice(false)}>X</button>
+        </div>
+      )}
       {error && <div className="form-error">{error}</div>}
       {listings.length === 0 ? (
         <div className="empty-state">
@@ -59,7 +70,12 @@ export default function MyListings() {
                 alt=""
               />
               <div className="dash-info">
-                <div className="dash-title">{l.title}</div>
+                <div className="dash-title">
+                  {l.title}{' '}
+                  <span className={`status-badge ${STATUS_CLASS[l.status] ?? 'is-pending'}`}>
+                    {t(STATUS_KEY[l.status] ?? 'status_pending')}
+                  </span>
+                </div>
                 <div className="dash-meta">
                   {formatBaht(l.price_thb)} · {l.listing_type === 'rent' ? t('for_rent') : t('for_sale')} · {l.province} · {formatDate(l.created_at, lang)}
                 </div>
