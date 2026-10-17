@@ -4,15 +4,13 @@ import { useLang } from '../lib/i18n'
 
 const PLACEHOLDER = 'https://picsum.photos/seed/placeholder/800/600'
 
-export default function ListingCard({ listing, selected, onHover }) {
+export default function ListingCard({ listing, selected }) {
   const { t } = useLang()
   const photo = listing.image_urls?.[0] || PLACEHOLDER
   return (
     <Link
       to={`/listing/${listing.id}`}
       className={`card${selected ? ' selected' : ''}`}
-      onMouseEnter={() => onHover?.(listing.id)}
-      onMouseLeave={() => onHover?.(null)}
     >
       <div className="card-photo">
         <img src={photo} alt={listing.title} loading="lazy" />
