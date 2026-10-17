@@ -186,6 +186,19 @@ const en = {
   admin_confirm_ban:
     'Ban this seller? All of their listings will be removed from the site. This is a serious action.',
   admin_not_admin: "You don't have moderation access.",
+  status_pending: 'Pending review',
+  status_approved: 'Live',
+  status_rejected: 'Rejected',
+  pending_notice:
+    'Your property was submitted and is waiting for review. It will appear on the map once approved.',
+  approval_title: 'Listings waiting for approval',
+  approval_none: 'No listings waiting for review.',
+  approve: 'Approve',
+  reject: 'Reject',
+  approval_confirm_reject: 'Reject this listing? The seller can edit it and resubmit.',
+  detail_pending_notice: 'This listing is waiting for review and is not visible to the public yet.',
+  detail_rejected_notice:
+    'This listing was rejected and is not visible to the public. Edit it to resubmit for review.',
 }
 
 const th = {
@@ -370,6 +383,19 @@ const th = {
   admin_confirm_ban:
     'แบนผู้ขายรายนี้? ประกาศทั้งหมดของเขาจะถูกลบออกจากเว็บไซต์ การกระทำนี้ร้ายแรง โปรดตรวจสอบให้แน่ใจ',
   admin_not_admin: 'คุณไม่มีสิทธิ์ตรวจสอบ',
+  status_pending: 'รอการตรวจสอบ',
+  status_approved: 'เผยแพร่แล้ว',
+  status_rejected: 'ไม่ผ่านการตรวจสอบ',
+  pending_notice:
+    'ประกาศของคุณถูกส่งแล้วและกำลังรอการตรวจสอบ จะแสดงบนแผนที่หลังจากได้รับการอนุมัติ',
+  approval_title: 'ประกาศที่รอการอนุมัติ',
+  approval_none: 'ไม่มีประกาศรอการตรวจสอบ',
+  approve: 'อนุมัติ',
+  reject: 'ปฏิเสธ',
+  approval_confirm_reject: 'ปฏิเสธประกาศนี้? ผู้ขายสามารถแก้ไขและส่งใหม่ได้',
+  detail_pending_notice: 'ประกาศนี้กำลังรอการตรวจสอบ ยังไม่แสดงต่อสาธารณะ',
+  detail_rejected_notice:
+    'ประกาศนี้ไม่ผ่านการตรวจสอบและไม่แสดงต่อสาธารณะ แก้ไขเพื่อส่งตรวจสอบอีกครั้ง',
 }
 
 const STRINGS = { en, th }
