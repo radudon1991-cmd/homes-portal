@@ -55,6 +55,15 @@ a { color: inherit; }
 .nav-cta { color: var(--gold-500); }
 .nav-user { font-size: 0.85rem; color: #bcd4d1; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* ---------- language toggle ---------- */
+.lang-toggle { display: flex; background: rgba(255,255,255,0.12); border-radius: 999px; padding: 2px; }
+.lang-btn {
+  border: none; background: transparent; color: #cfe3e1;
+  font-size: 0.8rem; font-weight: 800; padding: 0.35rem 0.7rem;
+  border-radius: 999px; cursor: pointer;
+}
+.lang-btn.active { background: var(--gold-500); color: var(--teal-900); }
+
 /* ---------- buttons & inputs ---------- */
 .btn {
   border: none; border-radius: 10px; padding: 0.6rem 1.1rem;
