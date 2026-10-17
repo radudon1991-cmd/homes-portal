@@ -3,13 +3,17 @@ import { useParams, Link } from 'react-router-dom'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { dotIcon } from '../components/MapView'
+import ReportButton from '../components/ReportButton'
+import SellerRating from '../components/SellerRating'
 import { fetchListingById } from '../lib/listings'
 import { formatBaht, formatDate } from '../lib/format'
 import { useLang, TYPE_KEY } from '../lib/i18n'
+import { useAuth } from '../lib/AuthContext'
 
 export default function ListingDetail() {
   const { id } = useParams()
   const { t, lang } = useLang()
+  const { user } = useAuth()
   const [listing, setListing] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activePhoto, setActivePhoto] = useState(0)
@@ -99,6 +103,12 @@ export default function ListingDetail() {
             <p className="seller-name">{seller.display_name || t('seller_fallback')}</p>
             {seller.phone && (
               <a className="btn btn-primary btn-block" href={`tel:${seller.phone}`}>📞 {seller.phone}</a>
+            )}
+          </div>
+          <div className="trust-box">
+            <SellerRating sellerId={listing.owner_id} />
+            {user && user.id !== listing.owner_id && (
+              <ReportButton listingId={listing.id} />
             )}
           </div>
         </div>
