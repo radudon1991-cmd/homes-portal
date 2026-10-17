@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
 import { fetchMyListings, deleteListing } from '../lib/listings'
 import { formatBaht, formatDate } from '../lib/format'
 
 export default function MyListings() {
   const { user } = useAuth()
+  const { profile } = useProfile()
   const { t, lang } = useLang()
   const [listings, setListings] = useState([])
   const [loading, setLoading] = useState(true)
@@ -38,6 +40,9 @@ export default function MyListings() {
         <h1>{t('my_listings')}</h1>
         <Link to="/post" className="btn btn-primary">{t('post_new')}</Link>
       </div>
+      {profile?.is_banned && (
+        <div className="trust-warning">⚠ {t('banned_msg', { reason: profile.ban_reason || '—' })}</div>
+      )}
       {error && <div className="form-error">{error}</div>}
       {listings.length === 0 ? (
         <div className="empty-state">
