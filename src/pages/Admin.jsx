@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useProfile } from '../lib/useProfile'
@@ -16,6 +16,8 @@ export default function Admin() {
   const [people, setPeople] = useState({})
   const [banned, setBanned] = useState([])
   const [pendingListings, setPendingListings] = useState([])
+  const [rejectingId, setRejectingId] = useState(null)
+  const [rejectNote, setRejectNote] = useState('')
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState('')
 
@@ -154,16 +156,23 @@ export default function Admin() {
 
   const approveListing = async (listing) => {
     setBusy('approve-' + listing.id)
-    await supabase.from('listings').update({ status: 'approved' }).eq('id', listing.id)
+    await supabase
+      .from('listings')
+      .update({ status: 'approved', rejection_reason: null })
+      .eq('id', listing.id)
     setBusy('')
     load()
   }
 
-  const rejectListing = async (listing) => {
-    if (!window.confirm(t('approval_confirm_reject'))) return
+  const confirmReject = async (listing) => {
     setBusy('reject-' + listing.id)
-    await supabase.from('listings').update({ status: 'rejected' }).eq('id', listing.id)
+    await supabase
+      .from('listings')
+      .update({ status: 'rejected', rejection_reason: rejectNote.trim() || null })
+      .eq('id', listing.id)
     setBusy('')
+    setRejectingId(null)
+    setRejectNote('')
     load()
   }
 
@@ -185,18 +194,19 @@ export default function Admin() {
           {pendingListings.map((l) => {
             const seller = people[l.owner_id]
             return (
-              <div key={l.id} className="dash-row">
+              <Fragment key={l.id}>
+              <div className="dash-row">
                 <div className="dash-info">
                   <div className="dash-title">
                     <Link to={`/listing/${l.id}`}>{l.title}</Link>
                   </div>
                   <div className="dash-meta">
-                    {l.property_type} | {l.listing_type} | {l.province} |{' '}
+                    {l.property_type} · {l.listing_type} · {l.province} ·{' '}
                     {formatDate(l.created_at, lang)}
                   </div>
                   <div className="dash-meta">
-                    <strong>{t('admin_seller')}:</strong> {seller?.display_name || '-'} (
-                    {seller?.email || '-'})
+                    <strong>{t('admin_seller')}:</strong> {seller?.display_name || '—'} (
+                    {seller?.email || '—'})
                   </div>
                 </div>
                 <div className="dash-actions">
@@ -210,12 +220,43 @@ export default function Admin() {
                   <button
                     className="btn btn-danger btn-sm"
                     disabled={busy === 'reject-' + l.id}
-                    onClick={() => rejectListing(l)}
+                    onClick={() => { setRejectingId(l.id); setRejectNote('') }}
                   >
                     {t('reject')}
                   </button>
                 </div>
               </div>
+              {rejectingId === l.id && (
+                <div className="reject-form">
+                  <label>{t('rejection_reason_label')}
+                    <textarea
+                      className="input"
+                      rows={3}
+                      value={rejectNote}
+                      onChange={(e) => setRejectNote(e.target.value)}
+                      placeholder={t('reject_note_ph')}
+                    />
+                  </label>
+                  <div className="form-actions">
+                    <button
+                      type="button"
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => setRejectingId(null)}
+                    >
+                      {t('cancel')}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      disabled={busy === 'reject-' + l.id}
+                      onClick={() => confirmReject(l)}
+                    >
+                      {t('confirm_reject')}
+                    </button>
+                  </div>
+                </div>
+              )}
+              </Fragment>
             )
           })}
         </div>
