@@ -6,10 +6,10 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 const en = {
   // brand
-  brand_main: 'Thailand',
-  brand_accent: 'Real Estate',
-  footer: 'Thailand Real Estate — find Thai properties on the map.',
-  page_title: 'Thailand Real Estate — Thailand Property Search',
+  brand_main: 'TruePin',
+  brand_accent: 'Property',
+  footer: 'TruePin Property — find verified Thai properties on the map.',
+  page_title: 'TruePin Property — Verified Thailand Property Search',
 
   // navbar
   nav_search: 'Search',
@@ -190,10 +190,10 @@ const en = {
 
 const th = {
   // brand
-  brand_main: 'Thailand',
-  brand_accent: 'Real Estate',
-  footer: 'Thailand Real Estate — ค้นหาอสังหาริมทรัพย์ไทยบนแผนที่',
-  page_title: 'Thailand Real Estate — ค้นหาอสังหาริมทรัพย์ไทย',
+  brand_main: 'TruePin',
+  brand_accent: 'Property',
+  footer: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทยที่เชื่อถือได้บนแผนที่',
+  page_title: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทย',
 
   // navbar
   nav_search: 'ค้นหา',
