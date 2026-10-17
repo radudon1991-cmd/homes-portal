@@ -75,6 +75,9 @@ const en = {
   no_account: 'No account yet?',
   signup_free_link: 'Sign up free',
   accounts_not_setup: 'Accounts are not set up yet — connect Supabase first (see README).',
+  or_divider: 'or',
+  continue_with: 'Continue with {provider}',
+  oauth_error: 'Sign-in failed. Please try again or use email instead.',
 
   // signup
   create_account: 'Create your account',
@@ -272,6 +275,9 @@ const th = {
   no_account: 'ยังไม่มีบัญชี?',
   signup_free_link: 'สมัครฟรี',
   accounts_not_setup: 'ยังไม่ได้ตั้งค่าระบบบัญชี — เชื่อมต่อ Supabase ก่อน (ดู README)',
+  or_divider: 'หรือ',
+  continue_with: 'ดำเนินการต่อด้วย {provider}',
+  oauth_error: 'เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้งหรือใช้อีเมลแทน',
 
   // signup
   create_account: 'สร้างบัญชีของคุณ',
