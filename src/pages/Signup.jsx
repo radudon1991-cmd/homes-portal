@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useLang } from '../lib/i18n'
+import SocialLogin from '../components/SocialLogin'
 
 export default function Signup() {
   const { signUp, isSupabaseConfigured } = useAuth()
@@ -52,6 +53,8 @@ export default function Signup() {
         <h1>{t('create_account')}</h1>
         <p className="auth-sub">{t('signup_sub')}</p>
         {error && <div className="form-error">{error}</div>}
+        <SocialLogin />
+        <div className="auth-divider">{t('or_divider')}</div>
         <label>{t('display_name')}<input className="input" type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder={t('name_placeholder')} /></label>
         <label>{t('email')}<input className="input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
         <label>{t('password_min')}<input className="input" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
