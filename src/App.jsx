@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import PostListing from './pages/PostListing'
 import MyListings from './pages/MyListings'
+import Admin from './pages/Admin'
 
 function Shell() {
   const { t } = useLang()
@@ -33,6 +34,7 @@ function Shell() {
             path="/my-listings"
             element={<ProtectedRoute><MyListings /></ProtectedRoute>}
           />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<div className="page-center"><p>{t('page_not_found')}</p></div>} />
         </Routes>
       </main>
