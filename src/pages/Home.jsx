@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import MapView from '../components/MapView'
 import SearchBar from '../components/SearchBar'
 import ListingCard from '../components/ListingCard'
@@ -17,6 +18,7 @@ const DEFAULT_FILTERS = {
 
 export default function Home() {
   const { t } = useLang()
+  const navigate = useNavigate()
   const [listings, setListings] = useState([])
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
   const [selectedId, setSelectedId] = useState(null)
@@ -43,7 +45,12 @@ export default function Home() {
       )}
       <div className="home-main">
         <div className="home-map">
-          <MapView listings={filtered} selectedId={selectedId} onSelect={setSelectedId} />
+          <MapView
+            listings={filtered}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            onOpenListing={(id) => navigate(`/listing/${id}`)}
+          />
         </div>
         <aside className="home-panel">
           <div className="panel-head">
@@ -56,7 +63,6 @@ export default function Home() {
                 key={l.id}
                 listing={l}
                 selected={l.id === selectedId}
-                onHover={setSelectedId}
               />
             ))}
             {!loading && filtered.length === 0 && (
