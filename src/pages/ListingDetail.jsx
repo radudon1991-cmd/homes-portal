@@ -8,6 +8,7 @@ import SellerRating from '../components/SellerRating'
 import { fetchListingById } from '../lib/listings'
 import { formatBaht, formatDate } from '../lib/format'
 import { useLang, TYPE_KEY } from '../lib/i18n'
+import { tileConfig } from '../lib/mapTiles'
 import { useAuth } from '../lib/AuthContext'
 
 export default function ListingDetail() {
@@ -34,12 +35,13 @@ export default function ListingDetail() {
       [listing.latitude, listing.longitude],
       14
     )
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    const tiles = tileConfig(lang)
+    L.tileLayer(tiles.url, {
+      attribution: tiles.attribution,
     }).addTo(map)
     L.marker([listing.latitude, listing.longitude], { icon: dotIcon() }).addTo(map)
     return () => map.remove()
-  }, [listing])
+  }, [listing, lang])
 
   if (loading) return <div className="page-center">{t('loading')}</div>
   if (!listing) {
