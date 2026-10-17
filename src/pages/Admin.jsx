@@ -15,6 +15,7 @@ export default function Admin() {
   const [listings, setListings] = useState({})
   const [people, setPeople] = useState({})
   const [banned, setBanned] = useState([])
+  const [pendingListings, setPendingListings] = useState([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState('')
 
@@ -41,6 +42,15 @@ export default function Admin() {
       })
     }
 
+    // Listings waiting for approval (new posts + seller edits).
+    const { data: waiting } = await supabase
+      .from('listings')
+      .select('id, title, price_thb, province, listing_type, property_type, owner_id, created_at')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true })
+    const waitingList = waiting ?? []
+    waitingList.forEach((l) => personIds.push(l.owner_id))
+
     let peopleMap = {}
     const uniqPersonIds = [...new Set(personIds)]
     if (uniqPersonIds.length) {
@@ -63,6 +73,7 @@ export default function Admin() {
     setListings(listingMap)
     setPeople(peopleMap)
     setBanned(bannedUsers ?? [])
+    setPendingListings(waitingList)
     setLoading(false)
   }
 
@@ -141,6 +152,21 @@ export default function Admin() {
     load()
   }
 
+  const approveListing = async (listing) => {
+    setBusy('approve-' + listing.id)
+    await supabase.from('listings').update({ status: 'approved' }).eq('id', listing.id)
+    setBusy('')
+    load()
+  }
+
+  const rejectListing = async (listing) => {
+    if (!window.confirm(t('approval_confirm_reject'))) return
+    setBusy('reject-' + listing.id)
+    await supabase.from('listings').update({ status: 'rejected' }).eq('id', listing.id)
+    setBusy('')
+    load()
+  }
+
   return (
     <div className="dashboard">
       <div className="dash-head">
@@ -148,6 +174,54 @@ export default function Admin() {
       </div>
 
       <h2>
+        {t('approval_title')} ({pendingListings.length})
+      </h2>
+      {pendingListings.length === 0 ? (
+        <div className="empty-state">
+          <p>{t('approval_none')}</p>
+        </div>
+      ) : (
+        <div className="dash-list">
+          {pendingListings.map((l) => {
+            const seller = people[l.owner_id]
+            return (
+              <div key={l.id} className="dash-row">
+                <div className="dash-info">
+                  <div className="dash-title">
+                    <Link to={`/listing/${l.id}`}>{l.title}</Link>
+                  </div>
+                  <div className="dash-meta">
+                    {l.property_type} | {l.listing_type} | {l.province} |{' '}
+                    {formatDate(l.created_at, lang)}
+                  </div>
+                  <div className="dash-meta">
+                    <strong>{t('admin_seller')}:</strong> {seller?.display_name || '-'} (
+                    {seller?.email || '-'})
+                  </div>
+                </div>
+                <div className="dash-actions">
+                  <button
+                    className="btn btn-primary btn-sm"
+                    disabled={busy === 'approve-' + l.id}
+                    onClick={() => approveListing(l)}
+                  >
+                    {t('approve')}
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    disabled={busy === 'reject-' + l.id}
+                    onClick={() => rejectListing(l)}
+                  >
+                    {t('reject')}
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      <h2 style={{ marginTop: '2rem' }}>
         {t('admin_pending')} ({pending.length})
       </h2>
       {pending.length === 0 ? (
