@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { formatBahtCompact } from '../lib/format'
+import { useLang } from '../lib/i18n'
+import { tileConfig } from '../lib/mapTiles'
 
 // A simple round dot pin (avoids Leaflet's default image assets under Vite).
 export function dotIcon() {
@@ -24,8 +26,10 @@ function pinIcon(listing, selected) {
 }
 
 export default function MapView({ listings, selectedId, onSelect }) {
+  const { lang } = useLang()
   const containerRef = useRef(null)
   const mapRef = useRef(null)
+  const tileRef = useRef(null)
   const markersRef = useRef(new Map())
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
@@ -38,16 +42,24 @@ export default function MapView({ listings, selectedId, onSelect }) {
       zoom: 6,
       scrollWheelZoom: true,
     })
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map)
     mapRef.current = map
     return () => {
       map.remove()
       mapRef.current = null
     }
   }, [])
+
+  // Base map tiles follow the UI language (Thai labels / English labels).
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+    if (tileRef.current) map.removeLayer(tileRef.current)
+    const tiles = tileConfig(lang)
+    tileRef.current = L.tileLayer(tiles.url, {
+      maxZoom: 19,
+      attribution: tiles.attribution,
+    }).addTo(map)
+  }, [lang])
 
   // Sync markers with listings.
   useEffect(() => {
