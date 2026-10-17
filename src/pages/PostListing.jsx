@@ -117,6 +117,9 @@ export default function PostListing() {
         image_urls: urls,
         owner_id: user.id,
         is_active: true,
+        // New and edited listings always go back to 'pending':
+        // an admin must approve them before they appear publicly.
+        status: 'pending',
       }
 
       // Keep the seller's phone number up to date for contact display.
@@ -127,11 +130,12 @@ export default function PostListing() {
       if (isEdit) {
         const { error } = await updateListing(editId, payload)
         if (error) throw error
+        navigate('/my-listings', { state: { pendingNotice: true } })
       } else {
         const { error } = await createListing(payload)
         if (error) throw error
+        navigate('/my-listings', { state: { pendingNotice: true } })
       }
-      navigate('/my-listings')
     } catch (err) {
       setError(err.message)
     } finally {
