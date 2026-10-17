@@ -21,6 +21,14 @@ export function formatBahtCompact(n) {
   return '฿' + num
 }
 
+/** Full price label for a listing: sales just the amount; rentals get a
+ *  /month or /day suffix from the listing's rent_period. Needs the i18n t(). */
+export function formatPrice(listing, t) {
+  const base = formatBaht(listing.price_thb)
+  if (listing.listing_type !== 'rent') return base
+  return base + (listing.rent_period === 'daily' ? t('per_day') : t('per_month'))
+}
+
 export function formatDate(iso, lang) {
   if (!iso) return '—'
   // Thai locale gives Thai month names + Buddhist year, e.g. "17 ต.ค. 2569".
