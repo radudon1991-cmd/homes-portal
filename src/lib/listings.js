@@ -9,12 +9,13 @@ function withSeller(listing) {
 
 export async function fetchListings() {
   if (!isSupabaseConfigured) {
-    return { data: SEED_LISTINGS.filter((l) => l.is_active), error: null }
+    return { data: SEED_LISTINGS.filter((l) => l.is_active && (l.status ?? 'approved') === 'approved'), error: null }
   }
   const { data, error } = await supabase
     .from('listings')
     .select('*, profiles(display_name, phone)')
     .eq('is_active', true)
+    .eq('status', 'approved')
     .order('created_at', { ascending: false })
     .limit(500)
   return { data: (data ?? []).map(withSeller), error }
