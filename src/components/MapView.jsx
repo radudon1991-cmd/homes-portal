@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { formatBahtCompact, formatPrice, provinceBounds } from '../lib/format'
+import { formatBahtCompact, formatPrice, provinceBounds, THAILAND_BOUNDS } from '../lib/format'
 import { useLang } from '../lib/i18n'
 import { createBaseLayer } from '../lib/mapTiles'
 
@@ -96,10 +96,11 @@ export default function MapView({ listings, selectedId, onSelect, onOpenListing,
     tileRef.current = createBaseLayer(lang).addTo(map)
   }, [lang])
 
-  // Province lock (owner's feature, 2026-10-18): when a province
-  // filter is chosen, fly to that province and fence PANNING to its
-  // bounds so visitors can't drift away and lose it. Zoom in/out
-  // stays completely normal. Clearing the filter removes the fence.
+  // Map fence (owner's feature, 2026-10-18): the map is ALWAYS
+  // fenced — to the chosen province when a province filter is set
+  // (with a fly-to), otherwise to Thailand as a whole, so visitors
+  // can never wander off the country. Only PANNING is fenced;
+  // zoom in/out stays completely normal.
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
@@ -117,8 +118,8 @@ export default function MapView({ listings, selectedId, onSelect, onOpenListing,
         }, 950)
       }
     } else {
-      map.setMaxBounds(undefined)
-      map.options.maxBoundsViscosity = 0
+      map.setMaxBounds(L.latLngBounds(THAILAND_BOUNDS).pad(0.02))
+      map.options.maxBoundsViscosity = 1.0
     }
     return () => clearTimeout(timer)
   }, [province])
