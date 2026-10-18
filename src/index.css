@@ -750,3 +750,14 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
   background: #C62828; color: #fff; font-size: 0.65rem; font-weight: 800;
   border-radius: 999px; padding: 1px 7px; text-transform: uppercase;
 }
+
+/* ── Admin announcement broadcast (2026-10-18) ─────────────────── */
+.announce-box {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: #FAFCFE; padding: 1rem 1.1rem; margin-bottom: 1.6rem;
+}
+.announce-box h2 { margin-top: 0; }
+.announce-box textarea { width: 100%; margin: 0.4rem 0 0.6rem; }
+.announce-actions { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
+.announce-noreply { margin: 0.2rem 0 0.7rem; font-weight: 500; }
+.msg-noreply { font-size: 0.85rem; color: var(--ink-soft); }
