@@ -3,7 +3,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { dotIcon } from './MapView'
 import { useLang } from '../lib/i18n'
-import { tileConfig } from '../lib/mapTiles'
+import { createBaseLayer } from '../lib/mapTiles'
 
 // Small map used in the "post a property" form: click anywhere to drop the pin.
 export default function LocationPicker({ value, onChange }) {
@@ -52,11 +52,7 @@ export default function LocationPicker({ value, onChange }) {
     const map = mapRef.current
     if (!map) return
     if (tileRef.current) map.removeLayer(tileRef.current)
-    const tiles = tileConfig(lang)
-    tileRef.current = L.tileLayer(tiles.url, {
-      maxZoom: 19,
-      attribution: tiles.attribution,
-    }).addTo(map)
+    tileRef.current = createBaseLayer(lang).addTo(map)
   }, [lang])
 
   return <div ref={containerRef} className="picker-map" />
