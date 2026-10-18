@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import LocationPicker from '../components/LocationPicker'
+import HouseRules from '../components/HouseRules'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { useLang, TYPE_KEY } from '../lib/i18n'
@@ -28,6 +29,8 @@ const EMPTY = {
   address: '',
   phone: '',
   line_id: '',
+  whatsapp: '',
+  telegram: '',
   auto_renew: false,
 }
 
@@ -71,6 +74,8 @@ export default function PostListing() {
         address: data.address ?? '',
         phone: '',
         line_id: '',
+        whatsapp: '',
+        telegram: '',
         auto_renew: data.auto_renew ?? false,
       })
       if (data.latitude != null) setLocation({ lat: data.latitude, lng: data.longitude })
@@ -87,7 +92,7 @@ export default function PostListing() {
   const [credit, setCredit] = useState(0)
   useEffect(() => {
     if (!user) return
-    supabase.from('profiles').select('phone, line_id, credit_baht').eq('id', user.id).single()
+    supabase.from('profiles').select('phone, line_id, whatsapp, telegram, credit_baht').eq('id', user.id).single()
       .then(({ data }) => {
         if (data) {
           setCredit(data.credit_baht ?? 0)
@@ -95,6 +100,8 @@ export default function PostListing() {
             ...f,
             phone: data.phone ?? f.phone,
             line_id: data.line_id ?? f.line_id,
+            whatsapp: data.whatsapp ?? f.whatsapp,
+            telegram: data.telegram ?? f.telegram,
           }))
         }
       })
@@ -182,6 +189,8 @@ export default function PostListing() {
         .update({
           phone: form.phone.trim() || null,
           line_id: form.line_id.trim() || null,
+          whatsapp: form.whatsapp.trim() || null,
+          telegram: form.telegram.trim() || null,
         })
         .eq('id', user.id)
 
@@ -220,6 +229,7 @@ export default function PostListing() {
       <form className="listing-form" onSubmit={submit}>
         <h1>{isEdit ? t('edit_listing') : t('post_property')}</h1>
         <div className="trust-warning">⚠ {t('posting_warning')}</div>
+        <HouseRules variant="compact" />
         {isEdit && rejectionNote && (
           <div className="admin-note"><strong>{t('fix_requested')}:</strong> {rejectionNote}</div>
         )}
@@ -324,6 +334,15 @@ export default function PostListing() {
           </label>
           <label>{t('line_label')}
             <input className="input" value={form.line_id} onChange={(e) => set('line_id', e.target.value)} placeholder={t('line_ph')} />
+          </label>
+        </div>
+
+        <div className="form-row">
+          <label>{t('whatsapp_label')}
+            <input className="input" value={form.whatsapp} onChange={(e) => set('whatsapp', e.target.value)} placeholder={t('whatsapp_ph')} />
+          </label>
+          <label>{t('telegram_label')}
+            <input className="input" value={form.telegram} onChange={(e) => set('telegram', e.target.value)} placeholder={t('telegram_ph')} />
           </label>
         </div>
 
