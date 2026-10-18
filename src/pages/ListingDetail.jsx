@@ -4,6 +4,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { dotIcon } from '../components/MapView'
 import ReportButton from '../components/ReportButton'
+import ListingChat from '../components/ListingChat'
 import SellerRating from '../components/SellerRating'
 import { fetchListingById } from '../lib/listings'
 import { sendMessage } from '../lib/messages'
@@ -174,6 +175,7 @@ export default function ListingDetail() {
               </Link>
             )}
           </div>
+          <ListingChat listing={listing} />
           <div className="trust-box">
             <SellerRating sellerId={listing.owner_id} />
             {user && user.id !== listing.owner_id && (
