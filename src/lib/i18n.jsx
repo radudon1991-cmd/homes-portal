@@ -3,12 +3,14 @@ import { createContext, useContext, useEffect, useState } from 'react'
 // Thai + English UI strings. t('key') looks up the current language,
 // falling back to English, then to the key itself.
 // Use {name} placeholders via t('key', { name: value }).
+
 const en = {
   // brand
   brand_main: 'TruePin',
   brand_accent: 'Property',
   footer: 'TruePin Property — find verified Thai properties on the map.',
   page_title: 'TruePin Property — Verified Thailand Property Search',
+
   // navbar
   nav_search: 'Search',
   nav_post: '+ Post property',
@@ -16,6 +18,7 @@ const en = {
   nav_login: 'Log in',
   nav_signup: 'Sign up free',
   nav_logout: 'Log out',
+
   // search bar
   search_placeholder: 'Search by area, e.g. Sukhumvit, Phuket…',
   buy: 'Buy',
@@ -31,19 +34,22 @@ const en = {
   type_house: 'House',
   type_townhouse: 'Townhouse',
   type_land: 'Land',
+
   // home
   loading: 'Loading…',
   property_one: 'property',
   property_many: 'properties',
   no_results: 'No properties match your search. Try widening the filters.',
-  demo_banner: 'Demo mode — showing sample listings. Connect Supabase (see README) to go live with real data.',
+  demo_banner: 'Demo mode — showing sample listings. Connect Supabase (see README) to go live with real listings.',
   page_not_found: 'Page not found.',
+
   // listing card / badges
   for_rent: 'For rent',
   for_sale: 'For sale',
   bd: 'bd',
   ba: 'ba',
   sqm: 'sqm',
+
   // listing detail
   back_to_map: '← Back to map',
   no_photos: 'No photos yet',
@@ -59,6 +65,7 @@ const en = {
   seller_fallback: 'Seller',
   listing_not_found: 'Listing not found.',
   back_to_search: 'Back to search',
+
   // login
   welcome: 'Welcome back',
   login_sub: 'Log in to post and manage your properties.',
@@ -72,6 +79,7 @@ const en = {
   or_divider: 'or',
   continue_with: 'Continue with {provider}',
   oauth_error: 'Sign-in failed. Please try again or use email instead.',
+
   // signup
   create_account: 'Create your account',
   signup_sub: 'Free. Post properties in minutes.',
@@ -85,6 +93,7 @@ const en = {
   check_email: 'Check your email',
   confirm_sent: 'We sent a confirmation link to {email}. Click it, then log in.',
   go_to_login: 'Go to log in',
+
   // post listing
   edit_listing: 'Edit your listing',
   post_property: 'Post a property',
@@ -122,6 +131,7 @@ const en = {
   saving: 'Saving…',
   save_changes: 'Save changes',
   publish: 'Publish listing',
+
   // my listings
   my_listings: 'My listings',
   post_new: '+ Post new property',
@@ -132,6 +142,7 @@ const en = {
   edit: 'Edit',
   delete: 'Delete',
   delete_confirm: 'Delete "{title}"? This cannot be undone.',
+
   // trust & safety
   nav_admin: 'Moderation',
   report_listing: 'Report listing',
@@ -158,10 +169,10 @@ const en = {
   rating_update: 'Update rating',
   rating_thanks: 'Thanks for your rating!',
   posting_warning:
-    'Accuracy matters: list only true, verifiable information. Listings with false or misleading information will be removed, and your account will be banned.',
+    'Accuracy matters: list only true, verifiable information. Listings with false or misleading information will be removed.',
   banned_title: 'Account banned',
   banned_msg:
-    'Your account was banned for: {reason}. Your listings have been removed. If you believe this is a mistake, please contact us.',
+    'Your account was banned for: {reason}. Your listings have been removed. If you believe this is a mistake, contact support.',
   banned_tag: 'banned',
   admin_title: 'Moderation',
   admin_pending: 'Pending reports',
@@ -198,6 +209,8 @@ const en = {
   confirm_reject: 'Confirm rejection',
   admin_note: 'Note from admin',
   fix_requested: 'Please fix the following and resubmit',
+
+  // inbox
   nav_inbox: 'Inbox',
   inbox_title: 'Messages',
   tab_inbox: 'Inbox',
@@ -214,6 +227,8 @@ const en = {
   msg_placeholder: 'Write a message…',
   msg_sent_ok: 'Message sent.',
   msg_error: 'Could not send. Please try again.',
+
+  // chat
   chat_open: 'Live chat',
   group_chat_title: 'TruePin group chat',
   chat_online: '{count} online',
@@ -223,7 +238,7 @@ const en = {
   chat_blocked: 'That message was blocked — please keep the chat clean.',
   chat_links: 'Only one link per message, please.',
   chat_too_long: 'Message is too long (500 characters max).',
-  chat_clears: 'Chats clear every day at 02:00 (Thailand time). Text, links & emoji only — no pictures or video.',
+  chat_clears: 'Chats clear every day at 02:00 (Thailand time). Text, links & emoji only — no pictures.',
   chat_empty: 'No messages yet — say hello! 👋',
   live_chat_seller: 'Live chat with the seller',
   live_chat_hint: 'No account needed. Chat with the seller here in real time.',
@@ -232,11 +247,15 @@ const en = {
   your_listing_chat: 'This is your listing — answer visitors from Inbox → Live chats.',
   seller_badge: 'Seller',
   msg_login_prompt: 'Log in to message the seller',
+
+  // rent period
   rent_period_label: 'Rent period',
   rent_monthly: 'Monthly',
   rent_daily: 'Daily',
   per_month: '/month',
   per_day: '/day',
+
+  // forgot/reset password
   forgot_password: 'Forgot password?',
   forgot_title: 'Forgot your password?',
   forgot_sub: 'Enter your email and we will send you a link to set a new password.',
@@ -252,6 +271,8 @@ const en = {
   password_too_short: 'Password must be at least 6 characters.',
   reset_link_invalid: 'This reset link is invalid or has expired. Please request a new one.',
   request_new_link: 'Request a new link',
+
+  // misc
   photos_max: 'Maximum 10 photos per post — the extra photos were not added.',
   stats_members: '{count} members',
   stats_active: '{count} active this month',
@@ -267,6 +288,7 @@ const th = {
   brand_accent: 'Property',
   footer: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทยที่เชื่อถือได้บนแผนที่',
   page_title: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทย',
+
   // navbar
   nav_search: 'ค้นหา',
   nav_post: '+ ลงประกาศ',
@@ -274,6 +296,7 @@ const th = {
   nav_login: 'เข้าสู่ระบบ',
   nav_signup: 'สมัครฟรี',
   nav_logout: 'ออกจากระบบ',
+
   // search bar
   search_placeholder: 'ค้นหาตามพื้นที่ เช่น สุขุมวิท ภูเก็ต…',
   buy: 'ซื้อ',
@@ -289,6 +312,7 @@ const th = {
   type_house: 'บ้าน',
   type_townhouse: 'ทาวน์เฮาส์',
   type_land: 'ที่ดิน',
+
   // home
   loading: 'กำลังโหลด…',
   property_one: 'ประกาศ',
@@ -296,12 +320,14 @@ const th = {
   no_results: 'ไม่พบประกาศที่ตรงกับการค้นหา ลองขยายเงื่อนไขการค้นหา',
   demo_banner: 'โหมดทดลอง — กำลังแสดงประกาศตัวอย่าง เชื่อมต่อ Supabase (ดู README) เพื่อใช้งานข้อมูลจริง',
   page_not_found: 'ไม่พบหน้านี้',
+
   // listing card / badges
   for_rent: 'ให้เช่า',
   for_sale: 'ขาย',
   bd: 'นอน',
   ba: 'น้ำ',
   sqm: 'ตร.ม.',
+
   // listing detail
   back_to_map: '← กลับไปแผนที่',
   no_photos: 'ยังไม่มีรูปภาพ',
@@ -317,6 +343,7 @@ const th = {
   seller_fallback: 'ผู้ขาย',
   listing_not_found: 'ไม่พบประกาศนี้',
   back_to_search: 'กลับไปค้นหา',
+
   // login
   welcome: 'ยินดีต้อนรับกลับ',
   login_sub: 'เข้าสู่ระบบเพื่อลงประกาศและจัดการอสังหาริมทรัพย์ของคุณ',
@@ -330,6 +357,7 @@ const th = {
   or_divider: 'หรือ',
   continue_with: 'ดำเนินการต่อด้วย {provider}',
   oauth_error: 'เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้งหรือใช้อีเมลแทน',
+
   // signup
   create_account: 'สร้างบัญชีของคุณ',
   signup_sub: 'ฟรี ลงประกาศได้ในไม่กี่นาที',
@@ -343,6 +371,7 @@ const th = {
   check_email: 'ตรวจสอบอีเมลของคุณ',
   confirm_sent: 'เราส่งลิงก์ยืนยันไปที่ {email} แล้ว คลิกลิงก์แล้วเข้าสู่ระบบ',
   go_to_login: 'ไปหน้าเข้าสู่ระบบ',
+
   // post listing
   edit_listing: 'แก้ไขประกาศของคุณ',
   post_property: 'ลงประกาศอสังหาริมทรัพย์',
@@ -380,6 +409,7 @@ const th = {
   saving: 'กำลังบันทึก…',
   save_changes: 'บันทึกการแก้ไข',
   publish: 'เผยแพร่ประกาศ',
+
   // my listings
   my_listings: 'ประกาศของฉัน',
   post_new: '+ ลงประกาศใหม่',
@@ -390,6 +420,7 @@ const th = {
   edit: 'แก้ไข',
   delete: 'ลบ',
   delete_confirm: 'ลบ "{title}"? การกระทำนี้ไม่สามารถย้อนกลับได้',
+
   // trust & safety
   nav_admin: 'ตรวจสอบ',
   report_listing: 'รายงานประกาศ',
@@ -416,10 +447,10 @@ const th = {
   rating_update: 'แก้ไขคะแนน',
   rating_thanks: 'ขอบคุณสำหรับคะแนน!',
   posting_warning:
-    'ความถูกต้องสำคัญ: ลงประกาศเฉพาะข้อมูลที่เป็นจริงและตรวจสอบได้เท่านั้น ประกาศที่มีข้อมูลเท็จหรือทำให้เข้าใจผิดจะถูกลบ และบัญชีของคุณจะถูกแบน',
+    'กรุณาลงข้อมูลที่ถูกต้องและตรวจสอบได้เท่านั้น ประกาศที่มีข้อมูลเท็จหรือทำให้เข้าใจผิดจะถูกลบ',
   banned_title: 'บัญชีถูกแบน',
   banned_msg:
-    'บัญชีของคุณถูกแบนเนื่องจาก: {reason} ประกาศของคุณถูกลบออกจากเว็บไซต์แล้ว หากคุณคิดว่าเป็นการเข้าใจผิด กรุณาติดต่อเรา',
+    'บัญชีของคุณถูกแบนเนื่องจาก: {reason} ประกาศทั้งหมดของคุณถูกลบแล้ว หากคิดว่าเป็นการผิดพลาด โปรดติดต่อทีมงาน',
   banned_tag: 'ถูกแบน',
   admin_title: 'ตรวจสอบประกาศ',
   admin_pending: 'รายงานที่รอตรวจสอบ',
@@ -436,13 +467,13 @@ const th = {
   admin_details: 'รายละเอียด',
   admin_credibility: 'ประวัติผู้รายงาน: {total} ครั้ง · ถูกต้อง {upheld} · ไม่ถูกต้อง {dismissed}',
   admin_confirm_ban:
-    'แบนผู้ขายรายนี้? ประกาศทั้งหมดของเขาจะถูกลบออกจากเว็บไซต์ การกระทำนี้ร้ายแรง โปรดตรวจสอบให้แน่ใจ',
+    'แบนผู้ขายรายนี้? ประกาศทั้งหมดของพวกเขาจะถูกลบออกจากไซต์ นี่เป็นการดำเนินการที่ร้ายแรง',
   admin_not_admin: 'คุณไม่มีสิทธิ์ตรวจสอบ',
   status_pending: 'รอการตรวจสอบ',
   status_approved: 'เผยแพร่แล้ว',
   status_rejected: 'ไม่ผ่านการตรวจสอบ',
   pending_notice:
-    'ประกาศของคุณถูกส่งแล้วและกำลังรอการตรวจสอบ จะแสดงบนแผนที่หลังจากได้รับการอนุมัติ',
+    'ประกาศของคุณถูกส่งแล้วและกำลังรอการตรวจสอบ จะแสดงบนแผนที่เมื่อได้รับการอนุมัติ',
   approval_title: 'ประกาศที่รอการอนุมัติ',
   approval_none: 'ไม่มีประกาศรอการตรวจสอบ',
   approve: 'อนุมัติ',
@@ -450,12 +481,14 @@ const th = {
   approval_confirm_reject: 'ปฏิเสธประกาศนี้? ผู้ขายสามารถแก้ไขและส่งใหม่ได้',
   detail_pending_notice: 'ประกาศนี้กำลังรอการตรวจสอบ ยังไม่แสดงต่อสาธารณะ',
   detail_rejected_notice:
-    'ประกาศนี้ไม่ผ่านการตรวจสอบและไม่แสดงต่อสาธารณะ แก้ไขเพื่อส่งตรวจสอบอีกครั้ง',
+    'ประกาศนี้ถูกปฏิเสธและไม่แสดงต่อสาธารณะ แก้ไขเพื่อส่งตรวจสอบใหม่',
   rejection_reason_label: 'บอกผู้ขายว่าต้องแก้ไขอะไร (ผู้ขายจะเห็นข้อความนี้)',
   reject_note_ph: 'เช่น ราคาดูไม่ถูกต้อง — 500 เป็นราคารวมหรือต่อตารางเมตร? โปรดชี้แจง',
   confirm_reject: 'ยืนยันการปฏิเสธ',
   admin_note: 'หมายเหตุจากผู้ดูแล',
   fix_requested: 'โปรดแก้ไขดังต่อไปนี้แล้วส่งใหม่',
+
+  // inbox
   nav_inbox: 'กล่องข้อความ',
   inbox_title: 'ข้อความ',
   tab_inbox: 'ข้อความเข้า',
@@ -472,6 +505,8 @@ const th = {
   msg_placeholder: 'เขียนข้อความ…',
   msg_sent_ok: 'ส่งข้อความแล้ว',
   msg_error: 'ส่งไม่สำเร็จ โปรดลองอีกครั้ง',
+
+  // chat
   chat_open: 'แชทสด',
   group_chat_title: 'แชทกลุ่ม TruePin',
   chat_online: 'ออนไลน์ {count} คน',
@@ -481,7 +516,7 @@ const th = {
   chat_blocked: 'ข้อความถูกบล็อก — กรุณาใช้คำสุภาพและเหมาะสม',
   chat_links: 'ส่งได้ครั้งละ 1 ลิงก์เท่านั้น',
   chat_too_long: 'ข้อความยาวเกินไป (สูงสุด 500 ตัวอักษร)',
-  chat_clears: 'แชทจะถูกล้างทุกวันเวลา 02:00 น. (เวลาไทย) ส่งได้เฉพาะข้อความ ลิงก์ และอีโมจิ — ห้ามส่งรูปภาพหรือวิดีโอ',
+  chat_clears: 'แชทจะถูกล้างทุกวันเวลา 02:00 น. (เวลาไทย) ส่งได้เฉพาะข้อความ ลิงก์ และอีโมจิ — ห้ามส่งรูป',
   chat_empty: 'ยังไม่มีข้อความ — ทักทายกันได้เลย! 👋',
   live_chat_seller: 'แชทสดกับผู้ขาย',
   live_chat_hint: 'ไม่ต้องมีบัญชี คุยกับผู้ขายแบบเรียลไทม์ได้ที่นี่',
@@ -490,11 +525,15 @@ const th = {
   your_listing_chat: 'นี่คือประกาศของคุณ — ตอบผู้เข้าชมได้ที่กล่องข้อความ → แชทสด',
   seller_badge: 'ผู้ขาย',
   msg_login_prompt: 'เข้าสู่ระบบเพื่อส่งข้อความถึงผู้ขาย',
+
+  // rent period
   rent_period_label: 'ระยะเวลาเช่า',
   rent_monthly: 'รายเดือน',
   rent_daily: 'รายวัน',
   per_month: '/เดือน',
   per_day: '/วัน',
+
+  // forgot/reset password
   forgot_password: 'ลืมรหัสผ่าน?',
   forgot_title: 'ลืมรหัสผ่าน?',
   forgot_sub: 'กรอกอีเมลของคุณ เราจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปให้',
@@ -510,6 +549,8 @@ const th = {
   password_too_short: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
   reset_link_invalid: 'ลิงก์นี้ไม่ถูกต้องหรือหมดอายุแล้ว โปรดขอลิงก์ใหม่',
   request_new_link: 'ขอลิงก์ใหม่',
+
+  // misc
   photos_max: 'ใส่รูปได้สูงสุด 10 รูปต่อประกาศ — รูปที่เกินไม่ได้ถูกเพิ่ม',
   stats_members: 'สมาชิก {count} คน',
   stats_active: 'ใช้งานเดือนนี้ {count} คน',
@@ -521,6 +562,7 @@ const th = {
 
 const STRINGS = { en, th }
 const TITLES = { en: en.page_title, th: th.page_title }
+
 const LanguageContext = createContext(null)
 
 export function LanguageProvider({ children }) {
@@ -533,6 +575,7 @@ export function LanguageProvider({ children }) {
       return 'th'
     }
   })
+
   useEffect(() => {
     try {
       localStorage.setItem('tre-lang', lang)
@@ -542,6 +585,7 @@ export function LanguageProvider({ children }) {
     document.title = TITLES[lang]
     document.documentElement.lang = lang === 'th' ? 'th' : 'en'
   }, [lang])
+
   const t = (key, vars) => {
     let s = STRINGS[lang][key] ?? STRINGS.en[key] ?? key
     if (vars) {
@@ -551,6 +595,7 @@ export function LanguageProvider({ children }) {
     }
     return s
   }
+
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
       {children}
