@@ -7,9 +7,9 @@ import ReportButton from '../components/ReportButton'
 import SellerRating from '../components/SellerRating'
 import { fetchListingById } from '../lib/listings'
 import { sendMessage } from '../lib/messages'
-import { formatBaht, formatDate, formatPrice } from '../lib/format'
+import { formatBaht, formatDate, formatPrice, provinceLabel } from '../lib/format'
 import { useLang, TYPE_KEY } from '../lib/i18n'
-import { tileConfig } from '../lib/mapTiles'
+import { createBaseLayer } from '../lib/mapTiles'
 import { useAuth } from '../lib/AuthContext'
 
 // Build the LINE chat link from whatever the seller entered:
@@ -44,14 +44,11 @@ export default function ListingDetail() {
 
   useEffect(() => {
     if (!listing || listing.latitude == null || !miniMapRef.current) return
-    const tiles = tileConfig(lang)
     const map = L.map(miniMapRef.current, { scrollWheelZoom: false }).setView(
       [listing.latitude, listing.longitude],
       14
     )
-    L.tileLayer(tiles.url, {
-      attribution: tiles.attribution,
-    }).addTo(map)
+    createBaseLayer(lang).addTo(map)
     L.marker([listing.latitude, listing.longitude], { icon: dotIcon() }).addTo(map)
     return () => map.remove()
   }, [listing, lang])
@@ -118,7 +115,7 @@ export default function ListingDetail() {
             {listing.bedrooms > 0 && <div><span>{t('fact_bedrooms')}</span><strong>{listing.bedrooms}</strong></div>}
             {listing.bathrooms > 0 && <div><span>{t('fact_bathrooms')}</span><strong>{listing.bathrooms}</strong></div>}
             {listing.area_sqm > 0 && <div><span>{t('fact_area')}</span><strong>{listing.area_sqm} {t('sqm')}</strong></div>}
-            <div><span>{t('fact_province')}</span><strong>{listing.province}</strong></div>
+            <div><span>{t('fact_province')}</span><strong>{provinceLabel(listing.province, lang)}</strong></div>
             <div><span>{t('fact_posted')}</span><strong>{formatDate(listing.created_at, lang)}</strong></div>
           </div>
           {listing.address && <p className="detail-address">📍 {listing.address}</p>}
