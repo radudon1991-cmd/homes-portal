@@ -40,7 +40,7 @@ const en = {
   property_one: 'property',
   property_many: 'properties',
   no_results: 'No properties match your search. Try widening the filters.',
-  demo_banner: 'Demo mode — showing sample listings. Connect Supabase (see README) to go live with real listings.',
+  demo_banner: 'Demo mode — showing sample listings. Connect Supabase (see README) to go live with real data.',
   page_not_found: 'Page not found.',
 
   // listing card / badges
@@ -169,10 +169,10 @@ const en = {
   rating_update: 'Update rating',
   rating_thanks: 'Thanks for your rating!',
   posting_warning:
-    'Accuracy matters: list only true, verifiable information. Listings with false or misleading information will be removed.',
+    'Accuracy matters: list only true, verifiable information. Listings with false or misleading information will be removed, and your account will be banned.',
   banned_title: 'Account banned',
   banned_msg:
-    'Your account was banned for: {reason}. Your listings have been removed. If you believe this is a mistake, contact support.',
+    'Your account was banned for: {reason}. Your listings have been removed. If you believe this is a mistake, please contact us.',
   banned_tag: 'banned',
   admin_title: 'Moderation',
   admin_pending: 'Pending reports',
@@ -209,8 +209,6 @@ const en = {
   confirm_reject: 'Confirm rejection',
   admin_note: 'Note from admin',
   fix_requested: 'Please fix the following and resubmit',
-
-  // inbox
   nav_inbox: 'Inbox',
   inbox_title: 'Messages',
   tab_inbox: 'Inbox',
@@ -227,8 +225,6 @@ const en = {
   msg_placeholder: 'Write a message…',
   msg_sent_ok: 'Message sent.',
   msg_error: 'Could not send. Please try again.',
-
-  // chat
   chat_open: 'Live chat',
   group_chat_title: 'TruePin group chat',
   chat_online: '{count} online',
@@ -238,7 +234,7 @@ const en = {
   chat_blocked: 'That message was blocked — please keep the chat clean.',
   chat_links: 'Only one link per message, please.',
   chat_too_long: 'Message is too long (500 characters max).',
-  chat_clears: 'Chats clear every day at 02:00 (Thailand time). Text, links & emoji only — no pictures.',
+  chat_clears: 'Chats clear every day at 02:00 (Thailand time). Text, links & emoji only — no pictures or video.',
   chat_empty: 'No messages yet — say hello! 👋',
   live_chat_seller: 'Live chat with the seller',
   live_chat_hint: 'No account needed. Chat with the seller here in real time.',
@@ -247,15 +243,11 @@ const en = {
   your_listing_chat: 'This is your listing — answer visitors from Inbox → Live chats.',
   seller_badge: 'Seller',
   msg_login_prompt: 'Log in to message the seller',
-
-  // rent period
   rent_period_label: 'Rent period',
   rent_monthly: 'Monthly',
   rent_daily: 'Daily',
   per_month: '/month',
   per_day: '/day',
-
-  // forgot/reset password
   forgot_password: 'Forgot password?',
   forgot_title: 'Forgot your password?',
   forgot_sub: 'Enter your email and we will send you a link to set a new password.',
@@ -271,8 +263,6 @@ const en = {
   password_too_short: 'Password must be at least 6 characters.',
   reset_link_invalid: 'This reset link is invalid or has expired. Please request a new one.',
   request_new_link: 'Request a new link',
-
-  // misc
   photos_max: 'Maximum 10 photos per post — the extra photos were not added.',
   stats_members: '{count} members',
   stats_active: '{count} active this month',
@@ -447,10 +437,10 @@ const th = {
   rating_update: 'แก้ไขคะแนน',
   rating_thanks: 'ขอบคุณสำหรับคะแนน!',
   posting_warning:
-    'กรุณาลงข้อมูลที่ถูกต้องและตรวจสอบได้เท่านั้น ประกาศที่มีข้อมูลเท็จหรือทำให้เข้าใจผิดจะถูกลบ',
+    'ความถูกต้องสำคัญ: ลงประกาศเฉพาะข้อมูลที่เป็นจริงและตรวจสอบได้เท่านั้น ประกาศที่มีข้อมูลเท็จหรือทำให้เข้าใจผิดจะถูกลบ และบัญชีของคุณจะถูกแบน',
   banned_title: 'บัญชีถูกแบน',
   banned_msg:
-    'บัญชีของคุณถูกแบนเนื่องจาก: {reason} ประกาศทั้งหมดของคุณถูกลบแล้ว หากคิดว่าเป็นการผิดพลาด โปรดติดต่อทีมงาน',
+    'บัญชีของคุณถูกแบนเนื่องจาก: {reason} ประกาศของคุณถูกลบออกจากเว็บไซต์แล้ว หากคุณคิดว่าเป็นการเข้าใจผิด กรุณาติดต่อเรา',
   banned_tag: 'ถูกแบน',
   admin_title: 'ตรวจสอบประกาศ',
   admin_pending: 'รายงานที่รอตรวจสอบ',
@@ -467,13 +457,13 @@ const th = {
   admin_details: 'รายละเอียด',
   admin_credibility: 'ประวัติผู้รายงาน: {total} ครั้ง · ถูกต้อง {upheld} · ไม่ถูกต้อง {dismissed}',
   admin_confirm_ban:
-    'แบนผู้ขายรายนี้? ประกาศทั้งหมดของพวกเขาจะถูกลบออกจากไซต์ นี่เป็นการดำเนินการที่ร้ายแรง',
+    'แบนผู้ขายรายนี้? ประกาศทั้งหมดของเขาจะถูกลบออกจากเว็บไซต์ การกระทำนี้ร้ายแรง โปรดตรวจสอบให้แน่ใจ',
   admin_not_admin: 'คุณไม่มีสิทธิ์ตรวจสอบ',
   status_pending: 'รอการตรวจสอบ',
   status_approved: 'เผยแพร่แล้ว',
   status_rejected: 'ไม่ผ่านการตรวจสอบ',
   pending_notice:
-    'ประกาศของคุณถูกส่งแล้วและกำลังรอการตรวจสอบ จะแสดงบนแผนที่เมื่อได้รับการอนุมัติ',
+    'ประกาศของคุณถูกส่งแล้วและกำลังรอการตรวจสอบ จะแสดงบนแผนที่หลังจากได้รับการอนุมัติ',
   approval_title: 'ประกาศที่รอการอนุมัติ',
   approval_none: 'ไม่มีประกาศรอการตรวจสอบ',
   approve: 'อนุมัติ',
@@ -481,14 +471,12 @@ const th = {
   approval_confirm_reject: 'ปฏิเสธประกาศนี้? ผู้ขายสามารถแก้ไขและส่งใหม่ได้',
   detail_pending_notice: 'ประกาศนี้กำลังรอการตรวจสอบ ยังไม่แสดงต่อสาธารณะ',
   detail_rejected_notice:
-    'ประกาศนี้ถูกปฏิเสธและไม่แสดงต่อสาธารณะ แก้ไขเพื่อส่งตรวจสอบใหม่',
+    'ประกาศนี้ไม่ผ่านการตรวจสอบและไม่แสดงต่อสาธารณะ แก้ไขเพื่อส่งตรวจสอบอีกครั้ง',
   rejection_reason_label: 'บอกผู้ขายว่าต้องแก้ไขอะไร (ผู้ขายจะเห็นข้อความนี้)',
   reject_note_ph: 'เช่น ราคาดูไม่ถูกต้อง — 500 เป็นราคารวมหรือต่อตารางเมตร? โปรดชี้แจง',
   confirm_reject: 'ยืนยันการปฏิเสธ',
   admin_note: 'หมายเหตุจากผู้ดูแล',
   fix_requested: 'โปรดแก้ไขดังต่อไปนี้แล้วส่งใหม่',
-
-  // inbox
   nav_inbox: 'กล่องข้อความ',
   inbox_title: 'ข้อความ',
   tab_inbox: 'ข้อความเข้า',
@@ -505,8 +493,6 @@ const th = {
   msg_placeholder: 'เขียนข้อความ…',
   msg_sent_ok: 'ส่งข้อความแล้ว',
   msg_error: 'ส่งไม่สำเร็จ โปรดลองอีกครั้ง',
-
-  // chat
   chat_open: 'แชทสด',
   group_chat_title: 'แชทกลุ่ม TruePin',
   chat_online: 'ออนไลน์ {count} คน',
@@ -516,7 +502,7 @@ const th = {
   chat_blocked: 'ข้อความถูกบล็อก — กรุณาใช้คำสุภาพและเหมาะสม',
   chat_links: 'ส่งได้ครั้งละ 1 ลิงก์เท่านั้น',
   chat_too_long: 'ข้อความยาวเกินไป (สูงสุด 500 ตัวอักษร)',
-  chat_clears: 'แชทจะถูกล้างทุกวันเวลา 02:00 น. (เวลาไทย) ส่งได้เฉพาะข้อความ ลิงก์ และอีโมจิ — ห้ามส่งรูป',
+  chat_clears: 'แชทจะถูกล้างทุกวันเวลา 02:00 น. (เวลาไทย) ส่งได้เฉพาะข้อความ ลิงก์ และอีโมจิ — ห้ามส่งรูปภาพหรือวิดีโอ',
   chat_empty: 'ยังไม่มีข้อความ — ทักทายกันได้เลย! 👋',
   live_chat_seller: 'แชทสดกับผู้ขาย',
   live_chat_hint: 'ไม่ต้องมีบัญชี คุยกับผู้ขายแบบเรียลไทม์ได้ที่นี่',
@@ -525,15 +511,11 @@ const th = {
   your_listing_chat: 'นี่คือประกาศของคุณ — ตอบผู้เข้าชมได้ที่กล่องข้อความ → แชทสด',
   seller_badge: 'ผู้ขาย',
   msg_login_prompt: 'เข้าสู่ระบบเพื่อส่งข้อความถึงผู้ขาย',
-
-  // rent period
   rent_period_label: 'ระยะเวลาเช่า',
   rent_monthly: 'รายเดือน',
   rent_daily: 'รายวัน',
   per_month: '/เดือน',
   per_day: '/วัน',
-
-  // forgot/reset password
   forgot_password: 'ลืมรหัสผ่าน?',
   forgot_title: 'ลืมรหัสผ่าน?',
   forgot_sub: 'กรอกอีเมลของคุณ เราจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปให้',
@@ -549,8 +531,6 @@ const th = {
   password_too_short: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
   reset_link_invalid: 'ลิงก์นี้ไม่ถูกต้องหรือหมดอายุแล้ว โปรดขอลิงก์ใหม่',
   request_new_link: 'ขอลิงก์ใหม่',
-
-  // misc
   photos_max: 'ใส่รูปได้สูงสุด 10 รูปต่อประกาศ — รูปที่เกินไม่ได้ถูกเพิ่ม',
   stats_members: 'สมาชิก {count} คน',
   stats_active: 'ใช้งานเดือนนี้ {count} คน',
