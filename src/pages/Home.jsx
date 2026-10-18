@@ -5,11 +5,13 @@ import SearchBar from '../components/SearchBar'
 import ListingCard from '../components/ListingCard'
 import GroupChat from '../components/GroupChat'
 import { fetchListings, applyFilters, dataSource } from '../lib/listings'
+import { PROVINCES } from '../lib/format'
 import { useLang } from '../lib/i18n'
 
 const DEFAULT_FILTERS = {
   query: '',
   listingType: '',
+  province: '',
   propertyType: '',
   minPrice: '',
   maxPrice: '',
@@ -25,6 +27,20 @@ export default function Home() {
   const [selectedId, setSelectedId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // Typing an exact province name in the search box (English or
+  // Thai, e.g. "Phuket" / "ภูเก็ต") engages the province filter,
+  // which flies the map there and locks panning to it (2026-10-18).
+  useEffect(() => {
+    const raw = filters.query.trim()
+    if (!raw) return
+    const lower = raw.toLowerCase()
+    const p = PROVINCES.find((x) => x.en.toLowerCase() === lower || x.th === raw)
+    if (p && filters.province !== p.en) {
+      setFilters((f) => ({ ...f, province: p.en }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters.query])
 
   useEffect(() => {
     fetchListings().then(({ data, error }) => {
@@ -63,6 +79,7 @@ export default function Home() {
             selectedId={selectedId}
             onSelect={setSelectedId}
             onOpenListing={(id) => navigate(`/listing/${id}`)}
+            province={filters.province}
           />
           <div className="map-legend">
             <span className="legend-row">
