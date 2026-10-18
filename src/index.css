@@ -723,3 +723,33 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 .copy-bar .btn { white-space: nowrap; }
 
 .input-credit { width: 5.5rem; }
+
+/* ── Admin Members inspection (2026-10-18) ─────────────────────── */
+.members-tools {
+  display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: flex-end;
+  margin-bottom: 1rem;
+}
+.members-tools > .input { flex: 1; min-width: 220px; }
+.members-sort { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; }
+
+.members-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 900px) {
+  .members-grid { grid-template-columns: 1fr 1fr; }
+}
+.member-card {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: #fff; padding: 0.9rem 1rem;
+  display: flex; flex-direction: column; gap: 0.35rem;
+}
+.member-head { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.member-name { font-weight: 800; font-size: 1.02rem; color: var(--teal-900); }
+.member-stats {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem;
+  font-size: 0.88rem; margin-top: 0.3rem;
+}
+.member-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-top: 0.55rem; }
+
+.pager {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; margin-top: 1.2rem; font-size: 0.9rem;
+}
