@@ -13,6 +13,11 @@ import {
   subscribeLiveMessages,
 } from '../lib/liveChat'
 import { checkChatMessage } from '../lib/chatFilter'
+import {
+  fetchContactMessages,
+  markContactRead,
+  deleteContactMessage,
+} from '../lib/contact'
 
 // Inbox (received) + Outbox (sent) for listing enquiries, plus the
 // Live tab: real-time guest chats started from the owner's listings.
@@ -27,6 +32,9 @@ export default function Inbox() {
   const [replyTo, setReplyTo] = useState(null)
   const [replyBody, setReplyBody] = useState('')
   const [busy, setBusy] = useState(false)
+
+  // "Contact us" messages (admin only)
+  const [contactMsgs, setContactMsgs] = useState([])
 
   // Live chats (owner side)
   const [liveConvs, setLiveConvs] = useState([])
@@ -83,6 +91,36 @@ export default function Inbox() {
     if (tab === 'live') loadLive()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab])
+
+  const loadContact = async () => {
+    const { data } = await fetchContactMessages()
+    setContactMsgs(data)
+  }
+
+  // Admins get the Contact tab; load it early for the unread badge.
+  useEffect(() => {
+    if (profile?.is_admin) loadContact()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.is_admin])
+
+  useEffect(() => {
+    if (tab === 'contact' && profile?.is_admin) loadContact()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab])
+
+  const contactUnread = contactMsgs.filter((c) => !c.is_read).length
+
+  const doContactRead = async (c) => {
+    await markContactRead(c.id)
+    setContactMsgs((prev) =>
+      prev.map((x) => (x.id === c.id ? { ...x, is_read: true } : x))
+    )
+  }
+
+  const doContactDelete = async (c) => {
+    await deleteContactMessage(c.id)
+    setContactMsgs((prev) => prev.filter((x) => x.id !== c.id))
+  }
 
   useEffect(() => {
     if (!activeConv) return
@@ -201,6 +239,15 @@ export default function Inbox() {
         >
           {t('tab_live')}
         </button>
+        {profile?.is_admin && (
+          <button
+            className={tab === 'contact' ? 'tab-btn active' : 'tab-btn'}
+            onClick={() => setTab('contact')}
+          >
+            {t('tab_contact')}
+            {contactUnread > 0 && <span className="nav-badge">{contactUnread}</span>}
+          </button>
+        )}
       </div>
 
       {tab === 'inbox' &&
@@ -308,6 +355,46 @@ export default function Inbox() {
               </button>
             </div>
             <p className="chat-note">{t('chat_clears')}</p>
+          </div>
+        ))}
+
+      {tab === 'contact' &&
+        profile?.is_admin &&
+        (contactMsgs.length === 0 ? (
+          <div className="empty-state">
+            <p>{t('contact_empty')}</p>
+          </div>
+        ) : (
+          <div className="msg-list">
+            {contactMsgs.map((c) => (
+              <div key={c.id} className={`msg-card${!c.is_read ? ' unread' : ''}`}>
+                <div className="msg-head">
+                  <span className="msg-party">
+                    <strong>{t('contact_from_label')}:</strong> {c.name}
+                  </span>
+                  {!c.is_read && <span className="msg-new">{t('msg_new')}</span>}
+                  <span className="msg-date">{formatDate(c.created_at, lang)}</span>
+                </div>
+                {c.contact_info && <p className="msg-listing">↩️ {c.contact_info}</p>}
+                <p className="msg-body">{c.body}</p>
+                <div className="msg-actions">
+                  {!c.is_read && (
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => doContactRead(c)}
+                    >
+                      {t('msg_mark_read')}
+                    </button>
+                  )}
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => doContactDelete(c)}
+                  >
+                    {t('contact_delete')}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         ))}
     </div>
