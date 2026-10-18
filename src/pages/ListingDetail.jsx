@@ -6,7 +6,7 @@ import { dotIcon } from '../components/MapView'
 import ReportButton from '../components/ReportButton'
 import ListingChat from '../components/ListingChat'
 import SellerRating from '../components/SellerRating'
-import { fetchListingById } from '../lib/listings'
+import { fetchListingById, isExpired } from '../lib/listings'
 import { sendMessage } from '../lib/messages'
 import { formatBaht, formatDate, formatPrice, provinceLabel } from '../lib/format'
 import { useLang, TYPE_KEY } from '../lib/i18n'
@@ -32,6 +32,7 @@ export default function ListingDetail() {
   const [activePhoto, setActivePhoto] = useState(0)
   const [msgBody, setMsgBody] = useState('')
   const [msgState, setMsgState] = useState('') // '' | 'sending' | 'sent' | 'error'
+  const [copied, setCopied] = useState(false)
   const miniMapRef = useRef(null)
 
   const typeLabel = (v) => t(TYPE_KEY[v] ?? v)
@@ -66,6 +67,26 @@ export default function ListingDetail() {
 
   const photos = listing.image_urls?.length ? listing.image_urls : []
   const seller = listing.profiles ?? {}
+  const expired = listing.status === 'approved' && isExpired(listing)
+  const isOwner = Boolean(user && user.id === listing.owner_id)
+  // Share bar (owner's feature, 2026-10-18): direct link to this post.
+  const shareUrl = `${window.location.origin}/listing/${listing.id}`
+  const shareEnc = encodeURIComponent(shareUrl)
+  const canNativeShare = typeof navigator !== 'undefined' && Boolean(navigator.share)
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+    } catch {
+      const ta = document.createElement('textarea')
+      ta.value = shareUrl
+      document.body.appendChild(ta)
+      ta.select()
+      document.execCommand('copy')
+      ta.remove()
+    }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <div className="detail">
@@ -78,6 +99,12 @@ export default function ListingDetail() {
       )}
       {listing.status === 'rejected' && listing.rejection_reason && (
         <div className="admin-note"><strong>{t('admin_note')}:</strong> {listing.rejection_reason}</div>
+      )}
+      {expired && (
+        <div className="notice-banner is-rejected">
+          ⛔ {t('expired_banner')}{' '}
+          {isOwner && <Link to="/my-listings" className="btn btn-primary btn-sm">{t('renew')}</Link>}
+        </div>
       )}
       <div className="detail-grid">
         <div className="detail-left">
@@ -120,6 +147,51 @@ export default function ListingDetail() {
             <div><span>{t('fact_posted')}</span><strong>{formatDate(listing.created_at, lang)}</strong></div>
           </div>
           {listing.address && <p className="detail-address">📍 {listing.address}</p>}
+          <div className="share-box">
+            <div className="share-label">🔗 {t('share_label')}</div>
+            <div className="share-btns">
+              <a
+                className="share-btn fb"
+                href={`https://www.facebook.com/sharer/sharer.php?u=${shareEnc}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Facebook
+              </a>
+              <a className="share-btn msgr" href={`fb-messenger://share?link=${shareEnc}`}>
+                Messenger
+              </a>
+              <a
+                className="share-btn line"
+                href={`https://social-plugins.line.me/lineit/share?url=${shareEnc}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LINE
+              </a>
+              {canNativeShare && (
+                <button
+                  type="button"
+                  className="share-btn more"
+                  onClick={() => navigator.share({ title: listing.title, url: shareUrl }).catch(() => {})}
+                >
+                  {t('share_more')}
+                </button>
+              )}
+            </div>
+            <div className="copy-bar">
+              <input
+                className="input"
+                readOnly
+                value={shareUrl}
+                onFocus={(e) => e.target.select()}
+                aria-label={t('share_label')}
+              />
+              <button type="button" className="btn btn-primary" onClick={copyLink}>
+                {copied ? t('copied') : t('copy_link')}
+              </button>
+            </div>
+          </div>
           <div className="seller-card">
             <h3>{t('contact_seller')}</h3>
             <p className="seller-name">{seller.display_name || t('seller_fallback')}</p>
