@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { formatBahtCompact, formatPrice } from '../lib/format'
+import { formatBahtCompact, formatPrice, provinceBounds } from '../lib/format'
 import { useLang } from '../lib/i18n'
 import { createBaseLayer } from '../lib/mapTiles'
 
@@ -60,7 +60,7 @@ function buildPopupEl(listing, t, onOpen) {
   return el
 }
 
-export default function MapView({ listings, selectedId, onSelect, onOpenListing }) {
+export default function MapView({ listings, selectedId, onSelect, onOpenListing, province }) {
   const { lang, t } = useLang()
   const containerRef = useRef(null)
   const mapRef = useRef(null)
@@ -95,6 +95,33 @@ export default function MapView({ listings, selectedId, onSelect, onOpenListing 
     if (tileRef.current) map.removeLayer(tileRef.current)
     tileRef.current = createBaseLayer(lang).addTo(map)
   }, [lang])
+
+  // Province lock (owner's feature, 2026-10-18): when a province
+  // filter is chosen, fly to that province and fence PANNING to its
+  // bounds so visitors can't drift away and lose it. Zoom in/out
+  // stays completely normal. Clearing the filter removes the fence.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+    let timer
+    if (province) {
+      const b = provinceBounds(province)
+      if (b) {
+        const bounds = L.latLngBounds(b)
+        // Fly first, clamp after: setting maxBounds while the view is
+        // outside it makes Leaflet snap awkwardly mid-flight.
+        map.flyToBounds(bounds, { padding: [14, 14], duration: 0.9 })
+        timer = setTimeout(() => {
+          map.setMaxBounds(bounds.pad(0.03))
+          map.options.maxBoundsViscosity = 1.0
+        }, 950)
+      }
+    } else {
+      map.setMaxBounds(undefined)
+      map.options.maxBoundsViscosity = 0
+    }
+    return () => clearTimeout(timer)
+  }, [province])
 
   // Sync markers with listings.
   useEffect(() => {
