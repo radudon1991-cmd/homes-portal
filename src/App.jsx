@@ -10,6 +10,7 @@ import Signup from './pages/Signup'
 import PostListing from './pages/PostListing'
 import MyListings from './pages/MyListings'
 import Admin from './pages/Admin'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 
 function Shell() {
   const { t } = useLang()
@@ -21,6 +22,7 @@ function Shell() {
           <Route path="/" element={<Home />} />
           <Route path="/listing/:id" element={<ListingDetail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/signup" element={<Signup />} />
           <Route
             path="/post"
