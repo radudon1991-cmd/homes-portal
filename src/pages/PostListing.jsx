@@ -35,7 +35,7 @@ export default function PostListing() {
   const isEdit = Boolean(editId)
   const { user } = useAuth()
   const { profile } = useProfile()
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const navigate = useNavigate()
 
   const [form, setForm] = useState(EMPTY)
@@ -260,7 +260,7 @@ export default function PostListing() {
         <div className="form-row">
           <label>{t('province_label')}
             <select className="input" value={form.province} onChange={(e) => set('province', e.target.value)}>
-              {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
+              {PROVINCES.map((p) => <option key={p.en} value={p.en}>{lang === 'th' ? p.th : p.en}</option>)}
             </select>
           </label>
           <label>{t('address_label')}
