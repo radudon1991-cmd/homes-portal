@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { formatBaht, formatBahtCompact } from '../lib/format'
+import { formatBahtCompact, formatPrice } from '../lib/format'
 import { useLang } from '../lib/i18n'
 import { tileConfig } from '../lib/mapTiles'
 
@@ -15,8 +15,33 @@ export function dotIcon() {
   })
 }
 
+// Pin colour by price range. The bands differ per category
+// (user's spec, 2026-10-17):
+//   sale:          green <=100K, blue <=500K, pink <=1M, red above
+//   rent monthly:  green <=8K,   blue <=15K,  pink <=25K, red above
+//   rent daily:    green <=700,  blue <=1.5K, pink <=3.5K, red above
+function priceTier(listing) {
+  const p = Number(listing.price_thb) || 0
+  if (listing.listing_type === 'rent') {
+    if (listing.rent_period === 'daily') {
+      if (p <= 700) return 'tier-green'
+      if (p <= 1500) return 'tier-blue'
+      if (p <= 3500) return 'tier-pink'
+      return 'tier-red'
+    }
+    if (p <= 8000) return 'tier-green'
+    if (p <= 15000) return 'tier-blue'
+    if (p <= 25000) return 'tier-pink'
+    return 'tier-red'
+  }
+  if (p <= 100000) return 'tier-green'
+  if (p <= 500000) return 'tier-blue'
+  if (p <= 1000000) return 'tier-pink'
+  return 'tier-red'
+}
+
 function pinIcon(listing, selected) {
-  const cls = `price-pin ${listing.listing_type === 'rent' ? 'rent' : 'sale'}${selected ? ' selected' : ''}`
+  const cls = `price-pin ${priceTier(listing)}${selected ? ' selected' : ''}`
   return L.divIcon({
     className: 'price-pin-wrap',
     html: `<div class="${cls}">${formatBahtCompact(listing.price_thb)}</div>`,
@@ -45,7 +70,7 @@ function buildPopupEl(listing, t, onOpen) {
   el.appendChild(title)
   const price = document.createElement('div')
   price.className = 'map-popup-price'
-  price.textContent = formatBaht(listing.price_thb)
+  price.textContent = formatPrice(listing, t)
   el.appendChild(price)
   const btn = document.createElement('button')
   btn.type = 'button'
