@@ -176,6 +176,7 @@ export default function ListingDetail() {
             )}
           </div>
           <ListingChat listing={listing} />
+          <div className="scam-box">⚠️ {t('scam_warn_full')}</div>
           <div className="trust-box">
             <SellerRating sellerId={listing.owner_id} />
             {user && user.id !== listing.owner_id && (
