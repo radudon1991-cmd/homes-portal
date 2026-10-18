@@ -23,6 +23,23 @@ function lineUrl(id) {
   return `https://line.me/ti/p/~${v}`
 }
 
+// WhatsApp chat link (2026-10-18): wa.me needs an international-format
+// number, so a Thai local number starting with 0 gets the 66 country code.
+function whatsappUrl(num) {
+  let d = (num || '').replace(/\D/g, '')
+  if (!d) return '#'
+  if (d.startsWith('0')) d = '66' + d.slice(1)
+  return `https://wa.me/${d}`
+}
+
+// Telegram chat link from a @username or a full t.me URL (2026-10-18).
+function telegramUrl(id) {
+  const v = (id || '').trim()
+  if (!v) return '#'
+  if (v.includes('t.me')) return v.startsWith('http') ? v : `https://${v}`
+  return `https://t.me/${v.replace(/^@/, '')}`
+}
+
 export default function ListingDetail() {
   const { id } = useParams()
   const { t, lang } = useLang()
@@ -223,6 +240,12 @@ export default function ListingDetail() {
             )}
             {seller.line_id && !contactLocked && (
               <a className="btn btn-line btn-block" href={lineUrl(seller.line_id)} target="_blank" rel="noreferrer">💬 {t('chat_line')}: {seller.line_id}</a>
+            )}
+            {seller.whatsapp && !contactLocked && (
+              <a className="btn btn-whatsapp btn-block" href={whatsappUrl(seller.whatsapp)} target="_blank" rel="noreferrer">🟢 {t('chat_whatsapp')}: {seller.whatsapp}</a>
+            )}
+            {seller.telegram && !contactLocked && (
+              <a className="btn btn-telegram btn-block" href={telegramUrl(seller.telegram)} target="_blank" rel="noreferrer">✈️ {t('chat_telegram')}: {seller.telegram}</a>
             )}
             {user && user.id !== listing.owner_id && !contactLocked && (
               <div className="msg-form">
