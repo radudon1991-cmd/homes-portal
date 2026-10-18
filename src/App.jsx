@@ -18,6 +18,7 @@ import Inbox from './pages/Inbox'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import Terms from './pages/Terms'
 import Contact from './pages/Contact'
 import FooterStats from './components/FooterStats'
 
@@ -51,6 +52,7 @@ function Shell() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<Signup />} />
           <Route
@@ -90,6 +92,11 @@ function Shell() {
           >
             💬 LINE @truepinproperty
           </a>
+        </div>
+        <div className="footer-links">
+          <Link to="/terms">{t('terms_link')}</Link>
+          <span aria-hidden="true"> · </span>
+          <Link to="/privacy-policy">{t('privacy_link')}</Link>
         </div>
       </footer>
     </div>
