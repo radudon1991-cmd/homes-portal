@@ -378,6 +378,20 @@ const en = {
   agree_first: 'Please read the house rules and tick the agreement box first.',
   full_terms_link: 'Read the full Terms of Service',
   house_rules_title: 'House rules — please read before posting',
+  // Mortgage calculator on sale listing pages (2026-10-18).
+  mtg_title: 'Mortgage calculator',
+  mtg_monthly: 'Estimated monthly payment',
+  mtg_per_month: ' / month',
+  mtg_principal: 'Principal',
+  mtg_interest: 'Interest',
+  mtg_price: 'Property price (฿)',
+  mtg_down_pct: 'Down payment (%)',
+  mtg_rate: 'Interest rate (% / year)',
+  mtg_years: 'Loan term (years)',
+  mtg_down: 'Down payment',
+  mtg_loan: 'Loan amount',
+  mtg_total_interest: 'Total interest over the term',
+  mtg_note: 'Estimate only — the principal/interest split uses the first monthly payment. Real rates and approval depend on the bank.',
 }
 
 const th = {
@@ -754,6 +768,20 @@ const th = {
   agree_first: 'โปรดอ่านกฎและติ๊กยอมรับก่อนดำเนินการต่อ',
   full_terms_link: 'อ่านข้อกำหนดการใช้บริการฉบับเต็ม',
   house_rules_title: 'กฎการลงประกาศ — โปรดอ่านก่อนโพสต์',
+  // Mortgage calculator on sale listing pages (2026-10-18).
+  mtg_title: 'คำนวณสินเชื่อบ้าน',
+  mtg_monthly: 'ยอดผ่อนโดยประมาณ',
+  mtg_per_month: ' / เดือน',
+  mtg_principal: 'เงินต้น',
+  mtg_interest: 'ดอกเบี้ย',
+  mtg_price: 'ราคาทรัพย์ (บาท)',
+  mtg_down_pct: 'เงินดาวน์ (%)',
+  mtg_rate: 'อัตราดอกเบี้ย (% ต่อปี)',
+  mtg_years: 'ระยะเวลากู้ (ปี)',
+  mtg_down: 'เงินดาวน์',
+  mtg_loan: 'ยอดสินเชื่อ',
+  mtg_total_interest: 'ดอกเบี้ยรวมตลอดอายุสัญญา',
+  mtg_note: 'เป็นการประมาณการเท่านั้น — การแยกเงินต้น/ดอกเบี้ยใช้ยอดของงวดแรก อัตราจริงและการอนุมัติขึ้นอยู่กับธนาคาร',
 }
 
 const STRINGS = { en, th }
