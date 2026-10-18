@@ -20,7 +20,8 @@ const en = {
   nav_logout: 'Log out',
 
   // search bar
-  search_placeholder: 'Search by area, e.g. Sukhumvit, Phuket…',
+  search_placeholder: 'Search by keyword, e.g. pool villa, near BTS, beachfront…',
+  expired_contact_hidden: 'Contact options are hidden because this post has expired.',
   buy: 'Buy',
   rent: 'Rent',
   buy_rent_all: 'Buy & Rent',
@@ -358,7 +359,8 @@ const th = {
   nav_logout: 'ออกจากระบบ',
 
   // search bar
-  search_placeholder: 'ค้นหาตามพื้นที่ เช่น สุขุมวิท ภูเก็ต…',
+  search_placeholder: 'ค้นหาด้วยคำค้น เช่น พูลวิลล่า ใกล้ BTS ติดชายหาด…',
+  expired_contact_hidden: 'ตัวเลือกการติดต่อถูกซ่อนไว้เพราะประกาศนี้หมดอายุแล้ว',
   buy: 'ซื้อ',
   rent: 'เช่า',
   buy_rent_all: 'ซื้อและเช่า',
