@@ -178,18 +178,22 @@ export default function Inbox() {
               {t('msg_mark_read')}
             </button>
           )}
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => {
-              setReplyTo(replyTo === m.id ? null : m.id)
-              setReplyBody('')
-            }}
-          >
-            {t('msg_reply')}
-          </button>
+          {m.no_reply ? (
+            <span className="msg-noreply">🔕 {t('no_reply_note')}</span>
+          ) : (
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => {
+                setReplyTo(replyTo === m.id ? null : m.id)
+                setReplyBody('')
+              }}
+            >
+              {t('msg_reply')}
+            </button>
+          )}
         </div>
       )}
-      {isInbox && replyTo === m.id && (
+      {isInbox && replyTo === m.id && !m.no_reply && (
         <div className="msg-reply">
           <textarea
             className="input"
@@ -289,8 +293,10 @@ export default function Inbox() {
                     </span>
                     <span className="msg-date">{formatDate(c.last_message_at, lang)}</span>
                   </div>
-                  {c.listings && (
+                  {c.listings ? (
                     <span className="msg-listing">🏠 {c.listings.title}</span>
+                  ) : (
+                    <span className="msg-listing">🛟 {t('support_chat')}</span>
                   )}
                 </button>
               ))}
@@ -307,13 +313,15 @@ export default function Inbox() {
             </button>
             <h2 className="live-thread-title">
               {activeConv.guest_name}
-              {activeConv.listings && (
+              {activeConv.listings ? (
                 <>
                   {' · '}
                   <Link to={`/listing/${activeConv.listings.id}`}>
                     {activeConv.listings.title}
                   </Link>
                 </>
+              ) : (
+                <> · 🛟 {t('support_chat')}</>
               )}
             </h2>
             <div className="chat-list thread">
