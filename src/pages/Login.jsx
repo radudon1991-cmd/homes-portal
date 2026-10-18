@@ -39,6 +39,7 @@ export default function Login() {
         <label>{t('email')}<input className="input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
         <label>{t('password')}<input className="input" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} /></label>
         <button className="btn btn-primary btn-block" disabled={busy}>{busy ? t('logging_in') : t('login')}</button>
+        <p className="auth-switch"><Link to="/forgot-password">{t('forgot_password')}</Link></p>
         <p className="auth-switch">{t('no_account')} <Link to="/signup">{t('signup_free_link')}</Link></p>
       </form>
     </div>
