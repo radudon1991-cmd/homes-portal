@@ -36,7 +36,7 @@ export default function Navbar() {
   return (
     <header className="navbar">
       <Link to="/" className="brand">
-        <span className="brand-mark">⌂</span>
+        <img className="brand-mark" src="/logo.svg" alt="TruePin Property logo" />
         <span className="brand-text">
           {t('brand_main')} <em>{t('brand_accent')}</em>
         </span>
