@@ -3,14 +3,12 @@ import { createContext, useContext, useEffect, useState } from 'react'
 // Thai + English UI strings. t('key') looks up the current language,
 // falling back to English, then to the key itself.
 // Use {name} placeholders via t('key', { name: value }).
-
 const en = {
   // brand
   brand_main: 'TruePin',
   brand_accent: 'Property',
   footer: 'TruePin Property — find verified Thai properties on the map.',
   page_title: 'TruePin Property — Verified Thailand Property Search',
-
   // navbar
   nav_search: 'Search',
   nav_post: '+ Post property',
@@ -18,11 +16,11 @@ const en = {
   nav_login: 'Log in',
   nav_signup: 'Sign up free',
   nav_logout: 'Log out',
-
   // search bar
   search_placeholder: 'Search by area, e.g. Sukhumvit, Phuket…',
   buy: 'Buy',
   rent: 'Rent',
+  buy_rent_all: 'Buy & Rent',
   all_types: 'All types',
   min_price: 'Min ฿',
   max_price: 'Max ฿',
@@ -33,7 +31,6 @@ const en = {
   type_house: 'House',
   type_townhouse: 'Townhouse',
   type_land: 'Land',
-
   // home
   loading: 'Loading…',
   property_one: 'property',
@@ -41,14 +38,12 @@ const en = {
   no_results: 'No properties match your search. Try widening the filters.',
   demo_banner: 'Demo mode — showing sample listings. Connect Supabase (see README) to go live with real data.',
   page_not_found: 'Page not found.',
-
   // listing card / badges
   for_rent: 'For rent',
   for_sale: 'For sale',
   bd: 'bd',
   ba: 'ba',
   sqm: 'sqm',
-
   // listing detail
   back_to_map: '← Back to map',
   no_photos: 'No photos yet',
@@ -64,7 +59,6 @@ const en = {
   seller_fallback: 'Seller',
   listing_not_found: 'Listing not found.',
   back_to_search: 'Back to search',
-
   // login
   welcome: 'Welcome back',
   login_sub: 'Log in to post and manage your properties.',
@@ -78,7 +72,6 @@ const en = {
   or_divider: 'or',
   continue_with: 'Continue with {provider}',
   oauth_error: 'Sign-in failed. Please try again or use email instead.',
-
   // signup
   create_account: 'Create your account',
   signup_sub: 'Free. Post properties in minutes.',
@@ -92,7 +85,6 @@ const en = {
   check_email: 'Check your email',
   confirm_sent: 'We sent a confirmation link to {email}. Click it, then log in.',
   go_to_login: 'Go to log in',
-
   // post listing
   edit_listing: 'Edit your listing',
   post_property: 'Post a property',
@@ -130,7 +122,6 @@ const en = {
   saving: 'Saving…',
   save_changes: 'Save changes',
   publish: 'Publish listing',
-
   // my listings
   my_listings: 'My listings',
   post_new: '+ Post new property',
@@ -141,7 +132,6 @@ const en = {
   edit: 'Edit',
   delete: 'Delete',
   delete_confirm: 'Delete "{title}"? This cannot be undone.',
-
   // trust & safety
   nav_admin: 'Moderation',
   report_listing: 'Report listing',
@@ -277,7 +267,6 @@ const th = {
   brand_accent: 'Property',
   footer: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทยที่เชื่อถือได้บนแผนที่',
   page_title: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทย',
-
   // navbar
   nav_search: 'ค้นหา',
   nav_post: '+ ลงประกาศ',
@@ -285,11 +274,11 @@ const th = {
   nav_login: 'เข้าสู่ระบบ',
   nav_signup: 'สมัครฟรี',
   nav_logout: 'ออกจากระบบ',
-
   // search bar
   search_placeholder: 'ค้นหาตามพื้นที่ เช่น สุขุมวิท ภูเก็ต…',
   buy: 'ซื้อ',
   rent: 'เช่า',
+  buy_rent_all: 'ซื้อและเช่า',
   all_types: 'ทุกประเภท',
   min_price: 'ราคาต่ำสุด ฿',
   max_price: 'ราคาสูงสุด ฿',
@@ -300,7 +289,6 @@ const th = {
   type_house: 'บ้าน',
   type_townhouse: 'ทาวน์เฮาส์',
   type_land: 'ที่ดิน',
-
   // home
   loading: 'กำลังโหลด…',
   property_one: 'ประกาศ',
@@ -308,14 +296,12 @@ const th = {
   no_results: 'ไม่พบประกาศที่ตรงกับการค้นหา ลองขยายเงื่อนไขการค้นหา',
   demo_banner: 'โหมดทดลอง — กำลังแสดงประกาศตัวอย่าง เชื่อมต่อ Supabase (ดู README) เพื่อใช้งานข้อมูลจริง',
   page_not_found: 'ไม่พบหน้านี้',
-
   // listing card / badges
   for_rent: 'ให้เช่า',
   for_sale: 'ขาย',
   bd: 'นอน',
   ba: 'น้ำ',
   sqm: 'ตร.ม.',
-
   // listing detail
   back_to_map: '← กลับไปแผนที่',
   no_photos: 'ยังไม่มีรูปภาพ',
@@ -331,7 +317,6 @@ const th = {
   seller_fallback: 'ผู้ขาย',
   listing_not_found: 'ไม่พบประกาศนี้',
   back_to_search: 'กลับไปค้นหา',
-
   // login
   welcome: 'ยินดีต้อนรับกลับ',
   login_sub: 'เข้าสู่ระบบเพื่อลงประกาศและจัดการอสังหาริมทรัพย์ของคุณ',
@@ -345,7 +330,6 @@ const th = {
   or_divider: 'หรือ',
   continue_with: 'ดำเนินการต่อด้วย {provider}',
   oauth_error: 'เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้งหรือใช้อีเมลแทน',
-
   // signup
   create_account: 'สร้างบัญชีของคุณ',
   signup_sub: 'ฟรี ลงประกาศได้ในไม่กี่นาที',
@@ -359,7 +343,6 @@ const th = {
   check_email: 'ตรวจสอบอีเมลของคุณ',
   confirm_sent: 'เราส่งลิงก์ยืนยันไปที่ {email} แล้ว คลิกลิงก์แล้วเข้าสู่ระบบ',
   go_to_login: 'ไปหน้าเข้าสู่ระบบ',
-
   // post listing
   edit_listing: 'แก้ไขประกาศของคุณ',
   post_property: 'ลงประกาศอสังหาริมทรัพย์',
@@ -397,7 +380,6 @@ const th = {
   saving: 'กำลังบันทึก…',
   save_changes: 'บันทึกการแก้ไข',
   publish: 'เผยแพร่ประกาศ',
-
   // my listings
   my_listings: 'ประกาศของฉัน',
   post_new: '+ ลงประกาศใหม่',
@@ -408,7 +390,6 @@ const th = {
   edit: 'แก้ไข',
   delete: 'ลบ',
   delete_confirm: 'ลบ "{title}"? การกระทำนี้ไม่สามารถย้อนกลับได้',
-
   // trust & safety
   nav_admin: 'ตรวจสอบ',
   report_listing: 'รายงานประกาศ',
@@ -540,7 +521,6 @@ const th = {
 
 const STRINGS = { en, th }
 const TITLES = { en: en.page_title, th: th.page_title }
-
 const LanguageContext = createContext(null)
 
 export function LanguageProvider({ children }) {
@@ -553,7 +533,6 @@ export function LanguageProvider({ children }) {
       return 'th'
     }
   })
-
   useEffect(() => {
     try {
       localStorage.setItem('tre-lang', lang)
@@ -563,7 +542,6 @@ export function LanguageProvider({ children }) {
     document.title = TITLES[lang]
     document.documentElement.lang = lang === 'th' ? 'th' : 'en'
   }, [lang])
-
   const t = (key, vars) => {
     let s = STRINGS[lang][key] ?? STRINGS.en[key] ?? key
     if (vars) {
@@ -573,7 +551,6 @@ export function LanguageProvider({ children }) {
     }
     return s
   }
-
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
       {children}
