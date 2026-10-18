@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { supabase } from './supabase'
 import { useAuth } from './AuthContext'
 
-// Fetches the current user's profile row: is_admin, is_banned, ban_reason.
+// Fetches the current user's profile row: is_admin, is_banned,
+// ban_reason, credit_baht (auto-renew credit, migration12).
 export function useProfile() {
   const { user } = useAuth()
   const [profile, setProfile] = useState(null)
@@ -17,7 +18,7 @@ export function useProfile() {
     setLoading(true)
     supabase
       .from('profiles')
-      .select('id, is_admin, is_banned, ban_reason')
+      .select('id, is_admin, is_banned, ban_reason, credit_baht')
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
