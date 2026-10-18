@@ -98,6 +98,40 @@ export async function createConversation({ listingId, ownerId, key, name }) {
   return { data, error }
 }
 
+/* ------------- support chat (Contact page <-> admin) ------------- */
+// Same machinery as listing chat, but the conversation has no
+// listing (listing_id is null) and the "owner" side is the site
+// admin. The admin answers from the same Inbox -> Live tab.
+
+export async function findSupportConversation(adminId, key) {
+  const { data } = await supabase
+    .from('live_conversations')
+    .select('*')
+    .is('listing_id', null)
+    .eq('owner_id', adminId)
+    .eq('guest_key', key)
+    .maybeSingle()
+  return data ?? null
+}
+
+export async function createSupportConversation({ adminId, key, name }) {
+  const { data, error } = await supabase
+    .from('live_conversations')
+    .insert({
+      listing_id: null,
+      owner_id: adminId,
+      guest_key: key,
+      guest_name: name,
+    })
+    .select()
+    .single()
+  if (error) {
+    const existing = await findSupportConversation(adminId, key)
+    if (existing) return { data: existing, error: null }
+  }
+  return { data, error }
+}
+
 export async function fetchConversationMessages(conversationId, limit = 80) {
   const { data, error } = await supabase
     .from('live_messages')
