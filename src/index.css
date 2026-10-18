@@ -267,8 +267,13 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 
 /* ---------- footer ---------- */
 .footer {
-  text-align: center; padding: 1rem; font-size: 0.85rem; color: #C9D2DA;
+  text-align: center; font-size: 0.85rem; color: #C9D2DA;
   background: #2E2E2E;
+  /* Extra bottom padding (owner's fix, 2026-10-18): the floating
+     Live chat pill is fixed at the bottom-right and covered the
+     footer's LINE button when scrolled to the very bottom. The
+     padding lets the last footer content scroll clear of the pill. */
+  padding: 1rem 1rem 6rem;
 }
 
 /* ---------- trust & safety ---------- */
