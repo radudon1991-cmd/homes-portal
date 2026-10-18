@@ -114,6 +114,13 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 }
 .seg-btn.active { background: var(--teal-700); color: #fff; }
 
+/* Static colour key where the Buy/Rent switch used to be:
+   the words stay, coloured like the pins (blue buy, green rent). */
+.seg-legend { display: flex; gap: 1rem; align-items: center; padding: 0 0.4rem; white-space: nowrap; }
+.seg-word { font-weight: 800; font-size: 0.95rem; }
+.seg-word.sale { color: var(--teal-700); }
+.seg-word.rent { color: #5E9C2F; }
+
 .demo-banner {
   background: #E3F0FA; color: #003A5D; border-bottom: 1px solid #C4DDF0;
   padding: 0.55rem 1.2rem; font-size: 0.88rem;
@@ -145,14 +152,10 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
   border-left: 6px solid transparent; border-right: 6px solid transparent;
   border-top: 7px solid var(--teal-700);
 }
-.price-pin.tier-green { background: #5E9C2F; }
-.price-pin.tier-green::after { border-top-color: #5E9C2F; }
-.price-pin.tier-blue { background: var(--teal-700); }
-.price-pin.tier-blue::after { border-top-color: var(--teal-700); }
-.price-pin.tier-pink { background: #E91E63; }
-.price-pin.tier-pink::after { border-top-color: #E91E63; }
-.price-pin.tier-red { background: #C62828; }
-.price-pin.tier-red::after { border-top-color: #C62828; }
+/* Pin colours (owner's simplification, 2026-10-18): sale pins use
+   the base blue above; rent pins are green. */
+.price-pin.pin-rent { background: #5E9C2F; }
+.price-pin.pin-rent::after { border-top-color: #5E9C2F; }
 .price-pin.selected { background: var(--teal-900); transform: translate(-50%, -100%) scale(1.18); z-index: 1000; }
 .price-pin.selected::after { border-top-color: var(--teal-900); }
 
@@ -482,10 +485,8 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
   margin-right: 4px; border: 1.5px solid #fff;
   box-shadow: 0 0 2px rgba(0,0,0,0.4); vertical-align: -1px;
 }
-.legend-dot.tier-green { background: #5E9C2F; }
-.legend-dot.tier-blue { background: #005CAB; }
-.legend-dot.tier-pink { background: #E91E63; }
-.legend-dot.tier-red { background: #C62828; }
+.legend-dot.pin-sale { background: #005CAB; }
+.legend-dot.pin-rent { background: #5E9C2F; }
 .legend-row { display: flex; gap: 0.6rem; align-items: center; }
 .legend-row strong { margin-right: 0.1rem; }
 @media (max-width: 640px) {
