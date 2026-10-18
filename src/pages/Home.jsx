@@ -35,6 +35,17 @@ export default function Home() {
 
   const filtered = useMemo(() => applyFilters(listings, filters), [listings, filters])
 
+  // Owner's design rule (2026-10-17): the side/bottom list shows only
+  // the 5 most recent matching posts, as compact rows with square
+  // thumbnails. The map still shows ALL matching pins.
+  const recent = useMemo(
+    () =>
+      [...filtered]
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .slice(0, 5),
+    [filtered]
+  )
+
   return (
     <div className="home">
       <SearchBar filters={filters} onChange={setFilters} />
@@ -86,7 +97,7 @@ export default function Home() {
             {error && <span className="error-text"> ({error})</span>}
           </div>
           <div className="panel-list">
-            {filtered.map((l) => (
+            {recent.map((l) => (
               <ListingCard
                 key={l.id}
                 listing={l}
@@ -95,6 +106,9 @@ export default function Home() {
             ))}
             {!loading && filtered.length === 0 && (
               <p className="empty">{t('no_results')}</p>
+            )}
+            {!loading && filtered.length > recent.length && (
+              <p className="panel-note">{t('showing_recent_5', { count: filtered.length })}</p>
             )}
           </div>
         </aside>
