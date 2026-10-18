@@ -17,24 +17,20 @@ export default function SearchBar({ filters, onChange }) {
           value={filters.query}
           onChange={(e) => set('query', e.target.value)}
         />
-        <div className="seg">
-          <button
-            type="button"
-            className={filters.listingType === 'sale' ? 'seg-btn active' : 'seg-btn'}
-            onClick={() => set('listingType', 'sale')}
-          >
-            {t('buy')}
-          </button>
-          <button
-            type="button"
-            className={filters.listingType === 'rent' ? 'seg-btn active' : 'seg-btn'}
-            onClick={() => set('listingType', 'rent')}
-          >
-            {t('rent')}
-          </button>
+        {/* Not a switch any more (owner's simplification, 2026-10-18):
+            the words stay as a colour key — blue = buy, green = rent —
+            matching the pin colours. Separating sale/rent is a filter. */}
+        <div className="seg-legend">
+          <span className="seg-word sale">● {t('buy')}</span>
+          <span className="seg-word rent">● {t('rent')}</span>
         </div>
       </div>
       <div className="searchbar-row searchbar-filters">
+        <select className="input" value={filters.listingType} onChange={(e) => set('listingType', e.target.value)}>
+          <option value="">{t('buy_rent_all')}</option>
+          <option value="sale">{t('buy')}</option>
+          <option value="rent">{t('rent')}</option>
+        </select>
         <select className="input" value={filters.propertyType} onChange={(e) => set('propertyType', e.target.value)}>
           <option value="">{t('all_types')}</option>
           {TYPE_VALUES.map((v) => (
@@ -73,7 +69,7 @@ export default function SearchBar({ filters, onChange }) {
           type="button"
           className="btn btn-ghost"
           onClick={() =>
-            onChange({ query: '', listingType: 'sale', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '', bathrooms: '' })
+            onChange({ query: '', listingType: '', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '', bathrooms: '' })
           }
         >
           {t('clear')}
