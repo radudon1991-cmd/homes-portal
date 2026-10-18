@@ -33,6 +33,7 @@ export default function ListingDetail() {
   const [msgBody, setMsgBody] = useState('')
   const [msgState, setMsgState] = useState('') // '' | 'sending' | 'sent' | 'error'
   const [copied, setCopied] = useState(false)
+  const [msgrCopied, setMsgrCopied] = useState(false)
   const miniMapRef = useRef(null)
 
   const typeLabel = (v) => t(TYPE_KEY[v] ?? v)
@@ -69,6 +70,11 @@ export default function ListingDetail() {
   const seller = listing.profiles ?? {}
   const expired = listing.status === 'approved' && isExpired(listing)
   const isOwner = Boolean(user && user.id === listing.owner_id)
+  // Expired posts are off the market (owner's rule, 2026-10-18):
+  // visitors reaching one through an old shared link see the notice
+  // only — no phone, LINE, message form or live chat. The owner
+  // still sees everything, including the Renew shortcut.
+  const contactLocked = expired && !isOwner
   // Share bar (owner's feature, 2026-10-18): direct link to this post.
   const shareUrl = `${window.location.origin}/listing/${listing.id}`
   const shareEnc = encodeURIComponent(shareUrl)
@@ -86,6 +92,16 @@ export default function ListingDetail() {
     }
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+  // Messenger's app link (fb-messenger://) only works on phones; on
+  // desktop the button copies the link instead, ready to paste into
+  // Messenger (the web share dialog would need a Facebook App ID,
+  // which TruePin does not have).
+  const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')
+  const copyForMessenger = async () => {
+    await copyLink()
+    setMsgrCopied(true)
+    setTimeout(() => setMsgrCopied(false), 2000)
   }
 
   return (
@@ -158,9 +174,15 @@ export default function ListingDetail() {
               >
                 Facebook
               </a>
-              <a className="share-btn msgr" href={`fb-messenger://share?link=${shareEnc}`}>
-                Messenger
-              </a>
+              {isMobileUA ? (
+                <a className="share-btn msgr" href={`fb-messenger://share?link=${shareEnc}`}>
+                  Messenger
+                </a>
+              ) : (
+                <button type="button" className="share-btn msgr" onClick={copyForMessenger}>
+                  {msgrCopied ? t('copied') : 'Messenger'}
+                </button>
+              )}
               <a
                 className="share-btn line"
                 href={`https://social-plugins.line.me/lineit/share?url=${shareEnc}`}
@@ -195,13 +217,14 @@ export default function ListingDetail() {
           <div className="seller-card">
             <h3>{t('contact_seller')}</h3>
             <p className="seller-name">{seller.display_name || t('seller_fallback')}</p>
-            {seller.phone && (
+            {contactLocked && <p className="hint">{t('expired_contact_hidden')}</p>}
+            {seller.phone && !contactLocked && (
               <a className="btn btn-primary btn-block" href={`tel:${seller.phone}`}>📞 {seller.phone}</a>
             )}
-            {seller.line_id && (
+            {seller.line_id && !contactLocked && (
               <a className="btn btn-line btn-block" href={lineUrl(seller.line_id)} target="_blank" rel="noreferrer">💬 {t('chat_line')}: {seller.line_id}</a>
             )}
-            {user && user.id !== listing.owner_id && (
+            {user && user.id !== listing.owner_id && !contactLocked && (
               <div className="msg-form">
                 {msgState === 'sent' ? (
                   <p className="msg-ok">✓ {t('msg_sent_ok')}</p>
@@ -241,17 +264,17 @@ export default function ListingDetail() {
                 )}
               </div>
             )}
-            {!user && (
+            {!user && !contactLocked && (
               <Link to="/login" className="btn btn-ghost btn-block">
                 {t('msg_login_prompt')}
               </Link>
             )}
           </div>
-          <ListingChat listing={listing} />
+          {!contactLocked && <ListingChat listing={listing} />}
           <div className="scam-box">⚠️ {t('scam_warn_full')}</div>
           <div className="trust-box">
             <SellerRating sellerId={listing.owner_id} />
-            {user && user.id !== listing.owner_id && (
+            {user && user.id !== listing.owner_id && !contactLocked && (
               <ReportButton listingId={listing.id} />
             )}
           </div>
