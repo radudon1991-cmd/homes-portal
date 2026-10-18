@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import { dotIcon } from '../components/MapView'
 import ReportButton from '../components/ReportButton'
 import ListingChat from '../components/ListingChat'
+import MortgageCalculator from '../components/MortgageCalculator'
 import SellerRating from '../components/SellerRating'
 import { fetchListingById, isExpired } from '../lib/listings'
 import { sendMessage } from '../lib/messages'
@@ -180,6 +181,9 @@ export default function ListingDetail() {
             <div><span>{t('fact_posted')}</span><strong>{formatDate(listing.created_at, lang)}</strong></div>
           </div>
           {listing.address && <p className="detail-address">📍 {listing.address}</p>}
+          {listing.listing_type === 'sale' && !expired && (
+            <MortgageCalculator price={listing.price_thb} />
+          )}
           <div className="share-box">
             <div className="share-label">🔗 {t('share_label')}</div>
             <div className="share-btns">
