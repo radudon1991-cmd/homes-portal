@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from './supabase'
 import { SEED_LISTINGS } from './seedData'
 import { compressImage } from './image'
+import { PROVINCES } from './format'
 
 export const dataSource = isSupabaseConfigured ? 'supabase' : 'demo'
 
@@ -86,7 +87,10 @@ export function applyFilters(listings, f) {
     if (f.bedrooms !== '' && Number(l.bedrooms) < Number(f.bedrooms)) return false
     if (f.bathrooms !== '' && Number(l.bathrooms) < Number(f.bathrooms)) return false
     if (q) {
-      const hay = `${l.title} ${l.address} ${l.province}`.toLowerCase()
+      // Search matches the Thai province name too, so typing ภูเก็ต
+      // finds listings stored under the canonical 'Phuket'.
+      const provTh = PROVINCES.find((p) => p.en === l.province)?.th ?? ''
+      const hay = `${l.title} ${l.address} ${l.province} ${provTh}`.toLowerCase()
       if (!hay.includes(q)) return false
     }
     return true
