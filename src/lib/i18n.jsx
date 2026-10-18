@@ -510,11 +510,13 @@ const TITLES = { en: en.page_title, th: th.page_title }
 const LanguageContext = createContext(null)
 
 export function LanguageProvider({ children }) {
+  // Default language is THAI (owner's call, 2026-10-17): TruePin is a
+  // Thai site first. A visitor's stored choice ('en') still wins.
   const [lang, setLang] = useState(() => {
     try {
-      return localStorage.getItem('tre-lang') === 'th' ? 'th' : 'en'
+      return localStorage.getItem('tre-lang') === 'en' ? 'en' : 'th'
     } catch {
-      return 'en'
+      return 'th'
     }
   })
 
