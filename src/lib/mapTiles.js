@@ -1,3 +1,5 @@
+import L from 'leaflet'
+
 // Base map tiles per interface language.
 //
 // Thai UI  -> standard OpenStreetMap tiles (labels in Thai, the local language).
@@ -20,3 +22,12 @@ export function tileConfig(lang) {
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.esri.com/">Esri</a>',
   }
 }
+
+// Detail mini-map engine (listing detail page): builds the base tile layer
+// for the current interface language, so callers just do
+// createBaseLayer(lang).addTo(map).
+export function createBaseLayer(lang) {
+  const tiles = tileConfig(lang)
+  return L.tileLayer(tiles.url, {
+    attribution: tiles.attribution,
+  })
