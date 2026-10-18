@@ -234,3 +234,14 @@ export function provinceBounds(name) {
   const b = PROVINCE_BOUNDS[name]
   return b ? [[b[0], b[1]], [b[2], b[3]]] : null
 }
+/** Thailand-wide bounds (union of all 77 provinces): with no
+ *  province filter chosen, the map is fenced to these (owner's
+ *  rule, 2026-10-18) so visitors can never wander off the country. */
+export const THAILAND_BOUNDS = (() => {
+  const all = Object.values(PROVINCE_BOUNDS)
+  return [
+    [Math.min(...all.map((b) => b[0])), Math.min(...all.map((b) => b[1]))],
+    [Math.max(...all.map((b) => b[2])), Math.max(...all.map((b) => b[3]))],
+  ]
+})()
+
