@@ -1,10 +1,11 @@
 import { useLang, TYPE_KEY } from '../lib/i18n'
+import { PROVINCES } from '../lib/format'
 
 const BED_OPTIONS = ['', '1', '2', '3', '4', '5']
 const TYPE_VALUES = ['condo', 'house', 'townhouse', 'land']
 
 export default function SearchBar({ filters, onChange }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const set = (key, value) => onChange({ ...filters, [key]: value })
 
   return (
@@ -30,6 +31,12 @@ export default function SearchBar({ filters, onChange }) {
           <option value="">{t('buy_rent_all')}</option>
           <option value="sale">{t('buy')}</option>
           <option value="rent">{t('rent')}</option>
+        </select>
+        <select className="input" value={filters.province} onChange={(e) => set('province', e.target.value)}>
+          <option value="">{t('all_provinces')}</option>
+          {PROVINCES.map((p) => (
+            <option key={p.en} value={p.en}>{lang === 'th' ? p.th : p.en}</option>
+          ))}
         </select>
         <select className="input" value={filters.propertyType} onChange={(e) => set('propertyType', e.target.value)}>
           <option value="">{t('all_types')}</option>
@@ -69,7 +76,7 @@ export default function SearchBar({ filters, onChange }) {
           type="button"
           className="btn btn-ghost"
           onClick={() =>
-            onChange({ query: '', listingType: '', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '', bathrooms: '' })
+            onChange({ query: '', listingType: '', province: '', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '', bathrooms: '' })
           }
         >
           {t('clear')}
