@@ -124,6 +124,22 @@ export default function AdminMembers() {
     const name = member.display_name || member.email || member.id
     if (!window.confirm(t('delete_user_confirm', { name }))) return
     setBusy(member.id)
+    // Photos must go through the Storage API first: Supabase forbids
+    // deleting storage rows with SQL (learned 2026-10-18, when the
+    // original admin_delete_user hit exactly that wall).
+    try {
+      const { data: files } = await supabase.storage
+        .from('listing-photos')
+        .list(member.id)
+      const paths = (files ?? [])
+        .filter((f) => f.id)
+        .map((f) => `${member.id}/${f.name}`)
+      if (paths.length) {
+        await supabase.storage.from('listing-photos').remove(paths)
+      }
+    } catch {
+      // Photo cleanup is best-effort; account deletion still proceeds.
+    }
     const { error } = await supabase.rpc('admin_delete_user', { target_id: member.id })
     if (error) setError(error.message)
     else setMembers((ms) => ms.filter((m) => m.id !== member.id))
@@ -138,14 +154,12 @@ export default function AdminMembers() {
       </div>
       <p className="hint">{t('members_subtitle')}</p>
       {error && <div className="form-error">{error}</div>}
-
       <div className="credit-strip">
         <span>👥 <strong>{members.length}</strong> {t('members_title')}</span>
         <span>🟢 <strong>{activeThisMonth}</strong> {t('active_30d')}</span>
         <span>📝 <strong>{totalPosts}</strong> {t('stat_posts')}</span>
         <span>🚫 <strong>{bannedCount}</strong> {t('banned_badge')}</span>
       </div>
-
       <div className="members-tools">
         <input
           className="input"
@@ -222,7 +236,6 @@ export default function AdminMembers() {
           })}
         </div>
       )}
-
       {pages > 1 && (
         <div className="pager">
           <button className="btn btn-ghost btn-sm" disabled={page === 0} onClick={() => setPage(page - 1)}>
