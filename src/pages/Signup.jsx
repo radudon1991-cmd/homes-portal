@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useLang } from '../lib/i18n'
 import SocialLogin from '../components/SocialLogin'
+import HouseRules from '../components/HouseRules'
 
 export default function Signup() {
   const { signUp, isSupabaseConfigured } = useAuth()
@@ -14,6 +15,10 @@ export default function Signup() {
   const [error, setError] = useState('')
   const [done, setDone] = useState(false)
   const [busy, setBusy] = useState(false)
+  // Terms gate (owner rule, 2026-10-18): the welcome message and house
+  // rules come first; no account can be created until the visitor ticks
+  // the agreement box — it gates the email form AND Google sign-up.
+  const [agreed, setAgreed] = useState(false)
 
   if (!isSupabaseConfigured) {
     return <div className="page-center"><p>{t('accounts_not_setup')}</p></div>
@@ -52,13 +57,25 @@ export default function Signup() {
       <form className="auth-card" onSubmit={submit}>
         <h1>{t('create_account')}</h1>
         <p className="auth-sub">{t('signup_sub')}</p>
+        <HouseRules />
+        <label className="check-row agree-row">
+          <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
+          <span>{t('agree_terms')}</span>
+        </label>
+        <p className="hint"><Link to="/terms">{t('full_terms_link')}</Link></p>
         {error && <div className="form-error">{error}</div>}
-        <SocialLogin />
-        <div className="auth-divider">{t('or_divider')}</div>
+        {agreed ? (
+          <>
+            <SocialLogin />
+            <div className="auth-divider">{t('or_divider')}</div>
+          </>
+        ) : (
+          <p className="hint agree-note">☝️ {t('agree_first')}</p>
+        )}
         <label>{t('display_name')}<input className="input" type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder={t('name_placeholder')} /></label>
         <label>{t('email')}<input className="input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
         <label>{t('password_min')}<input className="input" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
-        <button className="btn btn-primary btn-block" disabled={busy}>{busy ? t('creating') : t('signup')}</button>
+        <button className="btn btn-primary btn-block" disabled={busy || !agreed}>{busy ? t('creating') : t('signup')}</button>
         <p className="auth-switch">{t('have_account')} <Link to="/login">{t('login_link')}</Link></p>
       </form>
     </div>
