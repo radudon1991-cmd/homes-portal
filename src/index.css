@@ -647,3 +647,27 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 .msg-card.live-conv { width: 100%; text-align: left; cursor: pointer; font: inherit; }
 .live-thread-title { font-size: 17px; margin: 10px 0; }
 .live-thread-title a { color: var(--teal-700); }
+
+/* ===== Contact us + scam-safety warnings ===== */
+.footer-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-top: 0.6rem; }
+.footer-actions .btn-line { margin-top: 0; }
+.contact-line-box { text-align: center; margin-top: 1.4rem; }
+.scam-banner {
+  background: #FFF4E0;
+  color: #7A4A00;
+  border-bottom: 1px solid #F0D49A;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: center;
+}
+.scam-box {
+  background: #FFF4E0;
+  border: 1px solid #F0D49A;
+  color: #7A4A00;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  margin-top: 1rem;
+}
