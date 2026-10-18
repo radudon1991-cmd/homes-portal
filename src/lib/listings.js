@@ -83,6 +83,7 @@ export function applyFilters(listings, f) {
     // Empty listingType means "all together" (owner's simplification,
     // 2026-10-18): sale and rent share one map unless filtered.
     if (f.listingType && l.listing_type !== f.listingType) return false
+    if (f.province && l.province !== f.province) return false
     if (f.propertyType && l.property_type !== f.propertyType) return false
     if (f.minPrice !== '' && Number(l.price_thb) < Number(f.minPrice)) return false
     if (f.maxPrice !== '' && Number(l.price_thb) > Number(f.maxPrice)) return false
