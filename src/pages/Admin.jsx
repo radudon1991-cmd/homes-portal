@@ -20,6 +20,7 @@ export default function Admin() {
   const [rejectNote, setRejectNote] = useState('')
   const [members, setMembers] = useState([])
   const [creditAmt, setCreditAmt] = useState({})
+  const [creditSearch, setCreditSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState('')
 
@@ -129,6 +130,17 @@ export default function Admin() {
   if (loading) return <div className="page-center">{t('loading')}</div>
 
   const pending = reports.filter((r) => r.status === 'pending')
+
+  // Member credits are search-only (owner's rule, 2026-10-18): no
+  // names are listed until the admin searches, and only matches show.
+  const creditQuery = creditSearch.trim().toLowerCase()
+  const matchedMembers = creditQuery
+    ? members.filter(
+        (p) =>
+          (p.display_name || '').toLowerCase().includes(creditQuery) ||
+          (p.email || '').toLowerCase().includes(creditQuery)
+      )
+    : []
 
   // Track record of a reporter: how many of their reports were upheld vs dismissed.
   const trackRecord = (reporterId) => {
@@ -405,13 +417,21 @@ export default function Admin() {
         {t('admin_credits')} ({members.length})
       </h2>
       <p className="hint">{t('admin_credits_hint')}</p>
-      {members.length === 0 ? (
+      <input
+        className="input"
+        style={{ maxWidth: 380, marginBottom: '0.8rem' }}
+        placeholder={t('admin_credits_search_ph')}
+        value={creditSearch}
+        onChange={(e) => setCreditSearch(e.target.value)}
+      />
+      {creditQuery && matchedMembers.length === 0 && (
         <div className="empty-state">
-          <p>{t('none_yet')}</p>
+          <p>{t('admin_no_match')}</p>
         </div>
-      ) : (
+      )}
+      {matchedMembers.length > 0 && (
         <div className="dash-list">
-          {members.map((p) => (
+          {matchedMembers.map((p) => (
             <div key={p.id} className="dash-row">
               <div className="dash-info">
                 <div className="dash-title">
