@@ -9,7 +9,7 @@ import { useLang } from '../lib/i18n'
 
 const DEFAULT_FILTERS = {
   query: '',
-  listingType: 'sale',
+  listingType: '',
   propertyType: '',
   minPrice: '',
   maxPrice: '',
@@ -64,32 +64,10 @@ export default function Home() {
             onOpenListing={(id) => navigate(`/listing/${id}`)}
           />
           <div className="map-legend">
-            {filters.listingType === 'rent' ? (
-              <>
-                <span className="legend-row">
-                  <strong>{t('rent_monthly')}</strong>
-                  <span className="legend-item"><span className="legend-dot tier-green" />&lt;฿8K</span>
-                  <span className="legend-item"><span className="legend-dot tier-blue" />≤฿15K</span>
-                  <span className="legend-item"><span className="legend-dot tier-pink" />≤฿25K</span>
-                  <span className="legend-item"><span className="legend-dot tier-red" />&gt;฿25K</span>
-                </span>
-                <span className="legend-row">
-                  <strong>{t('rent_daily')}</strong>
-                  <span className="legend-item"><span className="legend-dot tier-green" />&lt;฿700</span>
-                  <span className="legend-item"><span className="legend-dot tier-blue" />≤฿1.5K</span>
-                  <span className="legend-item"><span className="legend-dot tier-pink" />≤฿3.5K</span>
-                  <span className="legend-item"><span className="legend-dot tier-red" />&gt;฿3.5K</span>
-                </span>
-              </>
-            ) : (
-              <span className="legend-row">
-                <strong>{t('for_sale')}</strong>
-                <span className="legend-item"><span className="legend-dot tier-green" />&lt;฿100K</span>
-                <span className="legend-item"><span className="legend-dot tier-blue" />≤฿500K</span>
-                <span className="legend-item"><span className="legend-dot tier-pink" />≤฿1M</span>
-                <span className="legend-item"><span className="legend-dot tier-red" />&gt;฿1M</span>
-              </span>
-            )}
+            <span className="legend-row">
+              <span className="legend-item"><span className="legend-dot pin-sale" />{t('buy')}</span>
+              <span className="legend-item"><span className="legend-dot pin-rent" />{t('rent')}</span>
+            </span>
           </div>
         </div>
         <aside className="home-panel">
