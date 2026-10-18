@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { formatBaht } from '../lib/format'
+import { formatPrice } from '../lib/format'
 import { useLang } from '../lib/i18n'
 
 const PLACEHOLDER = 'https://picsum.photos/seed/placeholder/800/600'
@@ -19,7 +19,7 @@ export default function ListingCard({ listing, selected }) {
         </span>
       </div>
       <div className="card-body">
-        <div className="card-price">{formatBaht(listing.price_thb)}</div>
+        <div className="card-price">{formatPrice(listing, t)}</div>
         <div className="card-title">{listing.title}</div>
         <div className="card-meta">
           {listing.bedrooms > 0 && <span>{listing.bedrooms} {t('bd')}</span>}
