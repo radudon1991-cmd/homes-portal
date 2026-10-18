@@ -4,6 +4,7 @@ import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
 import { sendMessage } from '../lib/messages'
 import { fetchAdminId, sendGuestContact } from '../lib/contact'
+import SupportChat from '../components/SupportChat'
 
 // "Contact us" page (owner's request, 2026-10-18), linked from the
 // footer button. Signed-in members write straight into the admin's
@@ -123,6 +124,7 @@ export default function Contact() {
             💬 LINE @truepinproperty
           </a>
         </div>
+        <SupportChat />
       </div>
     </div>
   )
