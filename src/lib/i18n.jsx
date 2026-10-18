@@ -22,6 +22,20 @@ const en = {
   // search bar
   search_placeholder: 'Search by keyword, e.g. pool villa, near BTS, beachfront…',
   expired_contact_hidden: 'Contact options are hidden because this post has expired.',
+  // Admin announcement broadcast (2026-10-18).
+  announce_title: 'Announcement to all members',
+  announce_hint: 'Goes to the inbox of every member at once — no need to pick people.',
+  announce_ph: 'Write your announcement…',
+  announce_send: 'Send to everyone',
+  announce_confirm: 'Send this announcement to all {n} members?',
+  announce_sent: '✓ Sent to {n} members',
+  announce_no_reply: 'No replies — members cannot reply to this announcement',
+  no_reply_note: 'Replies are off for this message',
+  // Support live chat on the Contact page (2026-10-18).
+  live_chat_admin: 'Live chat with the admin',
+  support_chat: 'Support chat',
+  support_chat_hint: 'No account needed — chat with the admin in real time.',
+  support_own_note: 'You are the admin: visitor chats appear in your Inbox, in the Live tab.',
   buy: 'Buy',
   rent: 'Rent',
   buy_rent_all: 'Buy & Rent',
@@ -361,6 +375,20 @@ const th = {
   // search bar
   search_placeholder: 'ค้นหาด้วยคำค้น เช่น พูลวิลล่า ใกล้ BTS ติดชายหาด…',
   expired_contact_hidden: 'ตัวเลือกการติดต่อถูกซ่อนไว้เพราะประกาศนี้หมดอายุแล้ว',
+  // Admin announcement broadcast (2026-10-18).
+  announce_title: 'ประกาศถึงสมาชิกทุกคน',
+  announce_hint: 'ส่งถึงกล่องข้อความของสมาชิกทุกคนพร้อมกัน — ไม่ต้องเลือกทีละคน',
+  announce_ph: 'เขียนประกาศของคุณ…',
+  announce_send: 'ส่งให้ทุกคน',
+  announce_confirm: 'ส่งประกาศนี้ให้สมาชิกทั้งหมด {n} คน?',
+  announce_sent: '✓ ส่งให้สมาชิก {n} คนแล้ว',
+  announce_no_reply: 'ไม่ต้องตอบกลับ — สมาชิกตอบกลับประกาศนี้ไม่ได้',
+  no_reply_note: 'ปิดการตอบกลับสำหรับข้อความนี้',
+  // Support live chat on the Contact page (2026-10-18).
+  live_chat_admin: 'แชทสดกับแอดมิน',
+  support_chat: 'แชทช่วยเหลือ',
+  support_chat_hint: 'ไม่ต้องมีบัญชี — คุยกับแอดมินแบบเรียลไทม์',
+  support_own_note: 'คุณคือแอดมิน: แชทของผู้เยี่ยมชมจะอยู่ในกล่องข้อความของคุณ แท็บแชทสด',
   buy: 'ซื้อ',
   rent: 'เช่า',
   buy_rent_all: 'ซื้อและเช่า',
