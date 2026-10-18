@@ -28,7 +28,7 @@ export function createBaseLayer(lang) {
     })
   }
   return maplibreGL({
-    style: 'https://openfreemap.org/styles/bright',
+    style: 'https://tiles.openfreemap.org/styles/bright',
     attributionControl: {
       compact: true,
       customAttribution:
