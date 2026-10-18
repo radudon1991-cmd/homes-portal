@@ -18,6 +18,9 @@ export async function fetchListings() {
     .select('*, profiles(display_name, phone, line_id)')
     .eq('is_active', true)
     .eq('status', 'approved')
+    // Posts go live for 30 days from approval (migration12); expired
+    // ones disappear from public view until the owner renews them.
+    .gt('expires_at', new Date().toISOString())
     .order('created_at', { ascending: false })
     .limit(500)
   return { data: (data ?? []).map(withSeller), error }
@@ -58,6 +61,35 @@ export async function updateListing(id, payload) {
 export async function deleteListing(id) {
   const { error } = await supabase.from('listings').delete().eq('id', id)
   return { error }
+}
+
+/** True when an approved listing's 30 days are up (migration12). */
+export function isExpired(listing) {
+  return Boolean(
+    listing?.expires_at && new Date(listing.expires_at).getTime() <= Date.now()
+  )
+}
+
+/** Whole days of live time left (0 when expired or no expiry set). */
+export function daysLeft(listing) {
+  if (!listing?.expires_at) return 0
+  const ms = new Date(listing.expires_at).getTime() - Date.now()
+  return Math.max(0, Math.ceil(ms / 86400000))
+}
+
+/**
+ * Renew a post for 30 more days: extends from whichever is later,
+ * the current expiry or right now — renewing early never loses days.
+ * Only expires_at is touched, so the listing is NOT sent back to
+ * pending (that rule lives in the edit form's payload, not here).
+ */
+export async function renewListing(listing) {
+  const base = Math.max(
+    listing.expires_at ? new Date(listing.expires_at).getTime() : 0,
+    Date.now()
+  )
+  const next = new Date(base + 30 * 86400000).toISOString()
+  return updateListing(listing.id, { expires_at: next })
 }
 
 export async function uploadPhotos(files, userId) {
