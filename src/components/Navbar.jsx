@@ -1,13 +1,32 @@
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
+import { fetchUnreadCount } from '../lib/messages'
 
 export default function Navbar() {
   const { user, signOut } = useAuth()
   const { profile } = useProfile()
   const { t, lang, setLang } = useLang()
   const navigate = useNavigate()
+  const [unread, setUnread] = useState(0)
+
+  useEffect(() => {
+    if (!user) {
+      setUnread(0)
+      return
+    }
+    let alive = true
+    fetchUnreadCount(user.id)
+      .then((c) => {
+        if (alive) setUnread(c)
+      })
+      .catch(() => {})
+    return () => {
+      alive = false
+    }
+  }, [user])
 
   const handleSignOut = async () => {
     await signOut()
@@ -46,6 +65,10 @@ export default function Navbar() {
         {user ? (
           <>
             <Link to="/post" className="nav-link nav-cta">{t('nav_post')}</Link>
+            <Link to="/inbox" className="nav-link">
+              {t('nav_inbox')}
+              {unread > 0 && <span className="nav-badge">{unread}</span>}
+            </Link>
             <Link to="/my-listings" className="nav-link">{t('nav_mylistings')}</Link>
             <span className="nav-user">{user.email}</span>
             <button className="btn btn-ghost" onClick={handleSignOut}>{t('nav_logout')}</button>
