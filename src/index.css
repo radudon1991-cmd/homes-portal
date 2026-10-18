@@ -517,3 +517,7 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 .msg-reply .form-actions { display: flex; justify-content: flex-end; margin-top: 0.5rem; }
 .msg-form { margin-top: 0.7rem; display: flex; flex-direction: column; gap: 0.5rem; }
 .msg-ok { color: #5E9C2F; font-weight: 700; margin: 0.5rem 0 0; }
+
+/* ---------- LINE contact button ---------- */
+.btn-line { background: #06C755; color: #fff; margin-top: 0.5rem; }
+.btn-line:hover { background: #05B34C; }
