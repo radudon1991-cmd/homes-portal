@@ -4,7 +4,7 @@ import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
 import { fetchMyListings, deleteListing } from '../lib/listings'
-import { formatBaht, formatDate, formatPrice } from '../lib/format'
+import { formatBaht, formatDate, formatPrice, provinceLabel } from '../lib/format'
 
 const STATUS_CLASS = { pending: 'is-pending', approved: 'is-approved', rejected: 'is-rejected' }
 const STATUS_KEY = { pending: 'status_pending', approved: 'status_approved', rejected: 'status_rejected' }
@@ -77,7 +77,7 @@ export default function MyListings() {
                   </span>
                 </div>
                 <div className="dash-meta">
-                  {formatPrice(l, t)} · {l.listing_type === 'rent' ? t('for_rent') : t('for_sale')} · {l.province} · {formatDate(l.created_at, lang)}
+                  {formatPrice(l, t)} · {l.listing_type === 'rent' ? t('for_rent') : t('for_sale')} · {provinceLabel(l.province, lang)} · {formatDate(l.created_at, lang)}
                 </div>
                 {l.status === 'rejected' && l.rejection_reason && (
                   <div className="admin-note"><strong>{t('admin_note')}:</strong> {l.rejection_reason}</div>
