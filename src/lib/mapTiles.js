@@ -31,3 +31,4 @@ export function createBaseLayer(lang) {
   return L.tileLayer(tiles.url, {
     attribution: tiles.attribution,
   })
+}
