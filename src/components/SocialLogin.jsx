@@ -2,14 +2,15 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useLang } from '../lib/i18n'
 
-// One-tap sign-in with an existing account (Google / Facebook).
-// The buttons call Supabase's OAuth flow directly; no password is typed.
-// NOTE: each provider must be enabled in the Supabase dashboard
+// One-tap sign-in with an existing account (Google).
+// The button calls Supabase's OAuth flow directly; no password is typed.
+// NOTE: the provider must be enabled in the Supabase dashboard
 // (Authentication -> Providers) with its own OAuth client ID/secret
-// before its button will work.
+// before the button will work.
+// (Facebook login was removed on 2026-10-17 at the owner's request:
+// Meta's developer sign-in kept blocking the setup, so he dropped it.)
 const PROVIDERS = [
   { id: 'google', label: 'Google', className: 'social-google' },
-  { id: 'facebook', label: 'Facebook', className: 'social-facebook' },
 ]
 
 export default function SocialLogin() {
