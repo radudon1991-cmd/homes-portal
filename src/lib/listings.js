@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from './supabase'
 import { SEED_LISTINGS } from './seedData'
+import { compressImage } from './image'
 
 export const dataSource = isSupabaseConfigured ? 'supabase' : 'demo'
 
@@ -13,7 +14,7 @@ export async function fetchListings() {
   }
   const { data, error } = await supabase
     .from('listings')
-    .select('*, profiles(display_name, phone)')
+    .select('*, profiles(display_name, phone, line_id)')
     .eq('is_active', true)
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
@@ -28,7 +29,7 @@ export async function fetchListingById(id) {
   }
   const { data, error } = await supabase
     .from('listings')
-    .select('*, profiles(display_name, phone)')
+    .select('*, profiles(display_name, phone, line_id)')
     .eq('id', id)
     .single()
   return { data: data ? withSeller(data) : null, error }
@@ -61,9 +62,13 @@ export async function deleteListing(id) {
 export async function uploadPhotos(files, userId) {
   const urls = []
   for (const file of files) {
-    const ext = file.name.split('.').pop()
+    // Shrink in the browser first (~300 KB max per photo) to save storage.
+    const prepared = await compressImage(file)
+    const ext = prepared.type === 'image/jpeg' ? 'jpg' : (prepared.name.split('.').pop() || 'jpg')
     const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    const { error } = await supabase.storage.from('listing-photos').upload(path, file)
+    const { error } = await supabase.storage
+      .from('listing-photos')
+      .upload(path, prepared, { contentType: prepared.type || undefined })
     if (error) return { urls, error }
     const { data } = supabase.storage.from('listing-photos').getPublicUrl(path)
     urls.push(data.publicUrl)
