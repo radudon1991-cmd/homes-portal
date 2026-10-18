@@ -12,6 +12,8 @@ import Signup from './pages/Signup'
 import PostListing from './pages/PostListing'
 import MyListings from './pages/MyListings'
 import Admin from './pages/Admin'
+import AdminMembers from './pages/AdminMembers'
+import AdminMemberListings from './pages/AdminMemberListings'
 import Inbox from './pages/Inbox'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
@@ -68,6 +70,8 @@ function Shell() {
             element={<ProtectedRoute><Inbox /></ProtectedRoute>}
           />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/members" element={<AdminMembers />} />
+          <Route path="/admin/member/:id" element={<AdminMemberListings />} />
           <Route path="*" element={<div className="page-center"><p>{t('page_not_found')}</p></div>} />
         </Routes>
       </main>
