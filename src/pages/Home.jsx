@@ -50,6 +50,7 @@ export default function Home() {
   return (
     <div className="home">
       <SearchBar filters={filters} onChange={setFilters} />
+      <div className="scam-banner">⚠️ {t('scam_warn_short')}</div>
       {dataSource === 'demo' && (
         <div className="demo-banner">
           {t('demo_banner')}
