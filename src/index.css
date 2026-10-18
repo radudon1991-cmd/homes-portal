@@ -782,3 +782,22 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 .footer-links { margin-top: 0.7rem; font-size: 0.88rem; }
 .footer-links a { color: #BFD9EC; }
 .footer-links a:hover { color: #fff; }
+
+/* ── Mortgage calculator (2026-10-18) ─────────────────────────── */
+.mtg-box {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: #FAFCFE; padding: 1rem 1.1rem; margin-bottom: 1rem;
+}
+.mtg-title { margin: 0 0 0.6rem; color: var(--teal-900); }
+.mtg-monthly { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.mtg-monthly strong { font-size: 1.25rem; color: var(--teal-900); white-space: nowrap; }
+.mtg-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; margin: 0.55rem 0 0.4rem; background: #E3EDF5; }
+.mtg-seg.principal { background: var(--teal-700); }
+.mtg-seg.interest { background: var(--gold-500); }
+.mtg-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; font-size: 0.88rem; margin-bottom: 0.7rem; }
+.mtg-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.3rem; }
+.mtg-dot.principal { background: var(--teal-700); }
+.mtg-dot.interest { background: var(--gold-500); }
+.mtg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 0.8rem; margin-bottom: 0.7rem; }
+.mtg-rows { border-top: 1px dashed var(--line); padding-top: 0.55rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.mtg-rows > div { display: flex; justify-content: space-between; gap: 1rem; }
