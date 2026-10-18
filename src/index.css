@@ -676,3 +676,50 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
   line-height: 1.55;
   margin-top: 1rem;
 }
+
+/* ── Expiry, renew, credits, share (2026-10-18) ────────────────── */
+.credit-strip {
+  display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap;
+  background: var(--teal-100); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 0.6rem 0.9rem; margin-bottom: 1rem;
+  font-size: 0.92rem;
+}
+.credit-strip .credit-hint { color: var(--ink-soft); font-size: 0.85rem; }
+.credit-strip .btn { margin-left: auto; }
+
+.expiry-line { font-size: 0.85rem; margin-top: 0.25rem; color: var(--teal-700); }
+.expiry-line.is-soon { color: #B26A00; font-weight: 600; }
+.expiry-line.is-expired { color: #B3261E; font-weight: 700; }
+
+.autorenew-box {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 0.7rem 0.9rem; background: #FAFCFE;
+}
+.check-row {
+  display: flex; align-items: flex-start; gap: 0.55rem;
+  font-weight: 600; cursor: pointer;
+}
+.check-row input[type="checkbox"] { width: 1.15rem; height: 1.15rem; margin-top: 0.15rem; accent-color: var(--gold-500); }
+.check-row.is-disabled { color: #9AA5AD; cursor: not-allowed; }
+.check-row.is-disabled input { accent-color: #C4CDD3; }
+
+.share-box {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 0.8rem 0.9rem; margin-bottom: 1rem; background: #FAFCFE;
+}
+.share-label { font-weight: 700; margin-bottom: 0.55rem; }
+.share-btns { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.6rem; }
+.share-btn {
+  display: inline-block; padding: 0.42rem 0.8rem; border-radius: 999px;
+  font-size: 0.85rem; font-weight: 700; color: #fff; text-decoration: none;
+  border: none; cursor: pointer;
+}
+.share-btn.fb { background: #1877F2; }
+.share-btn.msgr { background: #0084FF; }
+.share-btn.line { background: #06C755; }
+.share-btn.more { background: var(--teal-900); }
+.copy-bar { display: flex; gap: 0.45rem; }
+.copy-bar .input { flex: 1; min-width: 0; font-size: 0.82rem; }
+.copy-bar .btn { white-space: nowrap; }
+
+.input-credit { width: 5.5rem; }
