@@ -224,6 +224,7 @@ export default function Admin() {
     <div className="dashboard">
       <div className="dash-head">
         <h1>{t('admin_title')}</h1>
+        <Link to="/admin/members" className="btn btn-primary">👥 {t('members_title')}</Link>
       </div>
 
       <h2>
