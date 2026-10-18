@@ -18,6 +18,8 @@ export default function Admin() {
   const [pendingListings, setPendingListings] = useState([])
   const [rejectingId, setRejectingId] = useState(null)
   const [rejectNote, setRejectNote] = useState('')
+  const [members, setMembers] = useState([])
+  const [creditAmt, setCreditAmt] = useState({})
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState('')
 
@@ -71,12 +73,42 @@ export default function Admin() {
       .eq('is_banned', true)
       .order('banned_at', { ascending: false })
 
+    // All members with their auto-renew credit balance (migration12).
+    const { data: allMembers } = await supabase
+      .from('profiles')
+      .select('id, email, display_name, credit_baht')
+      .order('display_name', { ascending: true })
+
     setReports(all)
     setListings(listingMap)
     setPeople(peopleMap)
     setBanned(bannedUsers ?? [])
     setPendingListings(waitingList)
+    setMembers(allMembers ?? [])
     setLoading(false)
+  }
+
+  // Add credit after a member has paid the admin (฿1 per post per
+  // month for auto-renew). Goes through the admin-only RPC.
+  const addCredit = async (member) => {
+    const amount = parseInt(creditAmt[member.id], 10)
+    if (!amount) return
+    setBusy('credit-' + member.id)
+    const { error } = await supabase.rpc('admin_add_credit', {
+      target_id: member.id,
+      amount,
+    })
+    if (!error) {
+      setMembers((ms) =>
+        ms.map((m) =>
+          m.id === member.id
+            ? { ...m, credit_baht: Math.max(0, (m.credit_baht ?? 0) + amount) }
+            : m
+        )
+      )
+      setCreditAmt((c) => ({ ...c, [member.id]: '' }))
+    }
+    setBusy('')
   }
 
   useEffect(() => {
@@ -362,6 +394,47 @@ export default function Admin() {
                   onClick={() => unban(p)}
                 >
                   {t('admin_unban')}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <h2 style={{ marginTop: '2rem' }}>
+        {t('admin_credits')} ({members.length})
+      </h2>
+      <p className="hint">{t('admin_credits_hint')}</p>
+      {members.length === 0 ? (
+        <div className="empty-state">
+          <p>{t('none_yet')}</p>
+        </div>
+      ) : (
+        <div className="dash-list">
+          {members.map((p) => (
+            <div key={p.id} className="dash-row">
+              <div className="dash-info">
+                <div className="dash-title">
+                  {p.display_name || p.email} ({p.email})
+                </div>
+                <div className="dash-meta">
+                  {t('credit_balance')}: ฿{p.credit_baht ?? 0}
+                </div>
+              </div>
+              <div className="dash-actions">
+                <input
+                  className="input input-credit"
+                  type="number"
+                  placeholder="฿"
+                  value={creditAmt[p.id] ?? ''}
+                  onChange={(e) => setCreditAmt((c) => ({ ...c, [p.id]: e.target.value }))}
+                />
+                <button
+                  className="btn btn-primary btn-sm"
+                  disabled={busy === 'credit-' + p.id || !creditAmt[p.id]}
+                  onClick={() => addCredit(p)}
+                >
+                  {t('admin_add_credit')}
                 </button>
               </div>
             </div>
