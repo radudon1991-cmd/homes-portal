@@ -21,6 +21,9 @@ export default function Admin() {
   const [members, setMembers] = useState([])
   const [creditAmt, setCreditAmt] = useState({})
   const [creditSearch, setCreditSearch] = useState('')
+  const [announceBody, setAnnounceBody] = useState('')
+  const [announceNoReply, setAnnounceNoReply] = useState(false)
+  const [announceResult, setAnnounceResult] = useState('')
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState('')
 
@@ -87,6 +90,26 @@ export default function Admin() {
     setPendingListings(waitingList)
     setMembers(allMembers ?? [])
     setLoading(false)
+  }
+
+  // Announcement broadcast (migration14): one click sends the
+  // message to every member's Inbox at once.
+  const sendAnnouncement = async () => {
+    const body = announceBody.trim()
+    if (!body) return
+    if (!window.confirm(t('announce_confirm', { n: members.length }))) return
+    setBusy('announce')
+    const { data, error } = await supabase.rpc('admin_broadcast', {
+      body,
+      p_no_reply: announceNoReply,
+    })
+    if (error) {
+      setAnnounceResult(error.message)
+    } else {
+      setAnnounceResult(t('announce_sent', { n: data ?? 0 }))
+      setAnnounceBody('')
+    }
+    setBusy('')
   }
 
   // Add credit after a member has paid the admin (฿1 per post per
@@ -225,6 +248,37 @@ export default function Admin() {
       <div className="dash-head">
         <h1>{t('admin_title')}</h1>
         <Link to="/admin/members" className="btn btn-primary">👥 {t('members_title')}</Link>
+      </div>
+
+      <div className="announce-box">
+        <h2>📣 {t('announce_title')}</h2>
+        <p className="hint">{t('announce_hint')}</p>
+        <textarea
+          className="input"
+          rows={3}
+          maxLength={2000}
+          value={announceBody}
+          onChange={(e) => setAnnounceBody(e.target.value)}
+          placeholder={t('announce_ph')}
+        />
+        <label className="check-row announce-noreply">
+          <input
+            type="checkbox"
+            checked={announceNoReply}
+            onChange={(e) => setAnnounceNoReply(e.target.checked)}
+          />
+          <span>🔕 {t('announce_no_reply')}</span>
+        </label>
+        <div className="announce-actions">
+          <button
+            className="btn btn-primary"
+            disabled={busy === 'announce' || !announceBody.trim()}
+            onClick={sendAnnouncement}
+          >
+            {t('announce_send')}
+          </button>
+          {announceResult && <span className="hint ok">{announceResult}</span>}
+        </div>
       </div>
 
       <h2>
