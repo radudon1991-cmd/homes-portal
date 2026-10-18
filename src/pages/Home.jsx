@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import MapView from '../components/MapView'
 import SearchBar from '../components/SearchBar'
 import ListingCard from '../components/ListingCard'
+import GroupChat from '../components/GroupChat'
 import { fetchListings, applyFilters, dataSource } from '../lib/listings'
 import { useLang } from '../lib/i18n'
 
@@ -113,6 +114,7 @@ export default function Home() {
           </div>
         </aside>
       </div>
+      <GroupChat />
     </div>
   )
 }
