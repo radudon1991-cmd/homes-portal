@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { AuthProvider, useAuth } from './lib/AuthContext'
 import { supabase, isSupabaseConfigured } from './lib/supabase'
@@ -16,6 +16,7 @@ import Inbox from './pages/Inbox'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import Contact from './pages/Contact'
 import FooterStats from './components/FooterStats'
 
 function Shell() {
@@ -48,6 +49,7 @@ function Shell() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<Signup />} />
           <Route
             path="/post"
@@ -72,6 +74,19 @@ function Shell() {
       <footer className="footer">
         <span>{t('footer')}</span>
         <FooterStats />
+        <div className="footer-actions">
+          <Link to="/contact" className="btn btn-primary btn-sm">
+            ✉️ {t('contact_us')}
+          </Link>
+          <a
+            className="btn btn-line btn-sm"
+            href="https://line.me/R/ti/p/@truepinproperty"
+            target="_blank"
+            rel="noreferrer"
+          >
+            💬 LINE @truepinproperty
+          </a>
+        </div>
       </footer>
     </div>
   )
