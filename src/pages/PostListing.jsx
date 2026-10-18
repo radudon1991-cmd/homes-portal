@@ -28,6 +28,7 @@ const EMPTY = {
   address: '',
   phone: '',
   line_id: '',
+  auto_renew: false,
 }
 
 export default function PostListing() {
@@ -69,6 +70,8 @@ export default function PostListing() {
         province: data.province ?? 'Bangkok',
         address: data.address ?? '',
         phone: '',
+        line_id: '',
+        auto_renew: data.auto_renew ?? false,
       })
       if (data.latitude != null) setLocation({ lat: data.latitude, lng: data.longitude })
       setExistingPhotos(data.image_urls ?? [])
@@ -79,12 +82,15 @@ export default function PostListing() {
   }, [isEdit, editId, user])
 
   // Pre-fill the seller's contact info (phone + LINE) from their profile
-  // for both new posts and edits.
+  // for both new posts and edits. Also fetch the credit balance:
+  // auto-renew (migration12) is only available to members with credit.
+  const [credit, setCredit] = useState(0)
   useEffect(() => {
     if (!user) return
-    supabase.from('profiles').select('phone, line_id').eq('id', user.id).single()
+    supabase.from('profiles').select('phone, line_id, credit_baht').eq('id', user.id).single()
       .then(({ data }) => {
         if (data) {
+          setCredit(data.credit_baht ?? 0)
           setForm((f) => ({
             ...f,
             phone: data.phone ?? f.phone,
@@ -162,6 +168,7 @@ export default function PostListing() {
         image_urls: urls,
         owner_id: user.id,
         is_active: true,
+        auto_renew: form.auto_renew,
         // New and edited listings always go back to 'pending':
         // an admin must approve them before they appear publicly.
         // Editing also clears any previous rejection note (fresh review).
@@ -318,6 +325,24 @@ export default function PostListing() {
           <label>{t('line_label')}
             <input className="input" value={form.line_id} onChange={(e) => set('line_id', e.target.value)} placeholder={t('line_ph')} />
           </label>
+        </div>
+
+        <div className="autorenew-box">
+          <label className={`check-row${credit <= 0 && !form.auto_renew ? ' is-disabled' : ''}`}>
+            <input
+              type="checkbox"
+              checked={form.auto_renew}
+              disabled={credit <= 0 && !form.auto_renew}
+              onChange={(e) => set('auto_renew', e.target.checked)}
+            />
+            <span>🔄 {t('auto_renew_label')} — {t('auto_renew_hint')}</span>
+          </label>
+          {credit <= 0 && !form.auto_renew && (
+            <p className="hint">{t('auto_renew_need_credit')} <Link to="/contact">{t('buy_credit')} →</Link></p>
+          )}
+          {form.auto_renew && (
+            <p className="hint ok">✓ {t('auto_renew_on_hint', { credit })}</p>
+          )}
         </div>
 
         <div className="form-actions">
