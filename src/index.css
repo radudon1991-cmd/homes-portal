@@ -824,3 +824,8 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 }
 .photo-add-btn:hover { background: var(--gold-600); }
 .photo-add-btn.is-disabled { background: #C4CDD3; cursor: not-allowed; }
+
+
+/* Google Maps link under the listing mini-map */
+.gmaps-link { display: inline-block; margin-top: .6rem; font-weight: 700; color: var(--teal-700); text-decoration: none; }
+.gmaps-link:hover { text-decoration: underline; }
