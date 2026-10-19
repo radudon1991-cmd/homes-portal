@@ -15,7 +15,7 @@ export async function fetchListings() {
   }
   const { data, error } = await supabase
     .from('listings')
-    .select('*, profiles(display_name, avatar_url)')
+    .select('*, profiles(display_name, avatar_url, is_verified)')
     .eq('is_active', true)
     .eq('status', 'approved')
     // Posts go live for 30 days from approval (migration12); expired
@@ -33,7 +33,7 @@ export async function fetchListingById(id) {
   }
   const { data, error } = await supabase
     .from('listings')
-    .select('*, profiles(display_name, avatar_url)')
+    .select('*, profiles(display_name, avatar_url, is_verified)')
     .eq('id', id)
     .single()
   return { data: data ? withSeller(data) : null, error }
