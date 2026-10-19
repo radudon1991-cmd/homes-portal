@@ -230,7 +230,7 @@ export default function Admin() {
       p_user: req.profile.id,
       p_approve: approve,
     })
-    if (error) { setError(error.message); return }
+    if (error) { window.alert(error.message); return }
     load()
   }
 
