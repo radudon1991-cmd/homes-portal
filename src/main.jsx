@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import { LanguageProvider } from './lib/i18n'
 import './index.css'
+import './profile-avatars.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <LanguageProvider>
