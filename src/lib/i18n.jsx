@@ -997,3 +997,17 @@ Object.assign(th, {
   views_title: 'สมาชิกที่ยืนยันแล้วซึ่งเห็นข้อมูลติดต่อในประกาศนี้',
   views_none: 'ยังไม่มีสมาชิกที่ยืนยันแล้วเข้าดูข้อมูลติดต่อในประกาศนี้',
 })
+
+// ── Thai land units (migration21, 2026-10-19) ──
+Object.assign(en, {
+  unit_rai: 'Rai',
+  unit_ngan: 'Ngan',
+  unit_tarangwa: 'Tarang wa',
+  area_total: 'Total area',
+})
+Object.assign(th, {
+  unit_rai: 'ไร่',
+  unit_ngan: 'งาน',
+  unit_tarangwa: 'ตารางวา',
+  area_total: 'พื้นที่รวม',
+})
