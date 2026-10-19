@@ -25,6 +25,7 @@ export default function Admin() {
   const [announceNoReply, setAnnounceNoReply] = useState(false)
   const [announceResult, setAnnounceResult] = useState('')
   const [nameRequests, setNameRequests] = useState([])
+  const [verifyRequests, setVerifyRequests] = useState([]) // [{profile, url}]
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState('')
 
@@ -92,6 +93,26 @@ export default function Admin() {
       .order('name_requested_at', { ascending: true })
 
     setNameRequests(nameReqs ?? [])
+    // Verification requests (migration19): members who sent a
+    // live camera photo. Thumbnails are short-lived signed URLs
+    // into the PRIVATE verification-photos bucket (admin-only).
+    const { data: vReqs } = await supabase
+      .from('profiles')
+      .select('id, display_name, email, verification_photo_path, verification_requested_at')
+      .eq('verification_status', 'pending')
+      .order('verification_requested_at', { ascending: true })
+    const vWithUrls = []
+    for (const p of vReqs || []) {
+      let url = null
+      if (p.verification_photo_path) {
+        const { data: signed } = await supabase.storage
+          .from('verification-photos')
+          .createSignedUrl(p.verification_photo_path, 600)
+        url = signed?.signedUrl || null
+      }
+      vWithUrls.push({ profile: p, url })
+    }
+    setVerifyRequests(vWithUrls)
     setReports(all)
     setListings(listingMap)
     setPeople(peopleMap)
@@ -198,6 +219,18 @@ export default function Admin() {
     setBusy(report.id)
     await supabase.from('reports').update({ status: 'reviewed_dismissed' }).eq('id', report.id)
     setBusy('')
+    load()
+  }
+
+  // Approve/reject a verification request (migration19 RPC sends
+  // the member an Inbox message either way).
+  const reviewVerification = async (req, approve) => {
+    if (!window.confirm(approve ? t('admin_verify_approve_confirm') : t('admin_verify_reject_confirm'))) return
+    const { error } = await supabase.rpc('admin_review_verification', {
+      p_user: req.profile.id,
+      p_approve: approve,
+    })
+    if (error) { setError(error.message); return }
     load()
   }
 
@@ -340,6 +373,32 @@ export default function Admin() {
             </div>
           ))}
         </div>
+      )}
+
+      {verifyRequests.length > 0 && (
+        <>
+          <h2 className="admin-subhead">🪪 {t('admin_verify_title')} ({verifyRequests.length})</h2>
+          <ul className="mod-list">
+            {verifyRequests.map((req) => (
+              <li key={req.profile.id} className="mod-item">
+                <div className="verify-thumbs">
+                  {req.url
+                    ? <img src={req.url} alt="" className="verify-thumb" />
+                    : <span className="verify-thumb-missing">📷</span>}
+                </div>
+                <div className="mod-info">
+                  <strong>{req.profile.display_name || req.profile.email}</strong>
+                  <span className="mod-meta">{req.profile.email}</span>
+                  <span className="mod-meta">{new Date(req.profile.verification_requested_at).toLocaleString()}</span>
+                </div>
+                <div className="mod-actions">
+                  <button className="btn btn-primary btn-sm" onClick={() => reviewVerification(req, true)}>{t('approve')}</button>
+                  <button className="btn btn-ghost btn-sm danger" onClick={() => reviewVerification(req, false)}>{t('reject')}</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
 
       <h2>
