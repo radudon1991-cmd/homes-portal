@@ -936,8 +936,64 @@ Object.assign(th, {
 
 // ── Per-listing contact hint on the profile page (2026-10-18) ──
 Object.assign(en, {
-  profile_contact_hint: 'Your usual contact details. They pre-fill new posts to save typing, but every post saves its own contact info — you can use different details on each post.',
+  profile_contact_hint: 'Your usual contact details. They pre-fill new posts to save typing, but every post saves its own contact info – you can use different details on each post.',
 })
 Object.assign(th, {
   profile_contact_hint: 'ข้อมูลติดต่อปกติของคุณ ใช้กรอกให้อัตโนมัติเมื่อสร้างประกาศใหม่เพื่อความสะดวก แต่แต่ละประกาศจะบันทึกข้อมูลติดต่อของตัวเอง — คุณสามารถใช้ข้อมูลที่ต่างกันในแต่ละประกาศได้',
+})
+
+// ── Verified accounts: camera verification, contact gate, consent, view history (2026-10-19) ──
+Object.assign(en, {
+  verify_title: 'Verify your account',
+  verified_badge: 'Verified',
+  verify_done: 'Your account is verified. You can see contact details on all posts.',
+  verify_waiting: 'Your photo was sent and is waiting for an admin to check it. The result will arrive in your Inbox.',
+  verify_rejected: 'Your verification photo was not approved. Please take a clearer photo and try again.',
+  verify_explain: 'Verified members can see the contact details of sellers (phone, LINE, WhatsApp, Telegram) on every post, and sellers with the badge are trusted more. To verify, take ONE live photo of yourself with your camera inside this page. Photos from your gallery cannot be used. Only the admin can ever see your photo — nobody else.',
+  verify_start: 'Start verification',
+  verify_retake: 'Take a new photo',
+  verify_capture: 'Take photo',
+  verify_use_photo: 'Send this photo',
+  verify_cancel: 'Cancel',
+  verify_uploading: 'Sending…',
+  verify_camera_tip: 'Look at the camera and keep your face clear and well lit.',
+  verify_denied: 'Camera access was blocked. Please allow camera access in your browser and try again.',
+  verify_no_camera: 'No camera could be opened here. Please open this page in Chrome or Safari and try again.',
+  verify_failed: 'Something went wrong. Please try again.',
+  gate_contacts_hidden: 'Contact details are shown only to verified members, to protect everyone from scams. You can still send a message or use the live chat below.',
+  gate_login_btn: 'Log in to verify',
+  gate_verify_btn: 'Verify my account',
+  post_consent: 'I agree to show the contact information on this post (phone, LINE, WhatsApp, Telegram) to verified members of TruePin Property.',
+  admin_verify_title: 'Account verifications',
+  admin_verify_none: 'No verification photos are waiting.',
+  views_btn: 'Who viewed',
+  views_title: 'Verified members who saw the contact details on this post',
+  views_none: 'No verified member has viewed the contact details on this post yet.',
+})
+Object.assign(th, {
+  verify_title: 'ยืนยันตัวตนบัญชีของคุณ',
+  verified_badge: 'ยืนยันแล้ว',
+  verify_done: 'บัญชีของคุณได้รับการยืนยันแล้ว คุณสามารถเห็นข้อมูลติดต่อในทุกประกาศ',
+  verify_waiting: 'ส่งรูปของคุณแล้ว กำลังรอแอดมินตรวจสอบ ผลจะแจ้งไปในกล่องข้อความของคุณ',
+  verify_rejected: 'รูปยืนยันของคุณไม่ได้รับการอนุมัติ กรุณาถ่ายรูปใหม่ให้ชัดเจนแล้วลองอีกครั้ง',
+  verify_explain: 'สมาชิกที่ยืนยันตัวตนแล้วจะเห็นข้อมูลติดต่อของผู้ขาย (โทรศัพท์, LINE, WhatsApp, Telegram) ในทุกประกาศ และผู้ขายที่มีป้ายนี้จะได้รับความเชื่อถือมากขึ้น วิธียืนยัน: ถ่ายรูปสดของตัวคุณเอง 1 รูปด้วยกล้องภายในหน้านี้ ใช้รูปจากแกลเลอรีไม่ได้ มีเพียงแอดมินเท่านั้นที่เห็นรูปของคุณได้ — คนอื่นเห็นไม่ได้',
+  verify_start: 'เริ่มยืนยันตัวตน',
+  verify_retake: 'ถ่ายรูปใหม่',
+  verify_capture: 'ถ่ายรูป',
+  verify_use_photo: 'ส่งรูปนี้',
+  verify_cancel: 'ยกเลิก',
+  verify_uploading: 'กำลังส่ง…',
+  verify_camera_tip: 'มองกล้องและถ่ายให้เห็นใบหน้าชัดเจนในที่สว่าง',
+  verify_denied: 'การเข้าถึงกล้องถูกบล็อก กรุณาอนุญาตให้ใช้กล้องในเบราว์เซอร์แล้วลองอีกครั้ง',
+  verify_no_camera: 'เปิดกล้องในหน้านี้ไม่ได้ กรุณาเปิดหน้านี้ใน Chrome หรือ Safari แล้วลองอีกครั้ง',
+  verify_failed: 'เกิดข้อผิดพลาด กรุณาลองอีกครั้ง',
+  gate_contacts_hidden: 'ข้อมูลติดต่อจะแสดงเฉพาะสมาชิกที่ยืนยันตัวตนแล้ว เพื่อปกป้องทุกคนจากมิจฉาชีพ คุณยังส่งข้อความหรือใช้แชทสดด้านล่างได้',
+  gate_login_btn: 'เข้าสู่ระบบเพื่อยืนยันตัวตน',
+  gate_verify_btn: 'ยืนยันบัญชีของฉัน',
+  post_consent: 'ฉันตกลงให้แสดงข้อมูลติดต่อในประกาศนี้ (โทรศัพท์, LINE, WhatsApp, Telegram) แก่สมาชิกที่ยืนยันตัวตนแล้วของ TruePin Property',
+  admin_verify_title: 'การยืนยันบัญชี',
+  admin_verify_none: 'ไม่มีรูปยืนยันที่รอตรวจ',
+  views_btn: 'ใครดูบ้าง',
+  views_title: 'สมาชิกที่ยืนยันแล้วซึ่งเห็นข้อมูลติดต่อในประกาศนี้',
+  views_none: 'ยังไม่มีสมาชิกที่ยืนยันแล้วเข้าดูข้อมูลติดต่อในประกาศนี้',
 })
