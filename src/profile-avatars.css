@@ -41,3 +41,7 @@
 .views-panel { border-top: 1px dashed var(--line); margin-top:.6rem; padding-top:.6rem; display: flex; flex-direction: column; gap:.35rem;}
 .view-row { display: flex; flex-direction: column; font-size:.88rem;}
 .view-contacts { color: var(--ink-soft);}
+.verify-thumbs { display: flex; gap: .4rem; flex-shrink: 0;}
+.verify-thumb-missing { width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; background: var(--teal-100); border-radius: 8px; font-size: 28px;}
+.views-list { list-style: none; margin: .2rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .45rem;}
+.views-contact { display: flex; flex-wrap: wrap; gap: .3rem .8rem; font-size: .85rem;}
