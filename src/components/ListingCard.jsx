@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { formatPrice, provinceLabel } from '../lib/format'
+import { formatPrice, formatArea, provinceLabel } from '../lib/format'
 import { useLang } from '../lib/i18n'
 
 const PLACEHOLDER = 'https://picsum.photos/seed/placeholder/800/600'
@@ -24,7 +24,7 @@ export default function ListingCard({ listing, selected }) {
           </span>
           {listing.bedrooms > 0 && <span>{listing.bedrooms} {t('bd')}</span>}
           {listing.bathrooms > 0 && <span>{listing.bathrooms} {t('ba')}</span>}
-          {listing.area_sqm > 0 && <span>{listing.area_sqm} {t('sqm')}</span>}
+          {formatArea(listing, t) && <span>{formatArea(listing, t)}</span>}
           <span className="card-province">{provinceLabel(listing.province, lang)}</span>
         </div>
       </div>
