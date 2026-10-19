@@ -876,3 +876,10 @@ Object.assign(en, {
 Object.assign(th, {
   gmaps_open: 'เปิดใน Google Maps',
 })
+
+// ── Calculator title: short generic loan wording (owner's pick, 2026-10-18).
+// Overrides the in-object mtg_title, which said สินเชื่อบ้าน (home loan) —
+// too narrow for land and condo listings.
+Object.assign(th, {
+  mtg_title: 'คำนวณสินเชื่อ',
+})
