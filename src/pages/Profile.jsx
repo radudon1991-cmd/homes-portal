@@ -6,6 +6,7 @@ import { useLang } from '../lib/i18n'
 import { formatDate } from '../lib/format'
 import { compressImage } from '../lib/image'
 import { checkImageFile } from '../lib/avatarCheck'
+import VerifyAccount from '../components/VerifyAccount'
 
 // Member profile page (2026-10-18): avatar upload with an automatic
 // content check (no admin approval — lib/avatarCheck.js), display
@@ -211,6 +212,8 @@ export default function Profile() {
         {nameMsg === 'sent' && <p className="hint ok">✓ {t('name_request_sent')}</p>}
         {nameMsg && nameMsg !== 'sent' && <p className="error-text">{nameMsg}</p>}
       </div>
+
+      <VerifyAccount profile={profile} onChanged={load} />
 
       <div className="profile-card">
         <h3>{t('profile_contact_title')}</h3>
