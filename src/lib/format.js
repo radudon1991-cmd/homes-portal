@@ -29,6 +29,29 @@ export function formatPrice(listing, t) {
   return base + (listing.rent_period === 'daily' ? t('per_day') : t('per_month'))
 }
 
+/** Area label. Land posts (migration21) carry Thai land units —
+ * rai / ngan / tarang wa (1 rai = 4 ngan = 400 tarang wa =
+ * 1,600 sqm; 1 tarang wa = 4 sqm) — and display in those
+ * units; every other post uses square metres. withSqm appends
+ * the computed sqm total in parentheses. Returns '' when no
+ * area is recorded. */
+export function formatArea(listing, t, withSqm = false) {
+  const rai = Number(listing.area_rai) || 0
+  const ngan = Number(listing.area_ngan) || 0
+  const tw = Number(listing.area_tarangwa) || 0
+  if (rai > 0 || ngan > 0 || tw > 0) {
+    const parts = []
+    if (rai > 0) parts.push(`${rai} ${t('unit_rai')}`)
+    if (ngan > 0) parts.push(`${ngan} ${t('unit_ngan')}`)
+    if (tw > 0) parts.push(`${tw} ${t('unit_tarangwa')}`)
+    const base = parts.join(' ')
+    return withSqm && listing.area_sqm > 0
+      ? `${base} (${listing.area_sqm} ${t('sqm')})`
+      : base
+  }
+  return listing.area_sqm > 0 ? `${listing.area_sqm} ${t('sqm')}` : ''
+}
+
 export function formatDate(iso, lang) {
   if (!iso) return '–'
   // Thai locale gives Thai month names + Buddhist year, e.g. "17 ต.ค. 2569".
@@ -244,4 +267,3 @@ export const THAILAND_BOUNDS = (() => {
     [Math.max(...all.map((b) => b[2])), Math.max(...all.map((b) => b[3]))],
   ]
 })()
-
