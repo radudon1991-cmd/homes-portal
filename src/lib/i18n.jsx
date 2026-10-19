@@ -868,3 +868,11 @@ Object.assign(th, {
   photo_add_btn: 'เพิ่มรูปภาพ — เลือกได้ครั้งละสูงสุด 10 รูป',
   photo_multi_hint: 'เคล็ดลับ: บนมือถือ กดค้างที่รูปแรกเพื่อเลือกหลายรูปพร้อมกัน หรือแตะเพิ่มทีละชุดก็ได้',
 })
+
+// ── Google Maps link under the listing mini-map (2026-10-18) ──
+Object.assign(en, {
+  gmaps_open: 'Open in Google Maps',
+})
+Object.assign(th, {
+  gmaps_open: 'เปิดใน Google Maps',
+})
