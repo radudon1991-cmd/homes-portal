@@ -164,7 +164,19 @@ export default function ListingDetail() {
           )}
           <h2 className="detail-desc-title">{t('about')}</h2>
           <p className="detail-desc">{listing.description || t('no_description')}</p>
-          {listing.latitude != null && <div ref={miniMapRef} className="detail-minimap" />}
+          {listing.latitude != null && (
+            <>
+              <div ref={miniMapRef} className="detail-minimap" />
+              <a
+                className="gmaps-link"
+                href={`https://www.google.com/maps/search/?api=1&query=${listing.latitude},${listing.longitude}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                🗺️ {t('gmaps_open')} →
+              </a>
+            </>
+          )}
         </div>
         <div className="detail-right">
           <span className={`badge ${listing.listing_type}`}>
