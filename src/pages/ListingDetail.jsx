@@ -249,19 +249,32 @@ export default function ListingDetail() {
           </div>
           <div className="seller-card">
             <h3>{t('contact_seller')}</h3>
-            <p className="seller-name">{seller.display_name || t('seller_fallback')}</p>
+            <div className="seller-head">
+              {seller.avatar_url ? (
+                <img className="seller-avatar" src={seller.avatar_url} alt="" />
+              ) : (
+                <span className="seller-avatar seller-avatar-initial">
+                  {(seller.display_name || '?').trim().charAt(0).toUpperCase()}
+                </span>
+              )}
+              <p className="seller-name">{seller.display_name || t('seller_fallback')}</p>
+            </div>
             {contactLocked && <p className="hint">{t('expired_contact_hidden')}</p>}
-            {seller.phone && !contactLocked && (
-              <a className="btn btn-primary btn-block" href={`tel:${seller.phone}`}>📞 {seller.phone}</a>
-            )}
-            {seller.line_id && !contactLocked && (
-              <a className="btn btn-line btn-block" href={lineUrl(seller.line_id)} target="_blank" rel="noreferrer">💬 {t('chat_line')}: {seller.line_id}</a>
-            )}
-            {seller.whatsapp && !contactLocked && (
-              <a className="btn btn-whatsapp btn-block" href={whatsappUrl(seller.whatsapp)} target="_blank" rel="noreferrer">🟢 {t('chat_whatsapp')}: {seller.whatsapp}</a>
-            )}
-            {seller.telegram && !contactLocked && (
-              <a className="btn btn-telegram btn-block" href={telegramUrl(seller.telegram)} target="_blank" rel="noreferrer">✈️ {t('chat_telegram')}: {seller.telegram}</a>
+            {!contactLocked && (seller.phone || seller.line_id || seller.whatsapp || seller.telegram) && (
+              <div className="contact-pills">
+                {seller.phone && (
+                  <a className="contact-pill pill-phone" href={`tel:${seller.phone}`}>📞 {seller.phone}</a>
+                )}
+                {seller.line_id && (
+                  <a className="contact-pill pill-line" href={lineUrl(seller.line_id)} target="_blank" rel="noreferrer">💬 LINE</a>
+                )}
+                {seller.whatsapp && (
+                  <a className="contact-pill pill-whatsapp" href={whatsappUrl(seller.whatsapp)} target="_blank" rel="noreferrer">🟢 WhatsApp</a>
+                )}
+                {seller.telegram && (
+                  <a className="contact-pill pill-telegram" href={telegramUrl(seller.telegram)} target="_blank" rel="noreferrer">✈️ Telegram</a>
+                )}
+              </div>
             )}
             {user && user.id !== listing.owner_id && !contactLocked && (
               <div className="msg-form">
@@ -278,7 +291,7 @@ export default function ListingDetail() {
                     />
                     {msgState === 'error' && <p className="error-text">{t('msg_error')}</p>}
                     <button
-                      className="btn btn-primary btn-block"
+                      className="btn btn-primary msg-send"
                       disabled={msgState === 'sending' || !msgBody.trim()}
                       onClick={async () => {
                         if (!msgBody.trim()) return
@@ -304,7 +317,7 @@ export default function ListingDetail() {
               </div>
             )}
             {!user && !contactLocked && (
-              <Link to="/login" className="btn btn-ghost btn-block">
+              <Link to="/login" className="btn btn-ghost">
                 {t('msg_login_prompt')}
               </Link>
             )}
