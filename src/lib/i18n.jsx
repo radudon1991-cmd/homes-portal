@@ -933,3 +933,11 @@ Object.assign(th, {
 Object.assign(th, {
   mtg_title: 'คำนวณสินเชื่อ',
 })
+
+// ── Per-listing contact hint on the profile page (2026-10-18) ──
+Object.assign(en, {
+  profile_contact_hint: 'Your usual contact details. They pre-fill new posts to save typing, but every post saves its own contact info — you can use different details on each post.',
+})
+Object.assign(th, {
+  profile_contact_hint: 'ข้อมูลติดต่อปกติของคุณ ใช้กรอกให้อัตโนมัติเมื่อสร้างประกาศใหม่เพื่อความสะดวก แต่แต่ละประกาศจะบันทึกข้อมูลติดต่อของตัวเอง — คุณสามารถใช้ข้อมูลที่ต่างกันในแต่ละประกาศได้',
+})
