@@ -801,3 +801,26 @@ label .input, label textarea { margin-top: 0.35rem; font-weight: 400; }
 .mtg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 0.8rem; margin-bottom: 0.7rem; }
 .mtg-rows { border-top: 1px dashed var(--line); padding-top: 0.55rem; display: flex; flex-direction: column; gap: 0.3rem; }
 .mtg-rows > div { display: flex; justify-content: space-between; gap: 1rem; }
+
+/* ── Location picker search + GPS (2026-10-18) ───────────────── */
+.picker-search { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.picker-search .input { flex: 1 1 220px; }
+.picker-results {
+  list-style: none; margin: 0 0 0.5rem; padding: 0;
+  border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+}
+.picker-results li + li { border-top: 1px solid var(--line); }
+.picker-results button {
+  display: block; width: 100%; text-align: left; background: #fff; border: none;
+  padding: 0.55rem 0.8rem; cursor: pointer; font: inherit; color: var(--ink-soft);
+}
+.picker-results button:hover { background: var(--teal-100); }
+
+/* ── Photo picker button (2026-10-18) ─────────────────────────── */
+.photo-add-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: var(--gold-500); color: #fff; font-weight: 700;
+  padding: 0.65rem 1.1rem; border-radius: var(--radius); cursor: pointer;
+}
+.photo-add-btn:hover { background: var(--gold-600); }
+.photo-add-btn.is-disabled { background: #C4CDD3; cursor: not-allowed; }
