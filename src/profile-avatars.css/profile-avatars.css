@@ -26,3 +26,18 @@
 .name-request-row .input { flex: 1; }
 .pending-name-box { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; background: var(--teal-100); border-radius: 10px; padding: .6rem .8rem; }
 .msg-actions { display: flex; justify-content: flex-end; align-items: center; gap: .7rem; margin-top: .6rem; }
+
+/* ── Verified accounts (migrations 19+20, 2026-10-19) ── */
+.verified-tag { color: var(--gold-600); font-size:.8rem; font-weight: 700; white-space: nowrap;}
+.verify-gate { background: var(--teal-100); border: 1px dashed var(--teal-700); border-radius: var(--radius); padding:.75rem; display: flex; flex-direction: column; gap:.5rem; align-items: flex-start;}
+.verify-gate p { margin: 0; font-size:.9rem;}
+.verify-status { font-weight: 600;}
+.verify-status.ok { color: var(--gold-600);}
+.camera-box { display: flex; flex-direction: column; gap:.5rem; margin-top:.5rem;}
+.camera-box video,.camera-box img { width: 100%; max-width: 420px; border-radius: var(--radius); background: #000;}
+.camera-box img { background: none;}
+.verify-thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; flex-shrink: 0;}
+.consent-row { display: flex; margin: 1rem 0 0;}
+.views-panel { border-top: 1px dashed var(--line); margin-top:.6rem; padding-top:.6rem; display: flex; flex-direction: column; gap:.35rem;}
+.view-row { display: flex; flex-direction: column; font-size:.88rem;}
+.view-contacts { color: var(--ink-soft);}
