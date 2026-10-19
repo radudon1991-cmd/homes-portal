@@ -18,7 +18,7 @@ export function useProfile() {
     setLoading(true)
     supabase
       .from('profiles')
-      .select('id, is_admin, is_banned, ban_reason, credit_baht, display_name, avatar_url')
+      .select('id, is_admin, is_banned, ban_reason, credit_baht, display_name, avatar_url, is_verified')
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
