@@ -25,6 +25,9 @@ const EMPTY = {
   bedrooms: '2',
   bathrooms: '1',
   area_sqm: '',
+  area_rai: '',
+  area_ngan: '',
+  area_tarangwa: '',
   province: 'Bangkok',
   address: '',
   phone: '',
@@ -51,6 +54,7 @@ export default function PostListing() {
   const [busy, setBusy] = useState(false)
   const [loading, setLoading] = useState(isEdit)
   const [rejectionNote, setRejectionNote] = useState('')
+  const [consent, setConsent] = useState(false) // contact-info agreement (2026-10-19)
 
   useEffect(() => {
     if (!isEdit) return
@@ -70,6 +74,9 @@ export default function PostListing() {
         bedrooms: String(data.bedrooms ?? 0),
         bathrooms: String(data.bathrooms ?? 0),
         area_sqm: String(data.area_sqm ?? ''),
+        area_rai: String(data.area_rai ?? ''),
+        area_ngan: String(data.area_ngan ?? ''),
+        area_tarangwa: String(data.area_tarangwa ?? ''),
         province: data.province ?? 'Bangkok',
         address: data.address ?? '',
         // Contact info belongs to THIS post (migration18) — editing
@@ -164,6 +171,14 @@ export default function PostListing() {
         urls = [...urls, ...uploaded]
       }
 
+      // Land posts (migration21) measure area in rai / ngan /
+      // tarang wa; area_sqm stores the computed total so the
+      // rest of the site keeps working in square metres.
+      const isLand = form.property_type === 'land'
+      const landRai = parseInt(form.area_rai, 10) || 0
+      const landNgan = parseInt(form.area_ngan, 10) || 0
+      const landTw = Number(form.area_tarangwa) || 0
+      const landSqm = landRai * 1600 + landNgan * 400 + landTw * 4
       const payload = {
         title: form.title.trim(),
         description: form.description.trim(),
@@ -171,9 +186,12 @@ export default function PostListing() {
         property_type: form.property_type,
         listing_type: form.listing_type,
         rent_period: form.listing_type === 'rent' ? form.rent_period : 'monthly',
-        bedrooms: Math.round(Number(form.bedrooms) || 0),
-        bathrooms: Math.round(Number(form.bathrooms) || 0),
-        area_sqm: Number(form.area_sqm) || 0,
+        bedrooms: isLand ? 0 : Math.round(Number(form.bedrooms) || 0),
+        bathrooms: isLand ? 0 : Math.round(Number(form.bathrooms) || 0),
+        area_sqm: isLand ? landSqm : Number(form.area_sqm) || 0,
+        area_rai: isLand ? landRai : null,
+        area_ngan: isLand ? landNgan : null,
+        area_tarangwa: isLand ? landTw : null,
         province: form.province,
         address: form.address.trim(),
         latitude: location.lat,
@@ -267,17 +285,34 @@ export default function PostListing() {
           )}
         </div>
 
-        <div className="form-row">
-          <label>{t('bedrooms_label')}
-            <input className="input" type="number" min="0" max="20" value={form.bedrooms} onChange={(e) => set('bedrooms', e.target.value)} />
-          </label>
-          <label>{t('bathrooms_label')}
-            <input className="input" type="number" min="0" max="20" value={form.bathrooms} onChange={(e) => set('bathrooms', e.target.value)} />
-          </label>
-          <label>{t('area_label')}
-            <input className="input" type="number" min="0" step="any" value={form.area_sqm} onChange={(e) => set('area_sqm', e.target.value)} placeholder={t('area_ph')} />
-          </label>
-        </div>
+        {form.property_type === 'land' ? (
+          <>
+            <div className="form-row">
+              <label>{t('unit_rai')}
+                <input className="input" type="number" min="0" step="1" value={form.area_rai} onChange={(e) => set('area_rai', e.target.value)} placeholder="0" />
+              </label>
+              <label>{t('unit_ngan')}
+                <input className="input" type="number" min="0" max="3" step="1" value={form.area_ngan} onChange={(e) => set('area_ngan', e.target.value)} placeholder="0" />
+              </label>
+              <label>{t('unit_tarangwa')}
+                <input className="input" type="number" min="0" step="any" value={form.area_tarangwa} onChange={(e) => set('area_tarangwa', e.target.value)} placeholder="0" />
+              </label>
+            </div>
+            <p className="hint">{t('area_total')}: {(parseInt(form.area_rai, 10) || 0) * 1600 + (parseInt(form.area_ngan, 10) || 0) * 400 + (Number(form.area_tarangwa) || 0) * 4} {t('sqm')}</p>
+          </>
+        ) : (
+          <div className="form-row">
+            <label>{t('bedrooms_label')}
+              <input className="input" type="number" min="0" max="20" value={form.bedrooms} onChange={(e) => set('bedrooms', e.target.value)} />
+            </label>
+            <label>{t('bathrooms_label')}
+              <input className="input" type="number" min="0" max="20" value={form.bathrooms} onChange={(e) => set('bathrooms', e.target.value)} />
+            </label>
+            <label>{t('area_label')}
+              <input className="input" type="number" min="0" step="any" value={form.area_sqm} onChange={(e) => set('area_sqm', e.target.value)} placeholder={t('area_ph')} />
+            </label>
+          </div>
+        )}
 
         <div className="form-row">
           <label>{t('province_label')}
@@ -372,9 +407,18 @@ export default function PostListing() {
           )}
         </div>
 
+        <label className="check-row consent-row">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+          />
+          <span>✋ {t('post_consent')}</span>
+        </label>
+
         <div className="form-actions">
           <Link to="/my-listings" className="btn btn-ghost">{t('cancel')}</Link>
-          <button className="btn btn-primary" disabled={busy}>{busy ? t('saving') : isEdit ? t('save_changes') : t('publish')}</button>
+          <button className="btn btn-primary" disabled={busy || !consent}>{busy ? t('saving') : isEdit ? t('save_changes') : t('publish')}</button>
         </div>
       </form>
     </div>
