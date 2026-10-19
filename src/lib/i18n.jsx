@@ -868,6 +868,56 @@ Object.assign(th, {
   photo_add_btn: 'เพิ่มรูปภาพ — เลือกได้ครั้งละสูงสุด 10 รูป',
   photo_multi_hint: 'เคล็ดลับ: บนมือถือ กดค้างที่รูปแรกเพื่อเลือกหลายรูปพร้อมกัน หรือแตะเพิ่มทีละชุดก็ได้',
 })
+// ── Profile page, avatars, name-change requests (2026-10-18) ──
+Object.assign(en, {
+  nav_profile: 'Profile',
+  profile_title: 'My profile',
+  profile_joined: 'Member since {date}',
+  avatar_upload: 'Upload profile photo',
+  avatar_change: 'Change profile photo',
+  avatar_checking: 'Checking photo…',
+  avatar_saved: 'Profile photo updated',
+  avatar_blocked: 'This photo looks inappropriate and cannot be used. Please choose a different photo.',
+  avatar_check_failed: 'The photo check could not run. Please try again.',
+  avatar_hint: 'No approval needed — every photo is checked automatically before it uploads, and inappropriate photos are rejected.',
+  profile_name_title: 'Display name',
+  name_current: 'Current name',
+  name_request_ph: 'New display name',
+  name_request_btn: 'Request change',
+  name_request_hint: 'Name changes need admin approval to keep member names truthful. You will get an Inbox message when it is decided.',
+  name_request_sent: 'Request sent — waiting for admin approval.',
+  name_pending: 'Waiting for approval: {name}',
+  name_cancel: 'Cancel request',
+  name_requests_title: 'Name change requests',
+  name_requests_none: 'No name change requests waiting.',
+  profile_contact_title: 'Contact information',
+  profile_saved: 'Saved',
+})
+Object.assign(th, {
+  nav_profile: 'โปรไฟล์',
+  profile_title: 'โปรไฟล์ของฉัน',
+  profile_joined: 'สมาชิกตั้งแต่ {date}',
+  avatar_upload: 'อัปโหลดรูปโปรไฟล์',
+  avatar_change: 'เปลี่ยนรูปโปรไฟล์',
+  avatar_checking: 'กำลังตรวจสอบรูปภาพ…',
+  avatar_saved: 'อัปเดตรูปโปรไฟล์แล้ว',
+  avatar_blocked: 'รูปนี้ดูไม่เหมาะสม จึงใช้ไม่ได้ กรุณาเลือกรูปอื่น',
+  avatar_check_failed: 'ตรวจสอบรูปภาพไม่สำเร็จ กรุณาลองอีกครั้ง',
+  avatar_hint: 'ไม่ต้องรอการอนุมัติ — รูปภาพทุกใบจะถูกตรวจสอบอัตโนมัติก่อนอัปโหลด และรูปที่ไม่เหมาะสมจะถูกปฏิเสธ',
+  profile_name_title: 'ชื่อแสดง',
+  name_current: 'ชื่อปัจจุบัน',
+  name_request_ph: 'ชื่อแสดงใหม่',
+  name_request_btn: 'ส่งคำขอเปลี่ยนชื่อ',
+  name_request_hint: 'การเปลี่ยนชื่อต้องได้รับการอนุมัติจากผู้ดูแล เพื่อให้ชื่อสมาชิกเชื่อถือได้ คุณจะได้รับข้อความในกล่องข้อความเมื่อมีผลการพิจารณา',
+  name_request_sent: 'ส่งคำขอแล้ว — รอผู้ดูแลอนุมัติ',
+  name_pending: 'รอการอนุมัติ: {name}',
+  name_cancel: 'ยกเลิกคำขอ',
+  name_requests_title: 'คำขอเปลี่ยนชื่อ',
+  name_requests_none: 'ไม่มีคำขอเปลี่ยนชื่อที่รอดำเนินการ',
+  profile_contact_title: 'ข้อมูลติดต่อ',
+  profile_saved: 'บันทึกแล้ว',
+})
+
 
 // ── Google Maps link under the listing mini-map (2026-10-18) ──
 Object.assign(en, {
