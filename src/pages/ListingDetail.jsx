@@ -85,7 +85,16 @@ export default function ListingDetail() {
   }
 
   const photos = listing.image_urls?.length ? listing.image_urls : []
-  const seller = listing.profiles ?? {}
+  // Name + avatar come from the seller's profile, but contact info
+  // comes from THIS listing (migration18): every post carries its
+  // own phone / LINE / WhatsApp / Telegram.
+  const seller = {
+    ...(listing.profiles ?? {}),
+    phone: listing.phone ?? null,
+    line_id: listing.line_id ?? null,
+    whatsapp: listing.whatsapp ?? null,
+    telegram: listing.telegram ?? null,
+  }
   const expired = listing.status === 'approved' && isExpired(listing)
   const isOwner = Boolean(user && user.id === listing.owner_id)
   // Expired posts are off the market (owner's rule, 2026-10-18):
