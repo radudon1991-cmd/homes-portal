@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
+import { supabase } from '../lib/supabase'
 import { fetchMyListings, deleteListing, renewListing, isExpired, daysLeft } from '../lib/listings'
 import { formatBaht, formatDate, formatPrice, provinceLabel } from '../lib/format'
 
@@ -38,6 +39,9 @@ export default function MyListings() {
   }
 
   const [renewingId, setRenewingId] = useState('')
+  const [viewsFor, setViewsFor] = useState('') // listing id expanded
+  const [viewsData, setViewsData] = useState([]) // contact-view rows
+  const [viewsBusy, setViewsBusy] = useState(false)
   const renew = async (listing) => {
     setRenewingId(listing.id)
     const { data, error } = await renewListing(listing)
@@ -47,6 +51,17 @@ export default function MyListings() {
   }
 
   if (loading) return <div className="page-center">{t('loading')}</div>
+
+  // Who viewed my contacts (migration20): the RPC double-checks
+  // ownership server-side and returns viewer names + contacts.
+  const toggleViews = async (listingId) => {
+    if (viewsFor === listingId) { setViewsFor(''); return }
+    setViewsFor(listingId)
+    setViewsBusy(true)
+    const { data } = await supabase.rpc('listing_contact_views', { p_listing: listingId })
+    setViewsData(data || [])
+    setViewsBusy(false)
+  }
 
   return (
     <div className="dashboard">
@@ -106,6 +121,31 @@ export default function MyListings() {
                 {l.status === 'rejected' && l.rejection_reason && (
                   <div className="admin-note"><strong>{t('admin_note')}:</strong> {l.rejection_reason}</div>
                 )}
+          {viewsFor === l.id && (
+            <div className="views-panel">
+              <strong>👁 {t('views_title')}</strong>
+              {viewsBusy ? (
+                <p className="hint">{t('loading')}</p>
+              ) : viewsData.length === 0 ? (
+                <p className="hint">{t('views_empty')}</p>
+              ) : (
+                <ul className="views-list">
+                  {viewsData.map((v, i) => (
+                    <li key={i}>
+                      <strong>{v.viewer_name || '—'}</strong>
+                      <span className="mod-meta"> · {formatDate(v.viewed_at, lang)}</span>
+                      <div className="views-contact">
+                        {v.phone && <span>📞 {v.phone}</span>}
+                        {v.line_id && <span>LINE: {v.line_id}</span>}
+                        {v.whatsapp && <span>WhatsApp: {v.whatsapp}</span>}
+                        {v.telegram && <span>Telegram: {v.telegram}</span>}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
               </div>
               <div className="dash-actions">
                 {l.status === 'approved' && (
@@ -117,6 +157,9 @@ export default function MyListings() {
                     {t('renew')}
                   </button>
                 )}
+              <button className="dash-btn" onClick={() => toggleViews(l.id)}>
+                👁 {t('views_btn')}
+              </button>
                 <Link to={`/listing/${l.id}`} className="btn btn-ghost btn-sm">{t('view')}</Link>
                 <Link to={`/edit/${l.id}`} className="btn btn-ghost btn-sm">{t('edit')}</Link>
                 <button className="btn btn-danger btn-sm" onClick={() => remove(l.id, l.title)}>{t('delete')}</button>
