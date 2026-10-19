@@ -70,7 +70,16 @@ export default function Navbar() {
               {unread > 0 && <span className="nav-badge">{unread}</span>}
             </Link>
             <Link to="/my-listings" className="nav-link">{t('nav_mylistings')}</Link>
-            <span className="nav-user">{user.email}</span>
+            <Link to="/profile" className="nav-link nav-profile">
+              {profile?.avatar_url ? (
+                <img className="nav-avatar" src={profile.avatar_url} alt="" />
+              ) : (
+                <span className="nav-avatar nav-avatar-initial">
+                  {(profile?.display_name || user.email || '?').trim().charAt(0).toUpperCase()}
+                </span>
+              )}
+              <span>{profile?.display_name || t('nav_profile')}</span>
+            </Link>
             <button className="btn btn-ghost" onClick={handleSignOut}>{t('nav_logout')}</button>
           </>
         ) : (
