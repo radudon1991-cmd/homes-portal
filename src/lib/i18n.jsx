@@ -840,3 +840,31 @@ export const TYPE_KEY = {
   townhouse: 'type_townhouse',
   land: 'type_land',
 }
+
+// ── Batch 4 (2026-10-18): location-picker search/GPS + photo button strings ──
+// Appended at end of file (the editor supports whole-file replace and
+// end-of-file append only). Object.assign adds the exact batch-4 keys onto
+// the en/th objects; t() looks them up dynamically via STRINGS, so this is
+// equivalent to declaring them inside the objects above.
+Object.assign(en, {
+  loc_search_ph: 'Search a place, road, district, sub-district…',
+  loc_search_btn: 'Search',
+  loc_gps_btn: 'Use my location',
+  loc_no_results: 'No places found — try a road, district or landmark name.',
+  loc_search_failed: 'Search failed — please try again, or move the map by hand.',
+  loc_gps_unavailable: 'Location is not available on this device.',
+  loc_gps_failed: 'Could not get your location — please allow location access, or pin by hand.',
+  photo_add_btn: 'Add photos — up to 10 at once',
+  photo_multi_hint: 'Tip: on phones, long-press the first photo to select many at once. You can also add photos in batches.',
+})
+Object.assign(th, {
+  loc_search_ph: 'ค้นหาสถานที่ ถนน เขต/อำเภอ ตำบล/แขวง…',
+  loc_search_btn: 'ค้นหา',
+  loc_gps_btn: 'ใช้ตำแหน่งของฉัน',
+  loc_no_results: 'ไม่พบสถานที่ — ลองค้นหาด้วยชื่อถนน เขต หรือสถานที่สำคัญ',
+  loc_search_failed: 'ค้นหาไม่สำเร็จ — โปรดลองอีกครั้ง หรือเลื่อนแผนที่ด้วยตนเอง',
+  loc_gps_unavailable: 'อุปกรณ์นี้ไม่รองรับการระบุตำแหน่ง',
+  loc_gps_failed: 'ไม่สามารถดึงตำแหน่งของคุณได้ — โปรดอนุญาตการเข้าถึงตำแหน่ง หรือปักหมุดด้วยตนเอง',
+  photo_add_btn: 'เพิ่มรูปภาพ — เลือกได้ครั้งละสูงสุด 10 รูป',
+  photo_multi_hint: 'เคล็ดลับ: บนมือถือ กดค้างที่รูปแรกเพื่อเลือกหลายรูปพร้อมกัน หรือแตะเพิ่มทีละชุดก็ได้',
+})
