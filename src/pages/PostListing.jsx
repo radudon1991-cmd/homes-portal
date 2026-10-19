@@ -72,10 +72,12 @@ export default function PostListing() {
         area_sqm: String(data.area_sqm ?? ''),
         province: data.province ?? 'Bangkok',
         address: data.address ?? '',
-        phone: '',
-        line_id: '',
-        whatsapp: '',
-        telegram: '',
+        // Contact info belongs to THIS post (migration18) — editing
+        // loads the post's own details, never the profile's.
+        phone: data.phone ?? '',
+        line_id: data.line_id ?? '',
+        whatsapp: data.whatsapp ?? '',
+        telegram: data.telegram ?? '',
         auto_renew: data.auto_renew ?? false,
       })
       if (data.latitude != null) setLocation({ lat: data.latitude, lng: data.longitude })
@@ -86,9 +88,10 @@ export default function PostListing() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, editId, user])
 
-  // Pre-fill the seller's contact info (phone + LINE) from their profile
-  // for both new posts and edits. Also fetch the credit balance:
-  // auto-renew (migration12) is only available to members with credit.
+  // Fetch the credit balance (auto-renew, migration12, is only
+  // available to members with credit) and — for NEW posts only —
+  // pre-fill the contact fields from the profile as a starting
+  // helper. Edits load the post's OWN contact info (migration18).
   const [credit, setCredit] = useState(0)
   useEffect(() => {
     if (!user) return
@@ -96,15 +99,18 @@ export default function PostListing() {
       .then(({ data }) => {
         if (data) {
           setCredit(data.credit_baht ?? 0)
-          setForm((f) => ({
-            ...f,
-            phone: data.phone ?? f.phone,
-            line_id: data.line_id ?? f.line_id,
-            whatsapp: data.whatsapp ?? f.whatsapp,
-            telegram: data.telegram ?? f.telegram,
-          }))
+          if (!isEdit) {
+            setForm((f) => ({
+              ...f,
+              phone: data.phone ?? f.phone,
+              line_id: data.line_id ?? f.line_id,
+              whatsapp: data.whatsapp ?? f.whatsapp,
+              telegram: data.telegram ?? f.telegram,
+            }))
+          }
         }
       })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }))
@@ -173,6 +179,12 @@ export default function PostListing() {
         latitude: location.lat,
         longitude: location.lng,
         image_urls: urls,
+        // Per-post contact info (migration18): saved on the listing
+        // itself, so every post can show different details.
+        phone: form.phone.trim() || null,
+        line_id: form.line_id.trim() || null,
+        whatsapp: form.whatsapp.trim() || null,
+        telegram: form.telegram.trim() || null,
         owner_id: user.id,
         is_active: true,
         auto_renew: form.auto_renew,
@@ -183,16 +195,9 @@ export default function PostListing() {
         rejection_reason: null,
       }
 
-      // Keep the seller's contact info up to date for the listing page.
-      await supabase
-        .from('profiles')
-        .update({
-          phone: form.phone.trim() || null,
-          line_id: form.line_id.trim() || null,
-          whatsapp: form.whatsapp.trim() || null,
-          telegram: form.telegram.trim() || null,
-        })
-        .eq('id', user.id)
+      // NOTE: contact info is NOT written back to the profile any
+      // more (owner's rule, migration18) — it belongs to this post
+      // only, so one post's details never change another post's.
 
       if (isEdit) {
         const { error } = await updateListing(editId, payload)
