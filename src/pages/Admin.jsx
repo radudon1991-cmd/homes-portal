@@ -24,6 +24,7 @@ export default function Admin() {
   const [announceBody, setAnnounceBody] = useState('')
   const [announceNoReply, setAnnounceNoReply] = useState(false)
   const [announceResult, setAnnounceResult] = useState('')
+  const [nameRequests, setNameRequests] = useState([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState('')
 
@@ -83,6 +84,14 @@ export default function Admin() {
       .select('id, email, display_name, credit_baht')
       .order('display_name', { ascending: true })
 
+    // Display-name change requests waiting for approval (migration17).
+    const { data: nameReqs } = await supabase
+      .from('profiles')
+      .select('id, email, display_name, pending_display_name, name_requested_at')
+      .not('pending_display_name', 'is', null)
+      .order('name_requested_at', { ascending: true })
+
+    setNameRequests(nameReqs ?? [])
     setReports(all)
     setListings(listingMap)
     setPeople(peopleMap)
@@ -133,6 +142,18 @@ export default function Admin() {
       setCreditAmt((c) => ({ ...c, [member.id]: '' }))
     }
     setBusy('')
+  }
+
+  // Approve or reject a display-name change request (migration17 RPC;
+  // the member is notified in their Inbox either way).
+  const reviewName = async (req, approve) => {
+    setBusy('name-' + req.id)
+    const { error } = await supabase.rpc('admin_review_name_request', {
+      target: req.id,
+      approve,
+    })
+    setBusy('')
+    if (!error) load()
   }
 
   useEffect(() => {
@@ -280,6 +301,46 @@ export default function Admin() {
           {announceResult && <span className="hint ok">{announceResult}</span>}
         </div>
       </div>
+
+      <h2 style={{ marginTop: '2rem' }}>
+        {t('name_requests_title')} ({nameRequests.length})
+      </h2>
+      {nameRequests.length === 0 ? (
+        <div className="empty-state">
+          <p>{t('name_requests_none')}</p>
+        </div>
+      ) : (
+        <div className="dash-list">
+          {nameRequests.map((p) => (
+            <div key={p.id} className="dash-row">
+              <div className="dash-info">
+                <div className="dash-title">
+                  {p.display_name || '—'} → <strong>{p.pending_display_name}</strong>
+                </div>
+                <div className="dash-meta">
+                  {p.email} · {formatDate(p.name_requested_at, lang)}
+                </div>
+              </div>
+              <div className="dash-actions">
+                <button
+                  className="btn btn-primary btn-sm"
+                  disabled={busy === 'name-' + p.id}
+                  onClick={() => reviewName(p, true)}
+                >
+                  {t('approve')}
+                </button>
+                <button
+                  className="btn btn-danger btn-sm"
+                  disabled={busy === 'name-' + p.id}
+                  onClick={() => reviewName(p, false)}
+                >
+                  {t('reject')}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <h2>
         {t('approval_title')} ({pendingListings.length})
