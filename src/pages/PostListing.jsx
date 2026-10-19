@@ -165,8 +165,8 @@ export default function PostListing() {
         property_type: form.property_type,
         listing_type: form.listing_type,
         rent_period: form.listing_type === 'rent' ? form.rent_period : 'monthly',
-        bedrooms: Number(form.bedrooms) || 0,
-        bathrooms: Number(form.bathrooms) || 0,
+        bedrooms: Math.round(Number(form.bedrooms) || 0),
+        bathrooms: Math.round(Number(form.bathrooms) || 0),
         area_sqm: Number(form.area_sqm) || 0,
         province: form.province,
         address: form.address.trim(),
@@ -226,7 +226,7 @@ export default function PostListing() {
 
   return (
     <div className="form-page">
-      <form className="listing-form" onSubmit={submit}>
+      <form className="listing-form" onSubmit={submit} noValidate>
         <h1>{isEdit ? t('edit_listing') : t('post_property')}</h1>
         <div className="trust-warning">⚠ {t('posting_warning')}</div>
         <HouseRules variant="compact" />
@@ -250,7 +250,7 @@ export default function PostListing() {
             </select>
           </label>
           <label>{t('price_label')}
-            <input className="input" type="number" min="1" value={form.price_thb} onChange={(e) => set('price_thb', e.target.value)} placeholder={t('price_ph')} />
+            <input className="input" type="number" min="1" step="any" value={form.price_thb} onChange={(e) => set('price_thb', e.target.value)} placeholder={t('price_ph')} />
           </label>
           {form.listing_type === 'rent' && (
             <label>{t('rent_period_label')}
@@ -270,7 +270,7 @@ export default function PostListing() {
             <input className="input" type="number" min="0" max="20" value={form.bathrooms} onChange={(e) => set('bathrooms', e.target.value)} />
           </label>
           <label>{t('area_label')}
-            <input className="input" type="number" min="0" value={form.area_sqm} onChange={(e) => set('area_sqm', e.target.value)} placeholder={t('area_ph')} />
+            <input className="input" type="number" min="0" step="any" value={form.area_sqm} onChange={(e) => set('area_sqm', e.target.value)} placeholder={t('area_ph')} />
           </label>
         </div>
 
@@ -316,16 +316,19 @@ export default function PostListing() {
               ))}
             </div>
           )}
-          <input
-            className="input"
-            type="file"
-            accept="image/*"
-            multiple
-            disabled={totalPhotos >= MAX_PHOTOS}
-            onChange={addFiles}
-          />
+          <label className={`photo-add-btn${totalPhotos >= MAX_PHOTOS ? ' is-disabled' : ''}`}>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              disabled={totalPhotos >= MAX_PHOTOS}
+              onChange={addFiles}
+            />
+            📷 {t('photo_add_btn')}
+          </label>
           {photoError && <div className="form-error">{photoError}</div>}
-          <p className="hint">{t('photo_hint')}</p>
+          <p className="hint">{t('photo_hint')} {t('photo_multi_hint')}</p>
         </div>
 
         <div className="form-row">
