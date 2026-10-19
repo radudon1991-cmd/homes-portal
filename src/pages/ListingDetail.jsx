@@ -9,10 +9,12 @@ import MortgageCalculator from '../components/MortgageCalculator'
 import SellerRating from '../components/SellerRating'
 import { fetchListingById, isExpired } from '../lib/listings'
 import { sendMessage } from '../lib/messages'
-import { formatBaht, formatDate, formatPrice, provinceLabel } from '../lib/format'
+import { formatBaht, formatDate, formatPrice, formatArea, provinceLabel } from '../lib/format'
 import { useLang, TYPE_KEY } from '../lib/i18n'
 import { createBaseLayer } from '../lib/mapTiles'
 import { useAuth } from '../lib/AuthContext'
+import { useProfile } from '../lib/useProfile'
+import { supabase } from '../lib/supabase'
 
 // Build the LINE chat link from whatever the seller entered:
 // a full URL, an @official-account ID, or a plain LINE ID.
@@ -45,6 +47,7 @@ export default function ListingDetail() {
   const { id } = useParams()
   const { t, lang } = useLang()
   const { user } = useAuth()
+  const { profile: viewer } = useProfile()
   const [listing, setListing] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activePhoto, setActivePhoto] = useState(0)
@@ -62,6 +65,26 @@ export default function ListingDetail() {
       setLoading(false)
     })
   }, [id])
+
+  // Contact-view log (migration20): when a VERIFIED member (not
+  // the owner, not an admin) sees this post's contact details,
+  // record it once per browser session. The owner reads the
+  // history from My Listings, so a scam can be traced back to
+  // the verified account that saw the number.
+  useEffect(() => {
+    if (!listing || !user || !viewer?.is_verified || viewer?.is_admin) return
+    if (user.id === listing.owner_id) return
+    if (!(listing.phone || listing.line_id || listing.whatsapp || listing.telegram)) return
+    const key = `cv-${listing.id}`
+    try {
+      if (sessionStorage.getItem(key)) return
+      sessionStorage.setItem(key, '1')
+} catch { /* private mode: log anyway */}
+    supabase
+      .from('contact_views')
+      .insert({ listing_id: listing.id, viewer_id: user.id })
+      .then(() => {})
+  }, [listing, user, viewer])
 
   useEffect(() => {
     if (!listing || listing.latitude == null || !miniMapRef.current) return
@@ -102,6 +125,11 @@ export default function ListingDetail() {
   // only — no phone, LINE, message form or live chat. The owner
   // still sees everything, including the Renew shortcut.
   const contactLocked = expired && !isOwner
+  // Verification gate (migration19): direct contact details are
+  // visible only to the owner, admins and VERIFIED members.
+  // Guests and unverified members see a verify prompt instead.
+  const canSeeContacts = isOwner || Boolean(viewer?.is_admin) || Boolean(viewer?.is_verified)
+  const verifyLocked = !contactLocked && !canSeeContacts
   // Share bar (owner's feature, 2026-10-18): direct link to this post.
   const shareUrl = `${window.location.origin}/listing/${listing.id}`
   const shareEnc = encodeURIComponent(shareUrl)
@@ -197,7 +225,7 @@ export default function ListingDetail() {
             <div><span>{t('fact_type')}</span><strong>{typeLabel(listing.property_type)}</strong></div>
             {listing.bedrooms > 0 && <div><span>{t('fact_bedrooms')}</span><strong>{listing.bedrooms}</strong></div>}
             {listing.bathrooms > 0 && <div><span>{t('fact_bathrooms')}</span><strong>{listing.bathrooms}</strong></div>}
-            {listing.area_sqm > 0 && <div><span>{t('fact_area')}</span><strong>{listing.area_sqm} {t('sqm')}</strong></div>}
+            {(listing.area_sqm > 0 || listing.area_rai > 0 || listing.area_ngan > 0 || listing.area_tarangwa > 0) && <div><span>{t('fact_area')}</span><strong>{formatArea(listing, t, true)}</strong></div>}
             <div><span>{t('fact_province')}</span><strong>{provinceLabel(listing.province, lang)}</strong></div>
             <div><span>{t('fact_posted')}</span><strong>{formatDate(listing.created_at, lang)}</strong></div>
           </div>
@@ -266,10 +294,12 @@ export default function ListingDetail() {
                   {(seller.display_name || '?').trim().charAt(0).toUpperCase()}
                 </span>
               )}
-              <p className="seller-name">{seller.display_name || t('seller_fallback')}</p>
+              <p className="seller-name">{seller.display_name || t('seller_fallback')}{' '}
+                {seller.is_verified && <span className="verified-tag">✅ {t('verified_badge')}</span>}
+              </p>
             </div>
             {contactLocked && <p className="hint">{t('expired_contact_hidden')}</p>}
-            {!contactLocked && (seller.phone || seller.line_id || seller.whatsapp || seller.telegram) && (
+            {!contactLocked && canSeeContacts && (seller.phone || seller.line_id || seller.whatsapp || seller.telegram) && (
               <div className="contact-pills">
                 {seller.phone && (
                   <a className="contact-pill pill-phone" href={`tel:${seller.phone}`}>📞 {seller.phone}</a>
@@ -282,6 +312,16 @@ export default function ListingDetail() {
                 )}
                 {seller.telegram && (
                   <a className="contact-pill pill-telegram" href={telegramUrl(seller.telegram)} target="_blank" rel="noreferrer">✈️ Telegram</a>
+                )}
+              </div>
+            )}
+            {verifyLocked && (seller.phone || seller.line_id || seller.whatsapp || seller.telegram) && (
+              <div className="verify-gate">
+                <p>🔒 {t('gate_contacts_hidden')}</p>
+                {user ? (
+                  <Link to="/profile" className="btn btn-primary btn-sm">{t('gate_verify_btn')}</Link>
+                ) : (
+                  <Link to="/login" className="btn btn-primary btn-sm">{t('gate_login_btn')}</Link>
                 )}
               </div>
             )}
