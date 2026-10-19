@@ -20,6 +20,7 @@ import ResetPassword from './pages/ResetPassword'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import Contact from './pages/Contact'
+import Profile from './pages/Profile'
 import FooterStats from './components/FooterStats'
 
 function Shell() {
@@ -55,22 +56,11 @@ function Shell() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/post"
-            element={<ProtectedRoute><PostListing /></ProtectedRoute>}
-          />
-          <Route
-            path="/edit/:id"
-            element={<ProtectedRoute><PostListing /></ProtectedRoute>}
-          />
-          <Route
-            path="/my-listings"
-            element={<ProtectedRoute><MyListings /></ProtectedRoute>}
-          />
-          <Route
-            path="/inbox"
-            element={<ProtectedRoute><Inbox /></ProtectedRoute>}
-          />
+          <Route path="/post" element={<ProtectedRoute><PostListing /></ProtectedRoute>} />
+          <Route path="/edit/:id" element={<ProtectedRoute><PostListing /></ProtectedRoute>} />
+          <Route path="/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
+          <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/members" element={<AdminMembers />} />
           <Route path="/admin/member/:id" element={<AdminMemberListings />} />
@@ -81,17 +71,8 @@ function Shell() {
         <span>{t('footer')}</span>
         <FooterStats />
         <div className="footer-actions">
-          <Link to="/contact" className="btn btn-primary btn-sm">
-            ✉️ {t('contact_us')}
-          </Link>
-          <a
-            className="btn btn-line btn-sm"
-            href="https://line.me/R/ti/p/@truepinproperty"
-            target="_blank"
-            rel="noreferrer"
-          >
-            💬 LINE @truepinproperty
-          </a>
+          <Link to="/contact" className="btn btn-primary btn-sm">✉️ {t('contact_us')}</Link>
+          <a className="btn btn-line btn-sm" href="https://line.me/R/ti/p/@truepinproperty" target="_blank" rel="noreferrer">💬 LINE @truepinproperty</a>
         </div>
         <div className="footer-links">
           <Link to="/terms">{t('terms_link')}</Link>
