@@ -214,6 +214,7 @@ export default function Profile() {
 
       <div className="profile-card">
         <h3>{t('profile_contact_title')}</h3>
+        <p className="hint">{t('profile_contact_hint')}</p>
         <div className="form-row">
           <label>{t('phone_label')}
             <input className="input" value={contact.phone} onChange={(e) => setC('phone', e.target.value)} placeholder={t('phone_ph')} />
