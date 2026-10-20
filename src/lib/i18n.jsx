@@ -1011,3 +1011,15 @@ Object.assign(th, {
   unit_tarangwa: 'ตารางวา',
   area_total: 'พื้นที่รวม',
 })
+
+// ── Moderator role (migration22, 2026-10-19) ──
+Object.assign(en, {
+  mod_make: 'Make moderator',
+  mod_remove: 'Remove moderator',
+  mod_badge: 'Moderator',
+})
+Object.assign(th, {
+  mod_make: 'แต่งตั้งเป็นผู้ดูแล',
+  mod_remove: 'ถอดถอนผู้ดูแล',
+  mod_badge: 'ผู้ดูแล',
+})
