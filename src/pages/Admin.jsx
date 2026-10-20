@@ -5,8 +5,10 @@ import { useProfile } from '../lib/useProfile'
 import { useLang } from '../lib/i18n'
 import { formatDate } from '../lib/format'
 
-// Moderation dashboard for site admins: review reported listings,
-// ban dishonest sellers (removes their listings), unban on appeal.
+// Moderation dashboard: admins see everything (reports, bans,
+// credits, broadcasts, name + verification queues). MODERATORS
+// (migration22) see ONLY the pending-listings queue below —
+// approve/reject with a note; every other tool stays admin-only.
 // NOTHING here is automatic — every ban is a human decision.
 export default function Admin() {
   const { profile, loading: pLoading } = useProfile()
@@ -177,12 +179,46 @@ export default function Admin() {
     if (!error) load()
   }
 
+  // Moderator view (migration22): ONLY the pending-listings queue
+  // (plus the seller names for those rows). No reports, banned
+  // list, member credits, name requests or verification data is
+  // fetched at all for a non-admin moderator.
+  const loadModQueue = async () => {
+    setLoading(true)
+    const { data: waiting } = await supabase
+      .from('listings')
+      .select('id, title, price_thb, province, listing_type, property_type, owner_id, created_at')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true })
+    const waitingList = waiting ?? []
+    const ownerIds = [...new Set(waitingList.map((l) => l.owner_id))]
+    let peopleMap = {}
+    if (ownerIds.length) {
+      const { data: ps } = await supabase
+        .from('profiles')
+        .select('id, email, display_name, is_banned')
+        .in('id', ownerIds)
+      ;(ps ?? []).forEach((p) => {
+        peopleMap[p.id] = p
+      })
+    }
+    setPeople(peopleMap)
+    setPendingListings(waitingList)
+    setLoading(false)
+  }
+
+  const refresh = () => (profile?.is_admin ? load() : loadModQueue())
+
   useEffect(() => {
     if (profile?.is_admin) load()
+    else if (profile?.is_moderator) loadModQueue()
   }, [profile])
 
+  const isAdmin = !!profile?.is_admin
+  const isModerator = !isAdmin && !!profile?.is_moderator
+
   if (pLoading) return <div className="page-center">{t('loading')}</div>
-  if (!profile?.is_admin) {
+  if (!isAdmin && !isModerator) {
     return (
       <div className="page-center">
         <p>{t('admin_not_admin')}</p>
@@ -282,7 +318,7 @@ export default function Admin() {
       .update({ status: 'approved', rejection_reason: null })
       .eq('id', listing.id)
     setBusy('')
-    load()
+    refresh()
   }
 
   const confirmReject = async (listing) => {
@@ -294,16 +330,19 @@ export default function Admin() {
     setBusy('')
     setRejectingId(null)
     setRejectNote('')
-    load()
+    refresh()
   }
 
   return (
     <div className="dashboard">
       <div className="dash-head">
         <h1>{t('admin_title')}</h1>
-        <Link to="/admin/members" className="btn btn-primary">👥 {t('members_title')}</Link>
+        {isAdmin && (
+          <Link to="/admin/members" className="btn btn-primary">👥 {t('members_title')}</Link>
+        )}
       </div>
 
+      {isAdmin && (
       <div className="announce-box">
         <h2>📣 {t('announce_title')}</h2>
         <p className="hint">{t('announce_hint')}</p>
@@ -334,7 +373,10 @@ export default function Admin() {
           {announceResult && <span className="hint ok">{announceResult}</span>}
         </div>
       </div>
+      )}
 
+      {isAdmin && (
+      <>
       <h2 style={{ marginTop: '2rem' }}>
         {t('name_requests_title')} ({nameRequests.length})
       </h2>
@@ -374,8 +416,10 @@ export default function Admin() {
           ))}
         </div>
       )}
+      </>
+      )}
 
-      {verifyRequests.length > 0 && (
+      {isAdmin && verifyRequests.length > 0 && (
         <>
           <h2 className="admin-subhead">🪪 {t('admin_verify_title')} ({verifyRequests.length})</h2>
           <ul className="mod-list">
@@ -481,6 +525,8 @@ export default function Admin() {
         </div>
       )}
 
+      {isAdmin && (
+      <>
       <h2 style={{ marginTop: '2rem' }}>
         {t('admin_pending')} ({pending.length})
       </h2>
@@ -554,7 +600,11 @@ export default function Admin() {
           })}
         </div>
       )}
+      </>
+      )}
 
+      {isAdmin && (
+      <>
       <h2 style={{ marginTop: '2rem' }}>
         {t('admin_banned_users')} ({banned.length})
       </h2>
@@ -587,7 +637,11 @@ export default function Admin() {
           ))}
         </div>
       )}
+      </>
+      )}
 
+      {isAdmin && (
+      <>
       <h2 style={{ marginTop: '2rem' }}>
         {t('admin_credits')} ({members.length})
       </h2>
@@ -635,6 +689,8 @@ export default function Admin() {
             </div>
           ))}
         </div>
+      )}
+      </>
       )}
     </div>
   )
