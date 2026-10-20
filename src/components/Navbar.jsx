@@ -59,7 +59,7 @@ export default function Navbar() {
           </button>
         </div>
         <Link to="/" className="nav-link">{t('nav_search')}</Link>
-        {profile?.is_admin && (
+        {(profile?.is_admin || profile?.is_moderator) && (
           <Link to="/admin" className="nav-link">{t('nav_admin')}</Link>
         )}
         {user ? (
