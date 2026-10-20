@@ -28,7 +28,7 @@ export default function AdminMembers() {
     setLoading(true)
     const { data: ps, error: pErr } = await supabase
       .from('profiles')
-      .select('id, display_name, email, phone, line_id, is_admin, is_banned, ban_reason, created_at, last_active_at, credit_baht')
+      .select('id, display_name, email, phone, line_id, is_admin, is_moderator, is_banned, ban_reason, created_at, last_active_at, credit_baht')
       .order('created_at', { ascending: true })
     if (pErr) {
       setError(pErr.message)
@@ -120,6 +120,20 @@ export default function AdminMembers() {
     load()
   }
 
+  // Promote / demote a moderator (migration22). Admins only —
+  // the RPC double-checks server-side, and a guard trigger stops
+  // anyone changing the flag any other way.
+  const setModerator = async (member, flag) => {
+    setBusy(member.id)
+    const { error } = await supabase.rpc('admin_set_moderator', {
+      p_user: member.id,
+      p_flag: flag,
+    })
+    if (error) setError(error.message)
+    setBusy('')
+    load()
+  }
+
   const remove = async (member) => {
     const name = member.display_name || member.email || member.id
     if (!window.confirm(t('delete_user_confirm', { name }))) return
@@ -189,6 +203,7 @@ export default function AdminMembers() {
                 <div className="member-head">
                   <span className="member-name">{p.display_name || p.email}</span>
                   {p.is_admin && <span className="status-badge is-approved">{t('admin_badge')}</span>}
+                  {!p.is_admin && p.is_moderator && <span className="status-badge is-pending">{t('mod_badge')}</span>}
                   {p.is_banned && <span className="status-badge is-rejected">{t('banned_badge')}</span>}
                 </div>
                 <div className="dash-meta">{p.email}</div>
@@ -223,6 +238,15 @@ export default function AdminMembers() {
                       ) : (
                         <button className="btn btn-ghost btn-sm" disabled={busy === p.id} onClick={() => ban(p)}>
                           {t('ban_user')}
+                        </button>
+                      )}
+                      {p.is_moderator ? (
+                        <button className="btn btn-ghost btn-sm" disabled={busy === p.id} onClick={() => setModerator(p, false)}>
+                          {t('mod_remove')}
+                        </button>
+                      ) : (
+                        <button className="btn btn-ghost btn-sm" disabled={busy === p.id} onClick={() => setModerator(p, true)}>
+                          {t('mod_make')}
                         </button>
                       )}
                       <button className="btn btn-danger btn-sm" disabled={busy === p.id} onClick={() => remove(p)}>
