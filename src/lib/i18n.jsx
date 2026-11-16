@@ -9,7 +9,7 @@ const en = {
   brand_main: 'TruePin',
   brand_accent: 'Property',
   footer: 'TruePin Property — find verified Thai properties on the map.',
-  page_title: 'TruePin Property — Verified Thailand Property Search',
+  page_title: 'TruePin Property — Buy, Sell & Rent Houses, Land & Condos in Thailand',
 
   // navbar
   nav_search: 'Search',
@@ -399,7 +399,7 @@ const th = {
   brand_main: 'TruePin',
   brand_accent: 'Property',
   footer: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทยที่เชื่อถือได้บนแผนที่',
-  page_title: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทย',
+  page_title: 'TruePin Property — ซื้อ ขาย เช่า บ้าน ที่ดิน คอนโด ทั่วไทย',
 
   // navbar
   nav_search: 'ค้นหา',
