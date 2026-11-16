@@ -399,7 +399,7 @@ const th = {
   brand_main: 'TruePin',
   brand_accent: 'Property',
   footer: 'TruePin Property — ค้นหาอสังหาริมทรัพย์ไทยที่เชื่อถือได้บนแผนที่',
-  page_title: 'TruePin Property — ซื้อ ขาย เช่า บ้าน ที่ดิน คอนโด ทั่วไทย',
+  page_title: 'TruePin Property — ซื้อ ขาย เช่า บ้าน ที่ดิน คอนโด อสังหา ทั่วไทย',
 
   // navbar
   nav_search: 'ค้นหา',
